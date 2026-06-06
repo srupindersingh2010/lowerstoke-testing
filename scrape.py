@@ -175,19 +175,51 @@ def parse_planning_html(html):
 
 def scrape_planning():
     print("\n-- Planning Applications --")
-    apps = []
-    for fa in ["getReceivedWeeklyList", "getDeterminedWeeklyList"]:
-        r = safe_get(f"{PORTAL}?fa={fa}")
-        if r and r.status_code == 200:
-            apps.extend(parse_planning_html(r.text))
 
-    seen, unique = set(), []
-    for a in apps:
-        if a["reference"] not in seen:
-            seen.add(a["reference"])
-            unique.append(a)
+    # =================================================================
+    # MANUAL APPLICATIONS
+    # Add new planning applications here when you see them on the portal.
+    # Format from portal: Reference | Type | Address | Description | Ward
+    # Visit: https://planandregulatory.coventry.gov.uk/planning/index.html
+    #        ?fa=getApplications&ward=Lower%20Stoke
+    # Then copy the details into a new block below and commit the file.
+    # =================================================================
+    MANUAL_APPS = [
+        {
+            "reference":   "PL/2026/0000951/TCA",
+            "dateLodged":  "2026",
+            "address":     "13 Central Avenue, Coventry, CV2 4DN",
+            "description": "TCA — Trees in a Conservation Area. "
+                           "T1 Damson: Cut back Damson overhanging lawn area. "
+                           "T2 Sycamore: Remove self-set Sycamore to ground level. "
+                           "T3 Lime: Reduce by 3-4m and cut back over garden.",
+            "status":      "Under Consultation",
+            "portalLink":  "https://planandregulatory.coventry.gov.uk/planning/index.html"
+                           "?fa=getApplication&id=PL%2F2026%2F0000951%2FTCA",
+            "source":      "planandregulatory.coventry.gov.uk",
+            "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
+            "fetchedAt":   "Manually added",
+            "storedAt":    1749340800
+        },
+        # ── ADD NEW APPLICATIONS BELOW THIS LINE ──────────────────────
+        # Copy this template, fill in the details, save and commit:
+        #
+        # {
+        #     "reference":   "PL/2026/XXXXXXX/TYPE",
+        #     "dateLodged":  "DD Mon YYYY",
+        #     "address":     "Street Address, Coventry, POSTCODE",
+        #     "description": "Full description from the planning portal",
+        #     "status":      "Under Consultation / Awaiting Decision / Granted / Refused",
+        #     "portalLink":  "https://planandregulatory.coventry.gov.uk/planning/index.html"
+        #                    "?fa=getApplication&id=PL%2F2026%2FXXXXXXX%2FTYPE",
+        #     "source":      "planandregulatory.coventry.gov.uk",
+        #     "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
+        #     "fetchedAt":   "Manually added DD Mon YYYY",
+        #     "storedAt":    1749340800
+        # },
+    ]
 
-    # Rolling store — keeps 90 days of history across weekly runs
+    # Load persistent store (survives across daily runs)
     store_path = DATA_DIR / "planning_store.json"
     stored = []
     if store_path.exists():
@@ -196,29 +228,47 @@ def scrape_planning():
         except Exception:
             pass
 
-    cutoff_ts = (NOW_UTC - timedelta(days=90)).timestamp()
-    store_map = {a["reference"]: a for a in stored if a.get("storedAt", 0) > cutoff_ts}
-    now_ts    = NOW_UTC.timestamp()
-    for a in unique:
-        a["storedAt"] = now_ts
+    # Build map from store — manual apps always win (they have older storedAt
+    # so fresh scrapes overwrite them only if same reference is found live)
+    store_map = {}
+    for a in stored:
         store_map[a["reference"]] = a
+    # Seed manual apps (only if not already in store with live data)
+    for a in MANUAL_APPS:
+        if a["reference"] not in store_map:
+            store_map[a["reference"]] = a
+        else:
+            # Keep whichever has more detail (live scrape wins if it has address)
+            existing = store_map[a["reference"]]
+            if not existing.get("address") or existing.get("address") == "Lower Stoke, Coventry":
+                store_map[a["reference"]] = a
 
+    # Try to scrape fresh apps from portal weekly lists
+    # (portal often blocks, but we try anyway — any new ones get added to store)
+    scraped = []
+    for fa in ["getReceivedWeeklyList", "getDeterminedWeeklyList"]:
+        r = safe_get(f"{PORTAL}?fa={fa}")
+        if r and r.status_code == 200:
+            scraped.extend(parse_planning_html(r.text))
+
+    now_ts = NOW_UTC.timestamp()
+    seen   = set()
+    for a in scraped:
+        if a["reference"] not in seen:
+            seen.add(a["reference"])
+            a["storedAt"] = now_ts
+            store_map[a["reference"]] = a  # live data overwrites manual if found
+
+    # Save updated store
     merged = sorted(store_map.values(), key=lambda x: x.get("storedAt", 0), reverse=True)
+    # Trim to 90 days but NEVER remove manual apps
+    cutoff = (NOW_UTC - timedelta(days=90)).timestamp()
+    merged = [a for a in merged if a.get("storedAt", 0) > cutoff or a["reference"] in {m["reference"] for m in MANUAL_APPS}]
     store_path.write_text(json.dumps(merged[:60], ensure_ascii=False, indent=2))
-    print(f"  Planning apps in store: {len(merged)}")
+    print(f"  Planning apps total: {len(merged)} ({len(scraped)} scraped live, {len(MANUAL_APPS)} manual)")
+    for a in merged:
+        print(f"    {a['reference']} | {a['address'][:50]} | {a['status']}")
 
-    if not merged:
-        merged = [{
-            "reference":   "View Portal",
-            "dateLodged":  STAMP,
-            "address":     "Lower Stoke Ward, Coventry",
-            "description": "Visit the Coventry planning portal to search current applications for Lower Stoke ward.",
-            "status":      "See Portal",
-            "portalLink":  PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
-            "source":      "planandregulatory.coventry.gov.uk",
-            "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
-            "fetchedAt":   STAMP
-        }]
     write_json("planning.json", merged)
 
 # =============================================================================
