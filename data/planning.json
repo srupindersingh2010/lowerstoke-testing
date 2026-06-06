@@ -1,12 +1,13 @@
 [
   {
     "reference": "View Portal",
-    "dateLodged": "7 June 2026 at 00:40",
+    "dateLodged": "7 June 2026 at 00:50",
     "address": "Lower Stoke Ward, Coventry",
-    "description": "Visit the planning portal to browse current applications for Lower Stoke.",
-    "status": "Check Portal",
+    "description": "Visit the Coventry planning portal to search current applications for Lower Stoke ward.",
+    "status": "See Portal",
     "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
     "source": "planandregulatory.coventry.gov.uk",
-    "fetchedAt": "7 June 2026 at 00:40"
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "7 June 2026 at 00:50"
   }
 ]
