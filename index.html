@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lower Stoke Ward Action Hub</title>
+  <style>
+    :root {
+      --labour-red: #E30613;
+      --labour-dark-red: #A3000B;
+      --charcoal: #2C3E50;
+      --light-bg: #F8F9FA;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background: var(--light-bg); margin: 0; padding: 0; }
+
+    header { background: var(--labour-red); color: #FFF; padding: 25px 15px; text-align: center; border-bottom: 5px solid var(--labour-dark-red); }
+    header h1 { margin: 0; font-size: 2.2rem; letter-spacing: -0.5px; }
+    header p  { margin: 5px 0 0; font-size: 1rem; font-weight: 300; }
+    header .surgery { margin-top: 10px; background: rgba(0,0,0,0.2); display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; }
+
+    .sync-banner { background: #EAECEE; color: var(--charcoal); text-align: center; padding: 10px 15px; font-size: 0.85rem; font-weight: bold; border-bottom: 1px solid #D5D8DC; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .pulse-dot { width: 8px; height: 8px; background: #2ECC71; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .nav-tabs { display: flex; justify-content: center; background: var(--charcoal); flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+    .tab-link { background: none; border: none; color: #BBB; padding: 14px 18px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .tab-link:hover { color: #FFF; background: rgba(255,255,255,0.06); }
+    .tab-link.active { color: #FFF; background: var(--labour-red); }
+
+    .container { max-width: 1180px; margin: 20px auto; padding: 0 15px; }
+    .page-view { display: none; }
+    .page-view.active-view { display: block; }
+
+    .main-layout { display: flex; gap: 25px; align-items: flex-start; flex-wrap: wrap; }
+    .sidebar { flex: 0 0 300px; min-width: 260px; display: flex; flex-direction: column; gap: 20px; }
+    .content-area { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
+
+    .card { background: #FFF; border: 1px solid #EAEAEA; border-radius: 6px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+    .card-red-top  { border-top: 4px solid var(--labour-red); }
+    .card-dark-top { border-top: 4px solid var(--charcoal); }
+    .fetch-stamp { font-size: 0.75rem; color: #aaa; font-weight: normal; margin-left: 8px; }
+
+    .councillor-card { text-align: center; padding: 12px 0; border-bottom: 1px solid #F0F0F0; }
+    .councillor-card:last-child { border-bottom: none; padding-bottom: 0; }
+    .councillor-card img { width: 110px; height: 140px; object-fit: cover; border-radius: 4px; border: 1px solid #EAEAEA; background: #F5F5F5; display: block; margin: 0 auto 10px; }
+    .councillor-card h4 { margin: 4px 0 2px; color: var(--charcoal); font-size: 1rem; }
+    .councillor-card .role { font-size: 0.78rem; color: #888; margin-bottom: 8px; }
+    .cllr-contact { text-align: left; font-size: 0.82rem; background: var(--light-bg); padding: 8px 10px; border-radius: 4px; line-height: 1.8; }
+    .cllr-contact a { color: var(--labour-red); text-decoration: none; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 15px; margin-bottom: 20px; }
+    .stat-card { background: var(--light-bg); border-top: 3px solid var(--charcoal); padding: 15px; border-radius: 4px; text-align: center; }
+    .stat-card .num { font-size: 1.8rem; font-weight: bold; color: #111; margin: 5px 0; }
+    .stat-card .lbl { font-size: 0.82rem; color: #666; font-weight: 500; }
+
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 12px; }
+    .data-table th, .data-table td { padding: 10px 12px; border: 1px solid #EAEAEA; vertical-align: top; text-align: left; }
+    .data-table th { background: var(--light-bg); color: var(--charcoal); font-weight: bold; }
+    .data-table tr:hover td { background: #FAFAFA; }
+
+    .badge { padding: 3px 8px; border-radius: 3px; font-size: 0.72rem; font-weight: bold; display: inline-block; text-transform: uppercase; }
+    .badge-blue   { background: #E3F2FD; color: #0D47A1; }
+    .badge-red    { background: #FFEBEE; color: #C62828; }
+    .badge-green  { background: #E8F5E9; color: #1B5E20; }
+    .badge-orange { background: #FFF3E0; color: #E65100; }
+
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; margin-top: 12px; }
+    .news-card { background: #FFF; border: 1px solid #EAEAEA; border-radius: 4px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+    .news-card.featured { border-left: 4px solid #2ECC71; }
+    .news-card h4 { margin: 0 0 6px; font-size: 1rem; color: #111; }
+    .news-card .meta { font-size: 0.78rem; color: #888; margin-bottom: 10px; }
+    .news-card .read-link { color: var(--labour-red); font-weight: bold; text-decoration: none; font-size: 0.88rem; }
+    .source-link { font-size: 0.72rem; color: #bbb; margin-top: 4px; }
+    .source-link a { color: #bbb; }
+
+    .officer-card { background: var(--light-bg); border: 1px solid #E2E8F0; border-left: 4px solid var(--charcoal); border-radius: 4px; padding: 16px 20px; margin-bottom: 14px; }
+    .officer-card .name-row { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+    .officer-card .name { font-size: 1.05rem; font-weight: bold; color: var(--charcoal); }
+    .officer-card .rank-badge { background: var(--charcoal); color: #fff; font-size: 0.72rem; padding: 2px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .officer-card .bio { font-size: 0.85rem; color: #555; margin: 6px 0 8px; line-height: 1.6; }
+    .officer-card a { font-size: 0.8rem; color: var(--labour-red); text-decoration: none; font-weight: bold; }
+
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 18px; margin-top: 16px; }
+    .gallery-card { background: #FFF; border: 1px solid #EAEAEA; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
+    .gallery-img-wrap { width: 100%; height: 200px; background: #F0F2F5; overflow: hidden; }
+    .gallery-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-info { padding: 12px 15px; }
+    .gallery-info h4 { margin: 0 0 4px; font-size: 1rem; color: var(--charcoal); }
+    .gallery-info p  { margin: 0 0 6px; font-size: 0.84rem; color: #555; }
+    .gallery-date { font-size: 0.74rem; color: #999; font-weight: bold; }
+    .gallery-link { font-size: 0.78rem; color: var(--labour-red); text-decoration: none; }
+
+    .event-links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; margin-top: 14px; }
+    .event-link-card { background: #FFF; border: 1px solid #EAEAEA; border-radius: 6px; padding: 16px; display: flex; align-items: flex-start; gap: 12px; transition: box-shadow 0.2s; }
+    .event-link-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
+    .event-link-card .icon { font-size: 1.6rem; flex-shrink: 0; }
+    .event-link-card h4 { margin: 0 0 4px; font-size: 0.96rem; color: var(--charcoal); }
+    .event-link-card p  { margin: 0 0 8px; font-size: 0.82rem; color: #666; }
+    .event-link-card a  { color: var(--labour-red); font-size: 0.84rem; font-weight: bold; text-decoration: none; }
+
+    .section-header { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #F0F0F0; padding-bottom: 8px; margin-bottom: 14px; }
+    .section-header h2, .section-header h3 { margin: 0; }
+    .section-header a { margin-left: auto; font-size: 0.8rem; color: var(--labour-red); text-decoration: none; }
+
+    .page-bar { background: var(--charcoal); color: #FFF; padding: 10px 18px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 22px; gap: 8px; font-size: 0.9rem; }
+    .live-badge { background: var(--labour-red); padding: 3px 10px; border-radius: 3px; font-size: 0.78rem; font-weight: bold; letter-spacing: 0.5px; }
+
+    .empty-state { text-align: center; padding: 35px 20px; color: #777; background: var(--light-bg); border-radius: 6px; border: 1px dashed #CBD5E0; }
+
+    .form-frame { width: 100%; height: 820px; border: 1px solid #EAEAEA; border-radius: 4px; overflow: hidden; background: #FFF; }
+    .form-frame iframe { width: 100%; height: 100%; border: none; }
+
+    .loading { text-align: center; padding: 40px; color: #aaa; font-size: 0.95rem; }
+
+    footer { text-align: center; padding: 28px 15px; margin-top: 20px; background: var(--charcoal); color: #CCC; font-size: 0.82rem; }
+    footer a { color: #AAA; }
+
+    @media (max-width: 700px) {
+      header h1 { font-size: 1.5rem; }
+      .sidebar { flex: 1 1 100%; }
+      .tab-link { padding: 10px 12px; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏘️ Lower Stoke Ward Action Hub</h1>
+  <p>Always Approachable, Always Available, Always Accountable</p>
+  <p class="surgery">🩺 Street Surgery: 10:00–11:00am · 1st &amp; 3rd Saturday · Opposite Iceland/Lidl on Binley Rd · No appointment needed</p>
+</header>
+
+<div class="sync-banner">
+  <div class="pulse-dot"></div>
+  <span id="sync-timestamp">Loading data…</span>
+</div>
+
+<nav class="nav-tabs">
+  <button class="tab-link active" onclick="switchPage('page1',this)">📰 Ward &amp; Council</button>
+  <button class="tab-link" onclick="switchPage('page2',this)">🛡️ Policing &amp; Safety</button>
+  <button class="tab-link" onclick="switchPage('page3',this)">📅 Community Events</button>
+  <button class="tab-link" onclick="switchPage('page4',this)">📋 Report an Issue</button>
+  <button class="tab-link" onclick="switchPage('page5',this)">👥 Councillors' Updates</button>
+</nav>
+
+<div class="container">
+
+  <!-- PAGE 1 — WARD & COUNCIL -->
+  <div id="page1" class="page-view active-view">
+    <div class="page-bar">
+      <span>📍 Lower Stoke Ward — News &amp; Information</span>
+      <span class="live-badge">LIVE DATA</span>
+    </div>
+    <div class="main-layout">
+
+      <!-- 30% SIDEBAR -->
+      <aside class="sidebar">
+        <div class="card card-red-top">
+          <h3 style="text-align:center; color:var(--charcoal); margin-top:0; border-bottom:2px solid #F5F5F5; padding-bottom:8px;">👥 Your Ward Councillors</h3>
+
+          <div class="councillor-card">
+            <img src="https://www.coventry.gov.uk/images/John_McNicholas.jpg" alt="Cllr John McNicholas" onerror="this.src='https://placehold.co/110x140/eee/999?text=Photo'">
+            <h4>Cllr John McNicholas</h4>
+            <div class="role">Coventry City Council — Lower Stoke Ward</div>
+            <div class="cllr-contact">
+              <div>📞 <a href="tel:07968498860">07968 498 860</a></div>
+              <div>📧 <a href="mailto:john.mcnicholas@coventry.gov.uk">john.mcnicholas@coventry.gov.uk</a></div>
+            </div>
+          </div>
+
+          <div class="councillor-card">
+            <img src="https://www.coventry.gov.uk/images/Cllr_Shahnaz_Ahkter.JPG" alt="Cllr Dr Shahnaz Akhter" onerror="this.src='https://placehold.co/110x140/eee/999?text=Photo'">
+            <h4>Cllr Dr Shahnaz Akhter</h4>
+            <div class="role">Coventry City Council — Lower Stoke Ward</div>
+            <div class="cllr-contact">
+              <div>📞 <a href="tel:02476975555">024 7697 5555</a></div>
+              <div>📧 <a href="mailto:shahnaz.akhter@coventry.gov.uk">shahnaz.akhter@coventry.gov.uk</a></div>
+            </div>
+          </div>
+
+          <div class="councillor-card">
+            <img src="https://edemocracy.coventry.gov.uk/UserData/1/3/1/Info00002131/bigpic.jpg" alt="Cllr Rupinder Singh" onerror="this.src='https://placehold.co/110x140/eee/999?text=Photo'">
+            <h4>Cllr Rupinder Singh</h4>
+            <div class="role">Coventry City Council — Lower Stoke Ward</div>
+            <div class="cllr-contact">
+              <div>📞 <a href="tel:07960962642">07960 962 642</a></div>
+              <div>📧 <a href="mailto:rupinder.singh@coventry.gov.uk">rupinder.singh@coventry.gov.uk</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0; color:var(--charcoal); font-size:1rem; border-bottom:1px solid #F0F0F0; padding-bottom:8px;">🔗 Useful Links</h3>
+          <ul style="padding-left:18px; margin:0; font-size:0.85rem; line-height:2.2;">
+            <li><a href="https://www.coventry.gov.uk/news" target="_blank" style="color:var(--labour-red);">Coventry Council News</a></li>
+            <li><a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke" target="_blank" style="color:var(--labour-red);">Planning Applications (Lower Stoke)</a></li>
+            <li><a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);">WM Police — Stoke &amp; Wyken</a></li>
+            <li><a href="https://www.coventry.gov.uk/council-democracy/ward-councillors/2" target="_blank" style="color:var(--labour-red);">Lower Stoke Ward Profile</a></li>
+            <li><a href="https://www.coventry.gov.uk/events" target="_blank" style="color:var(--labour-red);">Coventry Council Events</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- 70% MAIN -->
+      <main class="content-area">
+
+        <div class="card card-red-top">
+          <div class="section-header">
+            <h2>📰 Latest Council News</h2>
+            <span class="fetch-stamp" id="ts-news"></span>
+            <a href="https://www.coventry.gov.uk/news" target="_blank">All Coventry news →</a>
+          </div>
+          <div class="news-grid" id="news-box"><div class="loading">Loading news…</div></div>
+        </div>
+
+        <div class="card">
+          <div class="section-header">
+            <h2>🏗️ Planning Applications — Lower Stoke Ward</h2>
+            <span class="fetch-stamp" id="ts-planning"></span>
+            <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke" target="_blank">Full planning portal →</a>
+          </div>
+          <p style="font-size:0.85rem; color:#666; margin-top:0;">Applications for Lower Stoke Ward. Click any reference number to view full details on the planning portal.</p>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr>
+                <th style="width:18%;">Reference</th>
+                <th style="width:16%;">Date Lodged</th>
+                <th style="width:50%;">Address &amp; Proposal</th>
+                <th style="width:16%;">Status</th>
+              </tr></thead>
+              <tbody id="planning-box"><tr><td colspan="4" class="loading">Loading planning data…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div><!-- /page1 -->
+
+  <!-- PAGE 2 — POLICING & SAFETY -->
+  <div id="page2" class="page-view">
+    <div class="page-bar">
+      <span>🛡️ Policing &amp; Safety — Stoke &amp; Wyken Neighbourhood</span>
+      <span class="live-badge">LIVE DATA</span>
+    </div>
+
+    <div class="card card-dark-top" style="margin-bottom:20px;">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="lbl">Sector</div>
+          <div class="num" style="font-size:1.2rem; padding:6px 0;">Stoke &amp; Wyken</div>
+          <div class="lbl">West Midlands Police</div>
+        </div>
+        <div class="stat-card" style="border-top-color:var(--labour-red);">
+          <div class="lbl">Active Crime Priorities</div>
+          <div class="num" id="crime-count">–</div>
+          <div class="lbl">Currently listed</div>
+        </div>
+        <div class="stat-card">
+          <div class="lbl">Neighbourhood Officers</div>
+          <div class="num" id="officer-count">–</div>
+          <div class="lbl">Assigned to area</div>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-top:20px;">
+        <h3>🎯 Top Reported Crime Priorities</h3>
+        <span class="fetch-stamp" id="ts-crime"></span>
+        <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area" target="_blank">View on WMP website →</a>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr>
+            <th style="width:22%;">Crime Type</th>
+            <th style="width:15%;">Reported</th>
+            <th style="width:48%;">Police Action</th>
+            <th style="width:15%;">Status</th>
+          </tr></thead>
+          <tbody id="crimes-box"><tr><td colspan="4" class="loading">Loading crime data…</td></tr></tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:#aaa; margin:10px 0 0;">
+        Sources: <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/" target="_blank" style="color:#aaa;">westmidlands.police.uk</a>
+        &amp; <a href="https://data.police.uk" target="_blank" style="color:#aaa;">data.police.uk</a>
+      </p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="section-header">
+        <h3>👮 Assigned Neighbourhood Officers</h3>
+        <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area" target="_blank">View full team on WMP →</a>
+      </div>
+      <div id="team-box"><div class="loading">Loading officer information…</div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <h3>📆 Upcoming PACT Meetings &amp; Events</h3>
+        <span class="fetch-stamp" id="ts-events"></span>
+        <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area" target="_blank">View all events on WMP →</a>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr>
+            <th style="width:35%;">Meeting / Event</th>
+            <th style="width:25%;">Time &amp; Date</th>
+            <th style="width:35%;">Location</th>
+            <th style="width:5%;"></th>
+          </tr></thead>
+          <tbody id="events-box"><tr><td colspan="4" class="loading">Loading events…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /page2 -->
+
+  <!-- PAGE 3 — COMMUNITY EVENTS -->
+  <div id="page3" class="page-view">
+    <div class="page-bar"><span>📅 Community Events &amp; What's On</span></div>
+    <div class="card card-red-top">
+      <div class="section-header"><h2>🎉 Find Events Near Lower Stoke</h2></div>
+      <p style="color:#555; margin-top:0;">Links to official event listings for Coventry. All open the original source website.</p>
+      <div class="event-links-grid">
+        <div class="event-link-card">
+          <div class="icon">🎭</div>
+          <div><h4>Coventry Rocks</h4><p>Local events and community activities across Coventry.</p><a href="https://www.coventryrocks.co.uk" target="_blank">Visit coventryrocks.co.uk →</a></div>
+        </div>
+        <div class="event-link-card">
+          <div class="icon">🗓️</div>
+          <div><h4>Visit Coventry — What's On</h4><p>Official tourism and events guide, updated regularly.</p><a href="https://visitcoventry.co.uk/whats-on/" target="_blank">Visit visitcoventry.co.uk →</a></div>
+        </div>
+        <div class="event-link-card">
+          <div class="icon">🎟️</div>
+          <div><h4>Eventbrite — Coventry</h4><p>Ticketed events, workshops and community gatherings.</p><a href="https://www.eventbrite.com/d/united-kingdom--Coventry--85684565/events" target="_blank">Visit Eventbrite →</a></div>
+        </div>
+        <div class="event-link-card">
+          <div class="icon">🚌</div>
+          <div><h4>Go CV</h4><p>Community resource covering local activities across the city.</p><a href="https://go-cv.co.uk" target="_blank">Visit go-cv.co.uk →</a></div>
+        </div>
+        <div class="event-link-card">
+          <div class="icon">🏛️</div>
+          <div><h4>Coventry Council Events</h4><p>Official council events including public meetings and activities.</p><a href="https://www.coventry.gov.uk/events" target="_blank">Visit coventry.gov.uk/events →</a></div>
+        </div>
+        <div class="event-link-card">
+          <div class="icon">👮</div>
+          <div><h4>Police PACT Meetings</h4><p>Community policing meetings for Stoke &amp; Wyken neighbourhood.</p><a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area" target="_blank">View PACT meetings →</a></div>
+        </div>
+      </div>
+    </div>
+    <!-- PACT meetings also shown here -->
+    <div class="card" style="margin-top:20px;">
+      <div class="section-header">
+        <h3>👮 Upcoming PACT Meetings (Stoke &amp; Wyken)</h3>
+        <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area" target="_blank">View all on WMP →</a>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Meeting</th><th>Time &amp; Date</th><th>Location</th></tr></thead>
+          <tbody id="events-box2"><tr><td colspan="3" class="loading">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /page3 -->
+
+  <!-- PAGE 4 — REPORT AN ISSUE -->
+  <div id="page4" class="page-view">
+    <div class="page-bar"><span>📋 Report an Issue or Request</span></div>
+    <div class="card card-dark-top">
+      <h2 style="margin-top:0;">📋 Submit an Issue or Case</h2>
+      <p style="color:#555; margin-bottom:20px;">Use this form to raise a neighbourhood issue or make a request. Your submission will be logged and followed up by your ward councillors.</p>
+      <div class="form-frame">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScyv10Ff_t_O_219Z7w7_n62K0tIUn37-n2o7x_z13lI1zCiw/viewform?embedded=true" title="Issue Report Form">Loading form…</iframe>
+      </div>
+    </div>
+  </div><!-- /page4 -->
+
+  <!-- PAGE 5 — COUNCILLORS' UPDATES -->
+  <div id="page5" class="page-view">
+    <div class="page-bar">
+      <span>👥 Councillors' Updates — Casework &amp; Progress</span>
+      <span class="live-badge">LIVE DATA</span>
+    </div>
+
+    <div class="card card-red-top" style="margin-bottom:20px;">
+      <div class="section-header">
+        <h2>📋 Active Casework Log</h2>
+        <span class="fetch-stamp" id="ts-cases"></span>
+      </div>
+      <p style="color:#555; font-size:0.9rem; margin-top:0;">Neighbourhood issues and resident requests logged across Lower Stoke Ward.</p>
+      <div id="casework-box"><div class="loading">Loading casework…</div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <h3>📸 Councillors' Progress &amp; Update Photos</h3>
+        <span class="fetch-stamp" id="ts-gallery"></span>
+        <a href="https://drive.google.com/drive/folders/1ukfcyO4BPjeAv40XVsvcJ-ds4ilwML3y" target="_blank">View Drive folder →</a>
+      </div>
+      <p style="color:#666; font-size:0.85rem; margin-top:0;">Photos uploaded by councillors in the past 14 days.</p>
+      <div class="gallery-grid" id="gallery-box"><div class="loading" style="grid-column:1/-1;">Loading gallery…</div></div>
+    </div>
+  </div><!-- /page5 -->
+
+</div><!-- /container -->
+
+<footer>
+  <p>© <span id="yr"></span> Lower Stoke Ward Action Hub — Data updated automatically every day at 08:00</p>
+  <p style="margin-top:4px;">
+    <a href="https://www.coventry.gov.uk" target="_blank">Coventry City Council</a> ·
+    <a href="https://www.westmidlands.police.uk" target="_blank">West Midlands Police</a> ·
+    <a href="https://planandregulatory.coventry.gov.uk" target="_blank">Planning Portal</a>
+  </p>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // ── HELPERS ──────────────────────────────────────────────────────────────────
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
+  function badgeClass(status) {
+    var s = (status||'').toLowerCase();
+    if (s.includes('progress')||s.includes('action'))             return 'badge-orange';
+    if (s.includes('resolv')||s.includes('complet')||s.includes('done')) return 'badge-green';
+    if (s.includes('crit')||s.includes('high')||s.includes('log'))return 'badge-red';
+    return 'badge-blue';
+  }
+
+  function stamp(id, text) {
+    var el = document.getElementById(id);
+    if (el && text) el.textContent = 'Fetched: ' + text;
+  }
+
+  // Fetch a JSON data file with cache-busting
+  function loadJSON(file, cb) {
+    fetch('data/' + file + '?v=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(cb)
+      .catch(function(e){ console.error('Failed to load ' + file, e); });
+  }
+
+  // ── TAB SWITCHING ─────────────────────────────────────────────────────────
+  function switchPage(id, btn) {
+    document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active-view'); });
+    document.querySelectorAll('.tab-link').forEach(function(t){ t.classList.remove('active'); });
+    document.getElementById(id).classList.add('active-view');
+    if (btn) btn.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // ── RENDER FUNCTIONS ──────────────────────────────────────────────────────
+
+  function renderNews(data) {
+    if (!data.length) { document.getElementById('news-box').innerHTML = '<p style="color:#777;">No news items available. <a href="https://www.coventry.gov.uk/news" target="_blank" style="color:var(--labour-red);">Visit Coventry Council news →</a></p>'; return; }
+    stamp('ts-news', data[0].fetchedAt);
+    document.getElementById('news-box').innerHTML = data.map(function(n){
+      return '<div class="news-card'+(n.focused?' featured':'')+'">'+
+        '<div><h4>'+esc(n.title)+'</h4><div class="meta">📅 '+esc(n.date)+'</div></div>'+
+        '<div><a href="'+esc(n.link)+'" target="_blank" class="read-link">Read full article →</a>'+
+        '<div class="source-link">Source: <a href="'+esc(n.link)+'" target="_blank">'+esc(n.source||'coventry.gov.uk')+'</a></div></div></div>';
+    }).join('');
+  }
+
+  function renderPlanning(data) {
+    stamp('ts-planning', data.length ? data[0].fetchedAt : '');
+    if (!data.length) { document.getElementById('planning-box').innerHTML = '<tr><td colspan="4" style="text-align:center;color:#777;">No applications found. <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke" target="_blank" style="color:var(--labour-red);">Search the planning portal →</a></td></tr>'; return; }
+    document.getElementById('planning-box').innerHTML = data.map(function(p){
+      return '<tr><td><a href="'+esc(p.portalLink)+'" target="_blank" style="color:var(--labour-red);font-weight:bold;text-decoration:underline;">'+esc(p.reference)+'</a><br><span style="font-size:0.72rem;color:#aaa;">'+esc(p.source||'')+'</span></td>'+
+        '<td style="color:#555;">'+esc(p.dateLodged)+'</td>'+
+        '<td><strong>'+esc(p.address)+'</strong><br><span style="font-size:0.82rem;color:#666;">'+esc(p.description)+'</span></td>'+
+        '<td><span class="badge badge-blue">'+esc(p.status)+'</span></td></tr>';
+    }).join('');
+  }
+
+  function renderCrimes(data) {
+    document.getElementById('crime-count').textContent = data.length;
+    stamp('ts-crime', data.length ? data[0].fetchedAt : '');
+    if (!data.length) { document.getElementById('crimes-box').innerHTML = '<tr><td colspan="4" style="text-align:center;color:#777;">No data available. <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);">Visit WM Police →</a></td></tr>'; return; }
+    document.getElementById('crimes-box').innerHTML = data.map(function(c){
+      return '<tr><td style="font-weight:bold;color:var(--charcoal);">'+esc(c.title)+'</td>'+
+        '<td style="color:#888;font-size:0.82rem;">'+esc(c.issue||c.count||'')+'</td>'+
+        '<td style="color:#555;font-size:0.85rem;line-height:1.5;">'+esc(c.action||'')+'<br>'+
+        (c.sourceUrl?'<a href="'+esc(c.sourceUrl)+'" target="_blank" style="font-size:0.75rem;color:#aaa;">View source →</a>':'')+'</td>'+
+        '<td><span class="badge badge-red">'+esc(c.status||'Active')+'</span></td></tr>';
+    }).join('');
+  }
+
+  function renderTeam(data) {
+    document.getElementById('officer-count').textContent = data.length;
+    if (!data.length) {
+      document.getElementById('team-box').innerHTML = '<div style="padding:16px;background:var(--light-bg);border-radius:4px;"><a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area" target="_blank" style="color:var(--labour-red);font-weight:bold;">View the Stoke &amp; Wyken policing team on the WMP website →</a></div>';
+      return;
+    }
+    document.getElementById('team-box').innerHTML = data.map(function(o){
+      return '<div class="officer-card">'+
+        '<div class="name-row"><span class="name">👮 '+esc(o.name)+'</span><span class="rank-badge">'+esc(o.rank||'Officer')+'</span></div>'+
+        (o.bio?'<p class="bio">'+esc(o.bio)+'</p>':'')+
+        '<a href="'+(o.sourceUrl||'https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area')+'" target="_blank">Read full profile on WMP website →</a></div>';
+    }).join('');
+  }
+
+  function renderEvents(data) {
+    stamp('ts-events', data.length ? data[0].fetchedAt : '');
+    var rows = data.length
+      ? data.map(function(e){
+          return '<tr><td><strong>'+esc(e.title)+'</strong></td><td>'+esc(e.date)+'</td><td>'+esc(e.address)+'</td>'+
+            '<td><a href="'+(e.sourceUrl||'https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area')+'" target="_blank" style="font-size:0.75rem;color:var(--labour-red);">WMP →</a></td></tr>';
+        }).join('')
+      : '<tr><td colspan="4" style="text-align:center;color:#777;">No upcoming events. <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area" target="_blank" style="color:var(--labour-red);">Check WMP website →</a></td></tr>';
+    document.getElementById('events-box').innerHTML  = rows;
+    // Also populate page3 copy
+    var rows2 = data.length
+      ? data.map(function(e){ return '<tr><td><strong>'+esc(e.title)+'</strong></td><td>'+esc(e.date)+'</td><td>'+esc(e.address)+'</td></tr>'; }).join('')
+      : '<tr><td colspan="3" style="text-align:center;color:#777;">No upcoming events listed.</td></tr>';
+    document.getElementById('events-box2').innerHTML = rows2;
+  }
+
+  function renderCasework(data) {
+    stamp('ts-cases', data.length ? data[0].fetchedAt : '');
+    if (!data.length) {
+      document.getElementById('casework-box').innerHTML =
+        '<div class="empty-state"><p style="font-weight:bold;color:var(--charcoal);margin:0 0 6px;">No casework items currently loaded.</p>'+
+        '<p style="margin:0;font-size:0.85rem;">Items appear here once the councillors\' case log spreadsheet is updated.</p></div>';
+      return;
+    }
+    var html = '<div style="overflow-x:auto;"><table class="data-table"><thead><tr>'+
+      '<th style="width:22%;">Issue &amp; Location</th><th style="width:10%;">Date</th>'+
+      '<th style="width:42%;">Details / Update</th><th style="width:13%;">Status</th><th style="width:13%;">Logged By</th>'+
+      '</tr></thead><tbody>';
+    data.forEach(function(c){
+      html += '<tr><td><strong style="color:var(--charcoal);display:block;margin-bottom:3px;">'+esc(c.title)+'</strong>'+
+        '<span style="color:#777;font-size:0.78rem;">📍 '+esc(c.locationFocus||'Lower Stoke')+'</span></td>'+
+        '<td style="color:#666;font-size:0.82rem;">'+esc(c.date||'')+'</td>'+
+        '<td style="color:#444;font-size:0.84rem;line-height:1.5;white-space:pre-wrap;">'+esc(c.bodyText||'No details logged.')+'</td>'+
+        '<td><span class="badge '+badgeClass(c.status)+'">'+esc(c.status||'Logged')+'</span></td>'+
+        '<td style="font-size:0.8rem;color:#555;"><div style="font-weight:600;color:var(--charcoal);">'+esc(c.loggedBy||c.name||'Ward Team')+'</div>'+
+        (c.email?'<a href="mailto:'+esc(c.email)+'" style="color:var(--labour-red);font-size:0.75rem;text-decoration:none;">✉️ Contact</a>':'')+'</td></tr>';
+    });
+    html += '</tbody></table></div>';
+    document.getElementById('casework-box').innerHTML = html;
+  }
+
+  function renderGallery(data) {
+    stamp('ts-gallery', data.length ? data[0].fetchedAt : '');
+    if (!data.length) {
+      document.getElementById('gallery-box').innerHTML =
+        '<div class="empty-state" style="grid-column:1/-1;">No photos uploaded in the past 14 days. '+
+        '<a href="https://drive.google.com/drive/folders/1ukfcyO4BPjeAv40XVsvcJ-ds4ilwML3y" target="_blank" style="color:var(--labour-red);">Open the shared Drive folder →</a></div>';
+      return;
+    }
+    document.getElementById('gallery-box').innerHTML = data.map(function(g){
+      return '<div class="gallery-card">'+
+        '<div class="gallery-img-wrap"><img src="https://docs.google.com/uc?export=view&id='+esc(g.id)+'" alt="'+esc(g.title)+'" loading="lazy"></div>'+
+        '<div class="gallery-info"><h4>'+esc(g.title)+'</h4><p>'+esc(g.description)+'</p>'+
+        '<div class="gallery-date">📅 Uploaded: '+esc(g.dateFormatted)+'</div>'+
+        '<a href="'+esc(g.driveLink||'#')+'" target="_blank" class="gallery-link">View full image →</a></div></div>';
+    }).join('');
+  }
+
+  // ── LOAD ALL DATA ─────────────────────────────────────────────────────────
+  loadJSON('meta.json', function(d){
+    document.getElementById('sync-timestamp').textContent = 'Data last updated: ' + d.lastUpdated;
+  });
+  loadJSON('news.json',          renderNews);
+  loadJSON('planning.json',      renderPlanning);
+  loadJSON('police_crimes.json', renderCrimes);
+  loadJSON('police_team.json',   renderTeam);
+  loadJSON('police_events.json', renderEvents);
+  loadJSON('casework.json',      renderCasework);
+
+  // Gallery — only if the JSON file exists (Drive access optional)
+  fetch('data/gallery.json?v=' + Date.now())
+    .then(function(r){ return r.ok ? r.json() : []; })
+    .then(renderGallery)
+    .catch(function(){ renderGallery([]); });
+</script>
+</body>
+</html>
