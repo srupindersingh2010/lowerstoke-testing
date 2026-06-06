@@ -1,13 +1,14 @@
 [
   {
-    "reference": "View Portal",
-    "dateLodged": "7 June 2026 at 00:50",
-    "address": "Lower Stoke Ward, Coventry",
-    "description": "Visit the Coventry planning portal to search current applications for Lower Stoke ward.",
-    "status": "See Portal",
-    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "reference": "PL/2026/0000951/TCA",
+    "dateLodged": "2026",
+    "address": "13 Central Avenue, Coventry, CV2 4DN",
+    "description": "TCA — Trees in a Conservation Area. T1 Damson: Cut back Damson overhanging lawn area. T2 Sycamore: Remove self-set Sycamore to ground level. T3 Lime: Reduce by 3–4m and cut back over garden.",
+    "status": "Under Consultation",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000951%2FTCA",
     "source": "planandregulatory.coventry.gov.uk",
     "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
-    "fetchedAt": "7 June 2026 at 00:50"
+    "fetchedAt": "Manually added 7 June 2026",
+    "storedAt": 1749340800
   }
 ]
