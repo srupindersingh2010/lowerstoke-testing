@@ -1,19 +1,16 @@
 """
 Lower Stoke Ward — Daily Data Scraper
 Runs via GitHub Actions every day at 08:00.
-Writes JSON files into data/ folder which index.html reads.
 
 PLANNING SPREADSHEET WORKFLOW:
-  1. Go to: https://planandregulatory.coventry.gov.uk/planning/index.html
-             ?fa=getApplications&ward=Lower%20Stoke
-  2. Download the spreadsheet (CSV or Excel) from that page
-  3. Drop it into this Google Drive folder:
-     https://drive.google.com/drive/folders/1reuhUHzInEHjWdOT4lHEHsQbmYRSl-qo
-  4. The scraper reads it automatically next morning — done.
-     No renaming needed. It always uses the newest file.
+  - Each week, save the planning spreadsheet you receive by email
+    into this Google Drive folder:
+    https://drive.google.com/drive/folders/1reuhUHzInEHjWdOT4lHEHsQbmYRSl-qo
+  - The scraper reads it automatically next morning.
+  - No renaming needed — it always uses the newest file.
 """
 
-import json, re, sys, traceback, csv, io
+import json, re, sys, traceback, csv, io, os, tempfile
 from datetime import datetime, timezone, timedelta, date as dt_date
 from pathlib import Path
 import requests
@@ -26,12 +23,12 @@ NOW_UTC = datetime.now(timezone.utc)
 NOW_UK  = NOW_UTC + timedelta(hours=1)
 STAMP   = NOW_UK.strftime("%-d %B %Y at %H:%M")
 
-PORTAL              = "https://planandregulatory.coventry.gov.uk/planning/index.html"
-PLANNING_FOLDER_ID  = "1reuhUHzInEHjWdOT4lHEHsQbmYRSl-qo"
-GALLERY_FOLDER_ID   = "1ukfcyO4BPjeAv40XVsvcJ-ds4ilwML3y"
-SHEET_ID            = "1CiCnq-WvIL0KmEv3RldjV0u9KxpTttHQkbN1igNILhQ"
-WMP_BASE            = "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken"
-WMP_SUFFIX          = "top-reported-crimes-in-this-area"
+PORTAL             = "https://planandregulatory.coventry.gov.uk/planning/index.html"
+PLANNING_FOLDER_ID = "1reuhUHzInEHjWdOT4lHEHsQbmYRSl-qo"
+GALLERY_FOLDER_ID  = "1ukfcyO4BPjeAv40XVsvcJ-ds4ilwML3y"
+SHEET_ID           = "1CiCnq-WvIL0KmEv3RldjV0u9KxpTttHQkbN1igNILhQ"
+WMP_BASE           = "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken"
+WMP_SUFFIX         = "top-reported-crimes-in-this-area"
 
 HEADERS = {
     "User-Agent": (
@@ -58,7 +55,6 @@ def write_json(filename, data):
     print(f"  Wrote {filename} ({len(data) if isinstance(data, list) else 'object'})")
 
 def fmt_date(iso_date):
-    """Convert YYYY-MM-DD to '7 Jun 2026'"""
     try:
         d = dt_date.fromisoformat(str(iso_date)[:10])
         return d.strftime("%-d %b %Y")
@@ -66,85 +62,168 @@ def fmt_date(iso_date):
         return str(iso_date)
 
 # =============================================================================
-# GOOGLE DRIVE HELPER
-# Lists files in a public shared Drive folder using the public export API.
-# The folder must be shared as "Anyone with the link can view".
-# Returns list of dicts: {id, name, mimeType, modifiedTime}
-# sorted newest first.
+# GOOGLE DRIVE API — service account authentication
+# Reads GDRIVE_SERVICE_ACCOUNT secret from environment (set in GitHub secrets)
 # =============================================================================
-def list_drive_folder(folder_id):
+def get_drive_service():
     """
-    Lists files in a public Google Drive folder.
-    Uses the Drive folder RSS/export feed which returns parseable XML/HTML.
-    The folder must be shared as "Anyone with the link can view".
+    Returns an authenticated Google Drive API session using the service account
+    JSON stored in the GDRIVE_SERVICE_ACCOUNT environment variable.
     """
-    files = []
-
-    # Method 1: Use the Drive folder download page which lists files in HTML
-    # Pattern found in Google Drive HTML: data-id="FILE_ID" or similar
-    url = f"https://drive.google.com/drive/folders/{folder_id}"
     try:
-        r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
-        print(f"  Drive folder -> {r.status_code} ({len(r.text)} chars)")
-        text = r.text
+        from google.oauth2 import service_account
+        from googleapiclient.discovery import build
 
-        # Google Drive embeds file data as JSON in page source in multiple formats.
-        # Try several patterns to extract file IDs and names.
-        seen = set()
+        sa_json = os.environ.get("GDRIVE_SERVICE_ACCOUNT", "")
+        if not sa_json:
+            print("  WARNING: GDRIVE_SERVICE_ACCOUNT secret not set")
+            return None
 
-        # Pattern 1: "id":"FILE_ID","name":"FILENAME"
-        for m in re.finditer(r'"id"\s*:\s*"([\w-]{20,})"\s*,\s*"name"\s*:\s*"([^"]+)"', text):
-            fid, fname = m.group(1), m.group(2)
-            if fid not in seen:
-                seen.add(fid)
-                mime = "text/csv" if fname.lower().endswith(".csv") else                        "application/vnd.ms-excel" if fname.lower().endswith((".xlsx",".xls")) else                        "application/octet-stream"
-                files.append({"id": fid, "name": fname, "mimeType": mime})
-
-        # Pattern 2: data embedded as array ["FILE_ID","FILENAME","MIME"...]
-        if not files:
-            for m in re.finditer(r'\["([\w-]{25,})","([^"]{1,200})","(application/vnd[^"]+|text/csv[^"]*)"]', text):
-                fid, fname, fmime = m.group(1), m.group(2), m.group(3)
-                if fid not in seen:
-                    seen.add(fid)
-                    files.append({"id": fid, "name": fname, "mimeType": fmime})
-
-        # Pattern 3: data-id attribute
-        if not files:
-            for m in re.finditer(r'data-id="([\w-]{20,})"[^>]*title="([^"]+)"', text):
-                fid, fname = m.group(1), m.group(2)
-                if fid not in seen and any(fname.lower().endswith(e) for e in [".csv",".xlsx",".xls"]):
-                    seen.add(fid)
-                    files.append({"id": fid, "name": fname, "mimeType": "text/csv"})
-
-        print(f"  Files found in Drive folder: {len(files)}")
-        if files:
-            for f in files[:5]:
-                print(f"    {f['name']} ({f['id'][:15]}...)")
+        sa_info = json.loads(sa_json)
+        creds   = service_account.Credentials.from_service_account_info(
+            sa_info,
+            scopes=["https://www.googleapis.com/auth/drive.readonly"]
+        )
+        service = build("drive", "v3", credentials=creds, cache_discovery=False)
+        print("  Google Drive API authenticated OK")
+        return service
     except Exception as e:
-        print(f"  Drive folder error: {e}")
+        print(f"  Drive API auth error: {e}")
         traceback.print_exc()
+        return None
 
-    return files
-
-def download_drive_file_as_csv(file_id, mime_type):
+def list_drive_folder_api(service, folder_id):
     """
-    Download a Drive file as CSV text.
-    Handles both Google Sheets (export) and uploaded CSV/Excel files.
+    Lists all files in a Drive folder using the API.
+    Returns list sorted newest modified first.
     """
-    if "spreadsheet" in mime_type or "google" in mime_type:
-        # Google Sheets — export as CSV
-        url = f"https://docs.google.com/spreadsheets/d/{file_id}/export?format=csv"
-    else:
-        # Uploaded CSV or Excel — export via Drive export
-        url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    try:
+        result = service.files().list(
+            q=f"'{folder_id}' in parents and trashed=false",
+            fields="files(id, name, mimeType, modifiedTime)",
+            orderBy="modifiedTime desc",
+            pageSize=50
+        ).execute()
+        files = result.get("files", [])
+        print(f"  Drive folder contains {len(files)} file(s):")
+        for f in files:
+            print(f"    {f['name']} | {f['mimeType']} | {f.get('modifiedTime','')[:10]}")
+        return files
+    except Exception as e:
+        print(f"  Drive list error: {e}")
+        traceback.print_exc()
+        return []
 
-    r = safe_get(url)
-    if r and r.status_code == 200:
-        return r.text
-    return None
+def download_drive_file_api(service, file_id, mime_type, file_name):
+    """
+    Downloads a Drive file and returns its content as text.
+    Handles Google Sheets (export to CSV) and uploaded CSV/Excel files.
+    """
+    try:
+        if "google-apps.spreadsheet" in mime_type:
+            # Google Sheets — export as CSV
+            request = service.files().export_media(
+                fileId=file_id,
+                mimeType="text/csv"
+            )
+        else:
+            # Uploaded file (CSV, Excel, etc.) — download directly
+            request = service.files().get_media(fileId=file_id)
+
+        content = request.execute()
+        if isinstance(content, bytes):
+            # Try UTF-8 first, then latin-1 for Excel exports
+            try:
+                return content.decode("utf-8")
+            except UnicodeDecodeError:
+                return content.decode("latin-1")
+        return str(content)
+    except Exception as e:
+        print(f"  Drive download error for {file_name}: {e}")
+        traceback.print_exc()
+        return None
 
 # =============================================================================
-# 1. COVENTRY COUNCIL NEWS — scrape HTML page (RSS feed is broken)
+# PARSE PLANNING SPREADSHEET
+# Coventry planning export columns (typical):
+#   Reference | Application Type | Address | Proposal | Ward | Status | Date
+# We filter rows where Ward contains "Lower Stoke"
+# =============================================================================
+def parse_planning_csv(csv_text, source_label):
+    apps = []
+    try:
+        # Handle Excel files that may have been converted — clean BOM
+        csv_text = csv_text.lstrip("\ufeff")
+        reader   = csv.DictReader(io.StringIO(csv_text))
+        headers  = reader.fieldnames or []
+        print(f"  Spreadsheet columns: {headers}")
+
+        def col(keywords):
+            for h in (headers or []):
+                for kw in keywords:
+                    if kw.lower() in h.lower():
+                        return h
+            return None
+
+        c_ref    = col(["reference", "ref", "app ref", "application ref", "app no"])
+        c_type   = col(["type", "application type", "app type"])
+        c_addr   = col(["address", "location", "site", "property"])
+        c_desc   = col(["proposal", "description", "development", "works"])
+        c_ward   = col(["ward"])
+        c_status = col(["status", "decision", "stage", "current status"])
+        c_date   = col(["date", "received", "validated", "lodged", "registered"])
+
+        print(f"  Column mapping: ref={c_ref} addr={c_addr} ward={c_ward} status={c_status}")
+
+        row_count = 0
+        for row in reader:
+            row_count += 1
+            # Filter for Lower Stoke ward — check ward column AND full row text
+            ward_val = (row.get(c_ward, "") if c_ward else "").strip()
+            row_text = " ".join(str(v) for v in row.values())
+            if "lower stoke" not in ward_val.lower() and "lower stoke" not in row_text.lower():
+                continue
+
+            ref   = (row.get(c_ref,    "") if c_ref    else "").strip()
+            addr  = (row.get(c_addr,   "") if c_addr   else "").strip()
+            desc  = (row.get(c_desc,   "") if c_desc   else "").strip()
+            atype = (row.get(c_type,   "") if c_type   else "").strip()
+            stat  = (row.get(c_status, "") if c_status else "Received").strip() or "Received"
+            date  = (row.get(c_date,   "") if c_date   else "").strip()
+
+            if not ref and not addr:
+                continue
+
+            # Combine application type + description for a richer display
+            full_desc = desc
+            if atype and desc and atype.lower() not in desc.lower():
+                full_desc = f"{atype} — {desc}"
+            elif atype and not desc:
+                full_desc = atype
+
+            ref_enc = ref.replace("/", "%2F")
+            apps.append({
+                "reference":   ref or "Unknown",
+                "dateLodged":  date or STAMP,
+                "address":     addr or "Lower Stoke, Coventry",
+                "description": full_desc or "Click reference for full details on the planning portal.",
+                "status":      stat,
+                "portalLink":  f"{PORTAL}?fa=getApplication&id={ref_enc}" if ref else PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
+                "source":      source_label,
+                "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
+                "fetchedAt":   STAMP,
+                "storedAt":    NOW_UTC.timestamp()
+            })
+            print(f"  Lower Stoke: {ref} | {addr[:45]} | {stat}")
+
+        print(f"  Rows read: {row_count}, Lower Stoke matches: {len(apps)}")
+    except Exception as e:
+        print(f"  CSV parse error: {e}")
+        traceback.print_exc()
+    return apps
+
+# =============================================================================
+# 1. COUNCIL NEWS
 # =============================================================================
 def scrape_news():
     print("\n-- Council News --")
@@ -170,157 +249,68 @@ def scrape_news():
                 if strong:
                     date_str = strong.get_text(strip=True).replace("Published:", "").strip()
             entries.append({
-                "title":     title,
-                "link":      link,
-                "date":      date_str or "Recent",
-                "focused":   len(entries) == 0,
-                "source":    "coventry.gov.uk/news",
-                "sourceUrl": "https://www.coventry.gov.uk/news",
-                "fetchedAt": STAMP
+                "title": title, "link": link, "date": date_str or "Recent",
+                "focused": len(entries) == 0, "source": "coventry.gov.uk/news",
+                "sourceUrl": "https://www.coventry.gov.uk/news", "fetchedAt": STAMP
             })
             if len(entries) >= 6:
                 break
     if not entries:
-        entries = [{
-            "title": "Visit Coventry Council for the latest news",
-            "link": "https://www.coventry.gov.uk/news",
-            "date": "See website", "focused": True,
-            "source": "coventry.gov.uk/news",
-            "sourceUrl": "https://www.coventry.gov.uk/news",
-            "fetchedAt": STAMP
-        }]
+        entries = [{"title": "Visit Coventry Council for the latest news",
+                    "link": "https://www.coventry.gov.uk/news", "date": "See website",
+                    "focused": True, "source": "coventry.gov.uk/news",
+                    "sourceUrl": "https://www.coventry.gov.uk/news", "fetchedAt": STAMP}]
     print(f"  News articles: {len(entries)}")
     write_json("news.json", entries)
 
 # =============================================================================
 # 2. PLANNING APPLICATIONS
-#
-# Priority order:
-#   A) Drive folder spreadsheet  — you download weekly from Coventry portal
-#   B) planning.data.gov.uk API  — free open government API, auto-filtered
-#   C) Coventry weekly list HTML — often blocked but worth trying
-#   D) Manual hardcoded entries  — always shown regardless
-#
-# All sources are merged. History kept for 90 days.
+#    Priority: A) Drive folder spreadsheet  B) planning.data.gov.uk API
+#              C) Coventry weekly list       D) Manual hardcoded entries
 # =============================================================================
-def parse_planning_csv(csv_text, source_label):
-    """
-    Parse a CSV from the Coventry planning portal.
-    Coventry's export columns (typical):
-      Reference | Application Type | Address | Proposal | Ward | Status | Date
-    We filter rows where Ward contains 'Lower Stoke'.
-    """
-    apps  = []
-    try:
-        reader  = csv.DictReader(io.StringIO(csv_text))
-        headers = reader.fieldnames or []
-        print(f"  CSV headers: {headers}")
-
-        def col(keywords):
-            for h in (headers or []):
-                for kw in keywords:
-                    if kw.lower() in h.lower():
-                        return h
-            return None
-
-        c_ref    = col(["reference","ref","app ref","application ref"])
-        c_type   = col(["type","application type"])
-        c_addr   = col(["address","location","site"])
-        c_desc   = col(["proposal","description","development"])
-        c_ward   = col(["ward"])
-        c_status = col(["status","decision","stage"])
-        c_date   = col(["date","received","validated","lodged"])
-
-        for row in reader:
-            # Filter for Lower Stoke ward
-            ward_val = (row.get(c_ward, "") if c_ward else "").strip()
-            # Also check entire row text in case ward column is missing
-            row_text = " ".join(str(v) for v in row.values())
-            if "lower stoke" not in ward_val.lower() and "lower stoke" not in row_text.lower():
-                continue
-
-            ref   = (row.get(c_ref,    "") if c_ref    else "").strip()
-            addr  = (row.get(c_addr,   "") if c_addr   else "").strip()
-            desc  = (row.get(c_desc,   "") if c_desc   else "").strip()
-            atype = (row.get(c_type,   "") if c_type   else "").strip()
-            stat  = (row.get(c_status, "") if c_status else "Received").strip() or "Received"
-            date  = (row.get(c_date,   "") if c_date   else "").strip()
-
-            if not ref and not addr:
-                continue
-
-            # Combine type + description for a richer description field
-            full_desc = desc
-            if atype and atype.lower() not in desc.lower():
-                full_desc = f"{atype} — {desc}" if desc else atype
-
-            ref_enc = ref.replace("/", "%2F")
-            apps.append({
-                "reference":   ref or "Unknown",
-                "dateLodged":  date or STAMP,
-                "address":     addr or "Lower Stoke, Coventry",
-                "description": full_desc or "Click reference for full details on the planning portal.",
-                "status":      stat,
-                "portalLink":  f"{PORTAL}?fa=getApplication&id={ref_enc}" if ref else PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
-                "source":      source_label,
-                "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
-                "fetchedAt":   STAMP,
-                "storedAt":    NOW_UTC.timestamp()
-            })
-            print(f"  Planning row: {ref} | {addr[:45]} | {stat}")
-    except Exception as e:
-        print(f"  CSV parse error: {e}")
-        traceback.print_exc()
-    return apps
-
-
 def scrape_planning():
     print("\n-- Planning Applications --")
     apps = []
 
     # ------------------------------------------------------------------
-    # SOURCE A: Google Drive folder — you drop the weekly spreadsheet here
-    # Share the folder as "Anyone with link can view"
-    # Folder: https://drive.google.com/drive/folders/1reuhUHzInEHjWdOT4lHEHsQbmYRSl-qo
+    # SOURCE A: Google Drive folder — weekly spreadsheet from your email
     # ------------------------------------------------------------------
-    print("  Checking Drive planning folder...")
-    drive_files = list_drive_folder(PLANNING_FOLDER_ID)
+    print("  Checking Drive planning folder via API...")
+    drive = get_drive_service()
+    if drive:
+        files = list_drive_folder_api(drive, PLANNING_FOLDER_ID)
 
-    # Find spreadsheet/CSV files (not images)
-    spreadsheet_mimes = [
-        "application/vnd.google-apps.spreadsheet",
-        "text/csv",
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "application/csv",
-        "text/plain"
-    ]
-    planning_files = [
-        f for f in drive_files
-        if any(m in f.get("mimeType","") for m in ["spreadsheet","csv","excel","sheet"])
-        or f["name"].lower().endswith((".csv",".xlsx",".xls"))
-    ]
-    print(f"  Planning spreadsheets found in Drive: {len(planning_files)}")
+        # Find spreadsheet or CSV files — newest first (already sorted)
+        planning_files = [
+            f for f in files
+            if any(x in f.get("mimeType","") for x in
+                   ["spreadsheet","csv","excel","sheet","vnd.ms-excel",
+                    "officedocument.spreadsheetml","text/plain"])
+            or any(f["name"].lower().endswith(e) for e in [".csv",".xlsx",".xls",".ods"])
+        ]
+        print(f"  Spreadsheet files found: {len(planning_files)}")
 
-    if planning_files:
-        # Use the first file found (Drive folder listing is newest-first typically)
-        newest = planning_files[0]
-        print(f"  Reading: {newest['name']} ({newest['id']})")
-        csv_text = download_drive_file_as_csv(newest["id"], newest.get("mimeType",""))
-        if csv_text:
-            drive_apps = parse_planning_csv(csv_text, f"Drive: {newest['name']}")
-            print(f"  Lower Stoke apps from Drive file: {len(drive_apps)}")
-            apps.extend(drive_apps)
-        else:
-            print("  Could not download Drive file")
+        for pf in planning_files[:3]:   # try up to 3 newest files
+            print(f"  Reading: {pf['name']}")
+            csv_text = download_drive_file_api(
+                drive, pf["id"], pf.get("mimeType",""), pf["name"])
+            if csv_text:
+                found = parse_planning_csv(csv_text, f"Coventry Planning (via Drive: {pf['name']})")
+                if found:
+                    apps.extend(found)
+                    print(f"  Got {len(found)} Lower Stoke apps from {pf['name']}")
+                    break   # stop once we find a file with Lower Stoke data
+            else:
+                print(f"  Could not read {pf['name']}")
+    else:
+        print("  Drive API not available — skipping Drive source")
 
     # ------------------------------------------------------------------
-    # SOURCE B: planning.data.gov.uk open API
-    # Free government API, Lower Stoke ward entity = 800137
+    # SOURCE B: planning.data.gov.uk open API (free, no blocking)
+    # Lower Stoke ward entity = 800137
     # ------------------------------------------------------------------
     try:
         ninety_ago = NOW_UTC - timedelta(days=90)
-        # Build URL as a single string — multiline concat loses f-string vars
         api_url = (
             f"https://www.planning.data.gov.uk/entity.json"
             f"?dataset=planning-application"
@@ -332,14 +322,15 @@ def scrape_planning():
             f"&entry_date_match=after"
             f"&limit=100"
         )
-        print(f"  API URL: {api_url[:100]}...")
+        print(f"  Calling: {api_url[:80]}...")
         r = safe_get(api_url)
         if r and r.status_code == 200:
             entities = r.json().get("entities", [])
-            print(f"  planning.data.gov.uk: {len(entities)} entities")
+            print(f"  planning.data.gov.uk: {len(entities)} entities returned")
+            existing_refs = {a["reference"] for a in apps}
             for e in entities:
                 ref  = (e.get("reference") or "").strip()
-                if not ref:
+                if not ref or ref in existing_refs:
                     continue
                 addr = (e.get("name") or e.get("address-text") or "Lower Stoke, Coventry").strip()
                 desc = (e.get("description") or e.get("development-description") or
@@ -359,17 +350,17 @@ def scrape_planning():
                     "fetchedAt":   STAMP,
                     "storedAt":    NOW_UTC.timestamp()
                 })
-                print(f"  API app: {ref} | {addr[:45]} | {stat}")
+                print(f"  API: {ref} | {addr[:45]} | {stat}")
         else:
             print(f"  planning.data.gov.uk status: {r.status_code if r else 'no response'}")
     except Exception as e:
         print(f"  planning.data.gov.uk error: {e}")
 
     # ------------------------------------------------------------------
-    # SOURCE C: Coventry weekly list HTML (often blocked — backup only)
+    # SOURCE C: Coventry weekly list (often blocked — last resort)
     # ------------------------------------------------------------------
     if not apps:
-        print("  Trying Coventry weekly list as last resort...")
+        print("  Trying Coventry weekly list...")
         for fa in ["getReceivedWeeklyList", "getDeterminedWeeklyList"]:
             r2 = safe_get(f"{PORTAL}?fa={fa}")
             if r2 and r2.status_code == 200:
@@ -410,8 +401,7 @@ def scrape_planning():
                         "reference": ref, "dateLodged": date_l or NOW_UK.strftime("%-d %b %Y"),
                         "address": addr or "Lower Stoke, Coventry",
                         "description": desc or "Click reference for full details.",
-                        "status": stat,
-                        "portalLink": app_link,
+                        "status": stat, "portalLink": app_link,
                         "source": "planandregulatory.coventry.gov.uk",
                         "sourceUrl": PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
                         "fetchedAt": STAMP, "storedAt": NOW_UTC.timestamp()
@@ -433,12 +423,11 @@ def scrape_planning():
             "fetchedAt":   "Manually added",
             "storedAt":    1749340800
         },
-        # Add more manual entries here if needed
     ]
     manual_refs = {a["reference"] for a in MANUAL}
 
     # ------------------------------------------------------------------
-    # MERGE all sources into rolling store (90 days history)
+    # MERGE into rolling 90-day store
     # ------------------------------------------------------------------
     store_path = DATA_DIR / "planning_store.json"
     stored = []
@@ -450,23 +439,17 @@ def scrape_planning():
 
     cutoff    = (NOW_UTC - timedelta(days=90)).timestamp()
     store_map = {}
-
-    # Load history, keep manual refs forever
     for a in stored:
         if a.get("storedAt", 0) > cutoff or a.get("reference") in manual_refs:
             store_map[a["reference"]] = a
-
-    # Manual entries fill any gaps
     for a in MANUAL:
         if a["reference"] not in store_map:
             store_map[a["reference"]] = a
-
-    # Fresh apps overwrite stored (newest data wins)
-    seen = set()
+    seen_refs = set()
     for a in apps:
-        ref = a.get("reference", "")
-        if ref and ref not in seen:
-            seen.add(ref)
+        ref = a.get("reference","")
+        if ref and ref not in seen_refs:
+            seen_refs.add(ref)
             store_map[ref] = a
 
     merged = sorted(store_map.values(),
@@ -478,7 +461,6 @@ def scrape_planning():
     print(f"  Total planning apps: {len(merged)}")
     for a in merged:
         print(f"    {a['reference']} | {a['address'][:40]} | {a['status']}")
-
     write_json("planning.json", merged)
 
 # =============================================================================
@@ -516,20 +498,17 @@ def scrape_police_events():
                                 "address": address or "Coventry",
                                 "sourceUrl": f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}",
                                 "fetchedAt": STAMP})
-                print(f"  Event: {title} | {date_str}")
-
     wmp_url = f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}"
     known = [
-        {"title":"Lower Stoke PACT Meeting",             "date":"6:00PM-7:00PM, Mon 08 June 2026", "address":"St Margaret's Church, 50 Walsgrave Road, Ball Hill, Coventry"},
-        {"title":"Community PACT Meeting - Upper Stoke",  "date":"6:00PM-7:00PM, Mon 08 June 2026", "address":"St Margaret's Church, 50 Walsgrave Road, Ball Hill, Coventry"},
-        {"title":"Wyken Community PACT Meeting",          "date":"6:00PM-7:00PM, Tue 09 June 2026", "address":"Wyken Community Centre, Westmorland Road, Coventry CV2 5PY"},
-        {"title":"Community PACT Meeting - Upper Stoke",  "date":"6:00PM-8:00PM, Fri 28 Aug 2026",  "address":"Stoke St Michael's Church, Coventry"},
+        {"title":"Lower Stoke PACT Meeting",            "date":"6:00PM-7:00PM, Mon 08 June 2026","address":"St Margaret's Church, 50 Walsgrave Road, Ball Hill, Coventry"},
+        {"title":"Community PACT Meeting - Upper Stoke", "date":"6:00PM-7:00PM, Mon 08 June 2026","address":"St Margaret's Church, 50 Walsgrave Road, Ball Hill, Coventry"},
+        {"title":"Wyken Community PACT Meeting",         "date":"6:00PM-7:00PM, Tue 09 June 2026","address":"Wyken Community Centre, Westmorland Road, Coventry CV2 5PY"},
+        {"title":"Community PACT Meeting - Upper Stoke", "date":"6:00PM-8:00PM, Fri 28 Aug 2026", "address":"Stoke St Michael's Church, Coventry"},
     ]
     existing = {e["title"].lower() for e in events}
     for k in known:
         if k["title"].lower() not in existing:
             events.append({**k, "sourceUrl": wmp_url, "fetchedAt": STAMP})
-
     print(f"  Total events: {len(events)}")
     write_json("police_events.json", events)
 
@@ -539,9 +518,7 @@ def scrape_police_team():
     html = wmp_fetch("on-the-team")
     if html:
         soup     = BeautifulSoup(html, "html.parser")
-        ranks_re = re.compile(
-            r'\b(Inspector|Chief Inspector|Superintendent|Sergeant|Sgt|'
-            r'Constable|Detective Constable|Detective Sergeant|PC|PCSO)\b', re.I)
+        ranks_re = re.compile(r'\b(Inspector|Chief Inspector|Superintendent|Sergeant|Sgt|Constable|Detective Constable|Detective Sergeant|PC|PCSO)\b', re.I)
         for heading in soup.find_all(["h3","h4","h5","h6"]):
             name = heading.get_text(strip=True)
             if not re.match(r'^[A-Z][a-z]+(?: [A-Z][a-z\'-]+){1,3}$', name):
@@ -562,19 +539,13 @@ def scrape_police_team():
                     break
             if name not in [t["name"] for t in team]:
                 team.append({"name": name, "rank": rank or "Neighbourhood Officer",
-                              "bio": bio,
-                              "sourceUrl": f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}",
+                              "bio": bio, "sourceUrl": f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}",
                               "fetchedAt": STAMP})
-                print(f"  Officer: {name} - {rank}")
-
-    confirmed = {
-        "name": "Manwar Porter", "rank": "Inspector",
-        "bio": "Local Policing Inspector for the North East Sector of Coventry covering Stoke & Wyken. Primary focus on antisocial behaviour, vehicle crime, and retail crime.",
-        "sourceUrl": f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}", "fetchedAt": STAMP
-    }
+    confirmed = {"name":"Manwar Porter","rank":"Inspector",
+                 "bio":"Local Policing Inspector for the North East Sector of Coventry covering Stoke & Wyken. Primary focus on antisocial behaviour, vehicle crime, and retail crime.",
+                 "sourceUrl":f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}","fetchedAt":STAMP}
     if not any(t["name"] == "Manwar Porter" for t in team):
         team.insert(0, confirmed)
-
     print(f"  Total officers: {len(team)}")
     write_json("police_team.json", team)
 
@@ -607,41 +578,34 @@ def scrape_police_crimes():
                     "sourceUrl": f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}",
                     "fetchedAt": STAMP
                 })
-                print(f"  Crime: {title} ({count})")
-
     try:
-        r = requests.get(
-            "https://data.police.uk/api/priorities?neighbourhood=west-midlands/stoke-and-wyken",
-            timeout=10)
+        r = requests.get("https://data.police.uk/api/priorities?neighbourhood=west-midlands/stoke-and-wyken", timeout=10)
         if r.status_code == 200:
             for item in r.json():
-                t = item.get("issue_title", "")
+                t = item.get("issue_title","")
                 if t and not any(p["title"].lower() == t.lower() for p in priorities):
                     priorities.append({
-                        "title":     t,
-                        "issue":     re.sub(r'<[^>]+>', '', item.get("issue","")).strip(),
-                        "action":    re.sub(r'<[^>]+>', '', item.get("action","")).strip() or "Active policing response in place.",
-                        "status":    "Active Priority",
-                        "source":    "data.police.uk",
-                        "sourceUrl": "https://data.police.uk",
-                        "fetchedAt": STAMP
+                        "title": t,
+                        "issue": re.sub(r'<[^>]+>','',item.get("issue","")).strip(),
+                        "action": re.sub(r'<[^>]+>','',item.get("action","")).strip() or "Active policing response in place.",
+                        "status": "Active Priority", "source": "data.police.uk",
+                        "sourceUrl": "https://data.police.uk", "fetchedAt": STAMP
                     })
     except Exception as e:
         print(f"  data.police.uk error: {e}")
-
     if not priorities:
         wmp_url = f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}"
         priorities = [
             {"title":"Violence and Sexual Offences","issue":"161 reported (Apr 2026)","count":"161","action":"Targeted policing operations and victim support services in place.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
             {"title":"Shoplifting","issue":"45 reported (Apr 2026)","count":"45","action":"High-visibility patrols at retail locations including Binley Road.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
-            {"title":"Criminal Damage and Arson","issue":"41 reported (Apr 2026)","count":"41","action":"Increased patrols in hotspot areas. Residents encouraged to report suspicious activity.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
+            {"title":"Criminal Damage and Arson","issue":"41 reported (Apr 2026)","count":"41","action":"Increased patrols in hotspot areas.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
             {"title":"Other Theft","issue":"33 reported (Apr 2026)","count":"33","action":"Intelligence-led operations targeting repeat offenders.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
         ]
     print(f"  Total crime priorities: {len(priorities)}")
     write_json("police_crimes.json", priorities)
 
 # =============================================================================
-# 4. CASEWORK LOG — Google Sheets public CSV export
+# 4. CASEWORK LOG
 # =============================================================================
 def scrape_casework():
     print("\n-- Casework Log --")
@@ -652,14 +616,12 @@ def scrape_casework():
         reader  = csv.DictReader(io.StringIO(r.text))
         headers = reader.fieldnames or []
         print(f"  Headers: {headers}")
-
         def col(keywords):
             for h in headers:
                 for kw in keywords:
                     if kw.lower() in h.lower():
                         return h
             return None
-
         c_title = col(["title","subject","issue","problem"])
         c_body  = col(["body","detail","description","update","note"])
         c_loc   = col(["location","address","area","street"])
@@ -668,7 +630,6 @@ def scrape_casework():
         c_name  = col(["name","resident","contact"])
         c_email = col(["email"])
         c_date  = col(["date","when","received","timestamp"])
-
         for row in reader:
             title = (row.get(c_title,"") if c_title else "").strip()
             body  = (row.get(c_body, "") if c_body  else "").strip()
@@ -689,7 +650,7 @@ def scrape_casework():
             })
         print(f"  Cases: {len(cases)}")
     else:
-        print("  Could not read sheet — share it as 'Anyone with link can view'")
+        print("  Could not read sheet — share as 'Anyone with link can view'")
     write_json("casework.json", cases)
 
 # =============================================================================
