@@ -1,5 +1,41 @@
 [
   {
+    "reference": "PL/2026/0000653/HHA",
+    "dateLodged": "20/4/2026",
+    "address": "9 Browning Road, Coventry, CV2 5HR",
+    "description": "HHA Householder application for planning permission for works or extension to a dwelling — Erection of single storey rear extension and internal alterations",
+    "status": "Received",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000653%2FHHA",
+    "source": "Coventry Planning (via Drive: Councillor List 18.4.26 - 24.4.26)",
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "7 June 2026 at 02:36",
+    "storedAt": 1780796181.88162
+  },
+  {
+    "reference": "PL/2026/0000633/FUL",
+    "dateLodged": "15/4/2026",
+    "address": "136 Whitworth Avenue, Coventry, CV3 1EY",
+    "description": "FUL minor application — Erection of 1no. 1 bedroom bungalow and 1no. 2 bedroom bungalow with associated parking and landscaping",
+    "status": "Received",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000633%2FFUL",
+    "source": "Coventry Planning (via Drive: Councillor List 18.4.26 - 24.4.26)",
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "7 June 2026 at 02:36",
+    "storedAt": 1780796181.88162
+  },
+  {
+    "reference": "PL/2026/0000608/DCA",
+    "dateLodged": "13/4/2026",
+    "address": "Garages (rear Of The Lindfield And Treforest Road) Whitworth Avenue, Coventry",
+    "description": "DCA Approval of details reserved by condition — Submission of details to discharge conditions 3-construction method statement; 4-written scheme of investigation; 5-investigation and risk assessment; 6-remediation scheme; 7-commencement of remediation; 10-arboricultural impact assessment; 11-drainage scheme; 12-materials; 22-boundary fencing and 23-swift boxes: imposed on planning permission FUL/2022/2372 for erection of 1No. 3 bedroomed house with associated parking and landscaping following demolition of 1 No. garage granted 23.05.23",
+    "status": "Received",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000608%2FDCA",
+    "source": "Coventry Planning (via Drive: Councillor List 18.4.26 - 24.4.26)",
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "7 June 2026 at 02:36",
+    "storedAt": 1780796181.88162
+  },
+  {
     "reference": "PL/2026/0000951/TCA",
     "dateLodged": "2026",
     "address": "13 Central Avenue, Coventry, CV2 4DN",
