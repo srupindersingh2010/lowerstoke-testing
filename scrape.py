@@ -61,6 +61,44 @@ def fmt_date(iso_date):
     except Exception:
         return str(iso_date)
 
+def fmt_excel_date(value):
+    """
+    Convert an Excel/Google Sheets serial date number to a readable date string.
+    Excel counts days from 1 Jan 1900. e.g. 46179.75 = 7 June 2026 at 18:00.
+    Also handles: plain date strings, ISO dates, and empty values.
+    """
+    if not value:
+        return ""
+    # Already a readable string (not a number)
+    if isinstance(value, str):
+        value = value.strip()
+        if not value:
+            return ""
+        # Try parsing as ISO date first
+        try:
+            d = dt_date.fromisoformat(value[:10])
+            return d.strftime("%-d %b %Y")
+        except Exception:
+            pass
+        # Try as a float serial
+        try:
+            value = float(value)
+        except Exception:
+            # Return as-is if it looks like a date string already
+            if re.search(r'\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4}', value):
+                return value
+            if re.search(r'\d{4}', value) and len(value) > 6:
+                return value
+            return value
+    try:
+        serial = float(value)
+        # Excel serial: days since 30 Dec 1899 (accounting for leap year bug)
+        base = dt_date(1899, 12, 30)
+        d = base + timedelta(days=int(serial))
+        return d.strftime("%-d %b %Y")
+    except Exception:
+        return str(value)
+
 # =============================================================================
 # GOOGLE DRIVE API — service account authentication
 # Reads GDRIVE_SERVICE_ACCOUNT secret from environment (set in GitHub secrets)
@@ -673,19 +711,30 @@ def scrape_casework():
         headers = reader.fieldnames or []
         print(f"  Headers: {headers}")
         def col(keywords):
+            # Exact match first (case-insensitive)
             for h in headers:
                 for kw in keywords:
-                    if kw.lower() in h.lower():
+                    if h.lower().strip() == kw.lower().strip():
+                        return h
+            # Partial match — whole word only to avoid "date" matching "update"
+            for h in headers:
+                for kw in keywords:
+                    if re.search(r"\b" + re.escape(kw.lower()) + r"\b", h.lower()):
                         return h
             return None
-        c_title = col(["title","subject","issue","problem"])
-        c_body  = col(["body","detail","description","update","note"])
-        c_loc   = col(["location","address","area","street"])
-        c_stat  = col(["status","stage","state"])
-        c_log   = col(["logged by","logged","councillor","officer","assigned"])
-        c_name  = col(["name","resident","contact"])
-        c_email = col(["email"])
-       c_date  = col(["date","when","received","timestamp","start time","start"])
+
+        # Exact column names from your Google Sheet:
+        # Id | Start time | Completion time | Email | Name | Title |
+        # Location Focus | Update Body Text | Status | Logged by
+        c_title = col(["Title", "title", "subject", "issue", "problem"])
+        c_body  = col(["Update Body Text", "body text", "body", "detail", "description", "note"])
+        c_loc   = col(["Location Focus", "location", "address", "area", "street"])
+        c_stat  = col(["Status", "status", "stage", "state"])
+        c_log   = col(["Logged by", "logged by", "councillor", "officer", "assigned"])
+        c_name  = col(["Name", "name", "resident", "contact"])
+        c_email = col(["Email", "email"])
+        c_date  = col(["Start time", "start time", "Completion time", "timestamp", "date received", "date logged"])
+        print(f"  Columns: title={c_title} body={c_body} date={c_date} status={c_stat}")
         for row in reader:
             title = (row.get(c_title,"") if c_title else "").strip()
             body  = (row.get(c_body, "") if c_body  else "").strip()
@@ -701,7 +750,7 @@ def scrape_casework():
                 "loggedBy":     (row.get(c_log,"")   if c_log   else "").strip(),
                 "name":         (row.get(c_name,"")  if c_name  else "").strip(),
                 "email":        (row.get(c_email,"") if c_email else "").strip(),
-                "date":         (row.get(c_date,"")  if c_date  else "").strip(),
+                "date":         fmt_excel_date(row.get(c_date,"") if c_date else ""),
                 "fetchedAt":    STAMP
             })
         print(f"  Cases: {len(cases)}")
