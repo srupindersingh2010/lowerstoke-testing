@@ -32,9 +32,9 @@
     .page-view { display: none; }
     .page-view.active-view { display: block; }
 
-    .main-layout { display: flex; gap: 25px; align-items: flex-start; flex-wrap: wrap; }
-    .sidebar { flex: 0 0 300px; min-width: 260px; display: flex; flex-direction: column; gap: 20px; }
-    .content-area { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
+    .main-layout { display: flex; gap: 25px; align-items: flex-start; flex-wrap: nowrap; }
+    .sidebar { flex: 0 0 300px; width: 300px; min-width: 260px; display: flex; flex-direction: column; gap: 20px; }
+    .content-area { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
 
     .card { background: #FFF; border: 1px solid #EAEAEA; border-radius: 6px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
     .card-red-top  { border-top: 4px solid var(--labour-red); }
@@ -65,10 +65,10 @@
     .badge-green  { background: #E8F5E9; color: #1B5E20; }
     .badge-orange { background: #FFF3E0; color: #E65100; }
 
-    .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; margin-top: 12px; }
-    .news-card { background: #FFF; border: 1px solid #EAEAEA; border-radius: 4px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+    .news-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 12px; }
+    .news-card { background: #FFF; border: 1px solid #EAEAEA; border-radius: 4px; padding: 16px 20px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
     .news-card.featured { border-left: 4px solid #2ECC71; }
-    .news-card h4 { margin: 0 0 6px; font-size: 1rem; color: #111; }
+    .news-card h4 { margin: 0 0 4px; font-size: 0.97rem; color: #111; flex: 1; }
     .news-card .meta { font-size: 0.78rem; color: #888; margin-bottom: 10px; }
     .news-card .read-link { color: var(--labour-red); font-weight: bold; text-decoration: none; font-size: 0.88rem; }
     .source-link { font-size: 0.72rem; color: #bbb; margin-top: 4px; }
@@ -116,9 +116,11 @@
     footer { text-align: center; padding: 28px 15px; margin-top: 20px; background: var(--charcoal); color: #CCC; font-size: 0.82rem; }
     footer a { color: #AAA; }
 
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       header h1 { font-size: 1.5rem; }
-      .sidebar { flex: 1 1 100%; }
+      .main-layout { flex-wrap: wrap; }
+      .sidebar { flex: 1 1 100%; width: 100%; }
+      .news-card { flex-direction: column; align-items: flex-start; }
       .tab-link { padding: 10px 12px; font-size: 0.82rem; }
     }
   </style>
@@ -459,9 +461,16 @@
     stamp('ts-news', data[0].fetchedAt);
     document.getElementById('news-box').innerHTML = data.map(function(n){
       return '<div class="news-card'+(n.focused?' featured':'')+'">'+
-        '<div><h4>'+esc(n.title)+'</h4><div class="meta">📅 '+esc(n.date)+'</div></div>'+
-        '<div><a href="'+esc(n.link)+'" target="_blank" class="read-link">Read full article →</a>'+
-        '<div class="source-link">Source: <a href="'+esc(n.link)+'" target="_blank">'+esc(n.source||'coventry.gov.uk')+'</a></div></div></div>';
+        '<div style="flex:1;min-width:0;">'+
+          '<h4>'+esc(n.title)+'</h4>'+
+          (n.summary ? '<p style="font-size:0.84rem;color:#555;margin:4px 0 6px;line-height:1.5;">'+esc(n.summary)+'</p>' : '')+
+          '<div class="meta">📅 '+esc(n.date)+'</div>'+
+        '</div>'+
+        '<div style="flex-shrink:0;padding-left:12px;text-align:right;">'+
+          '<a href="'+esc(n.link)+'" target="_blank" class="read-link" style="white-space:nowrap;">Read full article →</a>'+
+          '<div class="source-link"><a href="https://www.coventry.gov.uk/news" target="_blank">coventry.gov.uk/news</a></div>'+
+        '</div>'+
+      '</div>';
     }).join('');
   }
 
