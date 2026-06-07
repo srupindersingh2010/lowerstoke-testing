@@ -26,9 +26,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests beautifulsoup4 lxml
+          pip install requests beautifulsoup4 lxml \
+                      google-api-python-client \
+                      google-auth google-auth-httplib2
 
-     - name: Run scraper
+      - name: Run scraper
         env:
           GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
         run: python scrape.py
