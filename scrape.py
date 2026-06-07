@@ -685,7 +685,7 @@ def scrape_casework():
         c_log   = col(["logged by","logged","councillor","officer","assigned"])
         c_name  = col(["name","resident","contact"])
         c_email = col(["email"])
-        c_date  = col(["date","when","received","timestamp"])
+       c_date  = col(["date","when","received","timestamp","start time","start"])
         for row in reader:
             title = (row.get(c_title,"") if c_title else "").strip()
             body  = (row.get(c_body, "") if c_body  else "").strip()
