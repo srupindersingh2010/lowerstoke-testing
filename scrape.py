@@ -74,40 +74,56 @@ def fmt_date(iso_date):
 # =============================================================================
 def list_drive_folder(folder_id):
     """
-    Uses the Google Drive public folder export URL to list files.
-    No API key needed — works because folder is shared publicly.
+    Lists files in a public Google Drive folder.
+    Uses the Drive folder RSS/export feed which returns parseable XML/HTML.
+    The folder must be shared as "Anyone with the link can view".
     """
     files = []
-    # Drive folder page gives a JSON listing when fetched with the right accept header
+
+    # Method 1: Use the Drive folder download page which lists files in HTML
+    # Pattern found in Google Drive HTML: data-id="FILE_ID" or similar
     url = f"https://drive.google.com/drive/folders/{folder_id}"
     try:
-        r = requests.get(url, headers={
-            **HEADERS,
-            "Accept": "application/json, text/javascript, */*; q=0.01",
-        }, timeout=15, allow_redirects=True)
-        print(f"  Drive folder {folder_id} -> {r.status_code} ({len(r.text)} chars)")
-
-        # Drive embeds file metadata as JSON inside the HTML page
-        # Look for the file listing JSON block
+        r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
+        print(f"  Drive folder -> {r.status_code} ({len(r.text)} chars)")
         text = r.text
 
-        # Extract file IDs and names from the page HTML
-        # Google Drive renders files as data in the page source
-        # Pattern: ["FILE_ID","FILE_NAME","MIME_TYPE",...]
-        file_pattern = re.findall(
-            r'\["([\w-]{25,})",\s*"([^"]+)",\s*"([^"]+)"',
-            text
-        )
+        # Google Drive embeds file data as JSON in page source in multiple formats.
+        # Try several patterns to extract file IDs and names.
         seen = set()
-        for fid, fname, fmime in file_pattern:
-            if fid in seen:
-                continue
-            seen.add(fid)
-            files.append({"id": fid, "name": fname, "mimeType": fmime, "modifiedTime": ""})
 
-        print(f"  Found {len(files)} files in folder")
+        # Pattern 1: "id":"FILE_ID","name":"FILENAME"
+        for m in re.finditer(r'"id"\s*:\s*"([\w-]{20,})"\s*,\s*"name"\s*:\s*"([^"]+)"', text):
+            fid, fname = m.group(1), m.group(2)
+            if fid not in seen:
+                seen.add(fid)
+                mime = "text/csv" if fname.lower().endswith(".csv") else                        "application/vnd.ms-excel" if fname.lower().endswith((".xlsx",".xls")) else                        "application/octet-stream"
+                files.append({"id": fid, "name": fname, "mimeType": mime})
+
+        # Pattern 2: data embedded as array ["FILE_ID","FILENAME","MIME"...]
+        if not files:
+            for m in re.finditer(r'\["([\w-]{25,})","([^"]{1,200})","(application/vnd[^"]+|text/csv[^"]*)"]', text):
+                fid, fname, fmime = m.group(1), m.group(2), m.group(3)
+                if fid not in seen:
+                    seen.add(fid)
+                    files.append({"id": fid, "name": fname, "mimeType": fmime})
+
+        # Pattern 3: data-id attribute
+        if not files:
+            for m in re.finditer(r'data-id="([\w-]{20,})"[^>]*title="([^"]+)"', text):
+                fid, fname = m.group(1), m.group(2)
+                if fid not in seen and any(fname.lower().endswith(e) for e in [".csv",".xlsx",".xls"]):
+                    seen.add(fid)
+                    files.append({"id": fid, "name": fname, "mimeType": "text/csv"})
+
+        print(f"  Files found in Drive folder: {len(files)}")
+        if files:
+            for f in files[:5]:
+                print(f"    {f['name']} ({f['id'][:15]}...)")
     except Exception as e:
         print(f"  Drive folder error: {e}")
+        traceback.print_exc()
+
     return files
 
 def download_drive_file_as_csv(file_id, mime_type):
@@ -304,17 +320,19 @@ def scrape_planning():
     # ------------------------------------------------------------------
     try:
         ninety_ago = NOW_UTC - timedelta(days=90)
+        # Build URL as a single string — multiline concat loses f-string vars
         api_url = (
-            "https://www.planning.data.gov.uk/entity.json"
-            "?dataset=planning-application"
-            "&geometry_entity=800137"
-            "&geometry_relation=intersects"
+            f"https://www.planning.data.gov.uk/entity.json"
+            f"?dataset=planning-application"
+            f"&geometry_entity=800137"
+            f"&geometry_relation=intersects"
             f"&entry_date_year={ninety_ago.year}"
             f"&entry_date_month={ninety_ago.month}"
             f"&entry_date_day={ninety_ago.day}"
-            "&entry_date_match=after"
-            "&limit=100"
+            f"&entry_date_match=after"
+            f"&limit=100"
         )
+        print(f"  API URL: {api_url[:100]}...")
         r = safe_get(api_url)
         if r and r.status_code == 200:
             entities = r.json().get("entities", [])
