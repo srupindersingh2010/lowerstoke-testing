@@ -174,52 +174,112 @@ def parse_planning_html(html):
     return apps
 
 def scrape_planning():
+    """
+    Uses the free planning.data.gov.uk API — no scraping, no blocking.
+    Queries by the Lower Stoke ward entity (800137) which gives us
+    only applications within the ward boundary automatically.
+    Falls back to the Coventry weekly list if needed.
+    """
     print("\n-- Planning Applications --")
+    apps = []
+    PORTAL = "https://planandregulatory.coventry.gov.uk/planning/index.html"
 
-    # =================================================================
-    # MANUAL APPLICATIONS
-    # Add new planning applications here when you see them on the portal.
-    # Format from portal: Reference | Type | Address | Description | Ward
-    # Visit: https://planandregulatory.coventry.gov.uk/planning/index.html
-    #        ?fa=getApplications&ward=Lower%20Stoke
-    # Then copy the details into a new block below and commit the file.
-    # =================================================================
+    # =========================================================
+    # SOURCE 1: planning.data.gov.uk open API (best — no blocks)
+    # Lower Stoke ward entity = 800137 (confirmed from planning.data.gov.uk)
+    # =========================================================
+    try:
+        # Get apps within Lower Stoke ward boundary, last 90 days
+        ninety_days_ago = NOW_UTC - timedelta(days=90)
+        api_url = (
+            "https://www.planning.data.gov.uk/entity.json"
+            "?dataset=planning-application"
+            f"&geometry_entity=800137"
+            "&geometry_relation=intersects"
+            f"&entry_date_year={ninety_days_ago.year}"
+            f"&entry_date_month={ninety_days_ago.month}"
+            f"&entry_date_day={ninety_days_ago.day}"
+            "&entry_date_match=after"
+            "&limit=100"
+        )
+        r = safe_get(api_url)
+        if r and r.status_code == 200:
+            data = r.json()
+            entities = data.get("entities", [])
+            print(f"  planning.data.gov.uk returned {len(entities)} entities")
+            for e in entities:
+                ref     = e.get("reference", "")
+                address = e.get("name", "") or e.get("address", "")
+                desc    = e.get("description", "") or e.get("development-description", "")
+                status  = e.get("status", "") or e.get("decision", "Received")
+                date    = e.get("start-date", "") or e.get("entry-date", "")
+                # Build portal link from reference
+                ref_encoded = ref.replace("/", "%2F")
+                portal_link = f"{PORTAL}?fa=getApplication&id={ref_encoded}" if ref else PORTAL + "?fa=getApplications&ward=Lower%20Stoke"
+
+                if not ref:
+                    continue
+
+                # Format date nicely
+                date_str = date
+                if date and len(date) == 10:  # YYYY-MM-DD format
+                    try:
+                        from datetime import date as dt_date
+                        d = dt_date.fromisoformat(date)
+                        date_str = d.strftime("%-d %b %Y")
+                    except Exception:
+                        pass
+
+                apps.append({
+                    "reference":   ref,
+                    "dateLodged":  date_str or STAMP,
+                    "address":     address or "Lower Stoke, Coventry",
+                    "description": desc or "Click reference to view full details on the planning portal.",
+                    "status":      status,
+                    "portalLink":  portal_link,
+                    "source":      "planning.data.gov.uk",
+                    "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
+                    "fetchedAt":   STAMP,
+                    "storedAt":    NOW_UTC.timestamp()
+                })
+                print(f"  App: {ref} | {address[:50]} | {status}")
+        else:
+            print(f"  planning.data.gov.uk returned status {r.status_code if r else 'no response'}")
+    except Exception as e:
+        print(f"  planning.data.gov.uk error: {e}")
+
+    # =========================================================
+    # SOURCE 2: Coventry portal weekly list (backup if API empty)
+    # =========================================================
+    if len(apps) == 0:
+        print("  Trying Coventry weekly list as backup...")
+        for fa in ["getReceivedWeeklyList", "getDeterminedWeeklyList"]:
+            r = safe_get(f"{PORTAL}?fa={fa}")
+            if r and r.status_code == 200:
+                apps.extend(parse_planning_html(r.text, PORTAL))
+
+    # =========================================================
+    # SOURCE 3: Manual apps always included (never lost)
+    # Add any known applications below — they stay permanently
+    # =========================================================
     MANUAL_APPS = [
         {
             "reference":   "PL/2026/0000951/TCA",
             "dateLodged":  "2026",
             "address":     "13 Central Avenue, Coventry, CV2 4DN",
-            "description": "TCA — Trees in a Conservation Area. "
-                           "T1 Damson: Cut back Damson overhanging lawn area. "
-                           "T2 Sycamore: Remove self-set Sycamore to ground level. "
-                           "T3 Lime: Reduce by 3-4m and cut back over garden.",
+            "description": "Trees in a Conservation Area — T1 Damson: Cut back overhanging lawn. T2 Sycamore: Remove self-set Sycamore to ground level. T3 Lime: Reduce by 3-4m and cut back over garden.",
             "status":      "Under Consultation",
-            "portalLink":  "https://planandregulatory.coventry.gov.uk/planning/index.html"
-                           "?fa=getApplication&id=PL%2F2026%2F0000951%2FTCA",
+            "portalLink":  f"{PORTAL}?fa=getApplication&id=PL%2F2026%2F0000951%2FTCA",
             "source":      "planandregulatory.coventry.gov.uk",
             "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
             "fetchedAt":   "Manually added",
             "storedAt":    1749340800
         },
-        # ── ADD NEW APPLICATIONS BELOW THIS LINE ──────────────────────
-        # Copy this template, fill in the details, save and commit:
-        #
-        # {
-        #     "reference":   "PL/2026/XXXXXXX/TYPE",
-        #     "dateLodged":  "DD Mon YYYY",
-        #     "address":     "Street Address, Coventry, POSTCODE",
-        #     "description": "Full description from the planning portal",
-        #     "status":      "Under Consultation / Awaiting Decision / Granted / Refused",
-        #     "portalLink":  "https://planandregulatory.coventry.gov.uk/planning/index.html"
-        #                    "?fa=getApplication&id=PL%2F2026%2FXXXXXXX%2FTYPE",
-        #     "source":      "planandregulatory.coventry.gov.uk",
-        #     "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
-        #     "fetchedAt":   "Manually added DD Mon YYYY",
-        #     "storedAt":    1749340800
-        # },
+        # ── ADD MORE BELOW IF NEEDED ─────────────────────────
+        # ("PL/2026/XXXXXXX/TYPE", "Date", "Address", "Description", "Status")
     ]
 
-    # Load persistent store (survives across daily runs)
+    # Build final merged list — deduplicate by reference
     store_path = DATA_DIR / "planning_store.json"
     stored = []
     if store_path.exists():
@@ -228,58 +288,38 @@ def scrape_planning():
         except Exception:
             pass
 
-    # Build map from store — manual apps always win (they have older storedAt
-    # so fresh scrapes overwrite them only if same reference is found live)
     store_map = {}
+    # Load stored (keeps history)
+    cutoff = (NOW_UTC - timedelta(days=90)).timestamp()
     for a in stored:
-        store_map[a["reference"]] = a
-    # Seed manual apps (only if not already in store with live data)
+        if a.get("storedAt", 0) > cutoff:
+            store_map[a["reference"]] = a
+
+    # Manual apps always present
     for a in MANUAL_APPS:
         if a["reference"] not in store_map:
             store_map[a["reference"]] = a
-        else:
-            # Keep whichever has more detail (live scrape wins if it has address)
-            existing = store_map[a["reference"]]
-            if not existing.get("address") or existing.get("address") == "Lower Stoke, Coventry":
-                store_map[a["reference"]] = a
 
-    # Try to scrape fresh apps from portal weekly lists
-    # (portal often blocks, but we try anyway — any new ones get added to store)
-    scraped = []
-    for fa in ["getReceivedWeeklyList", "getDeterminedWeeklyList"]:
-        r = safe_get(f"{PORTAL}?fa={fa}")
-        if r and r.status_code == 200:
-            scraped.extend(parse_planning_html(r.text))
-
-    now_ts = NOW_UTC.timestamp()
-    seen   = set()
-    for a in scraped:
+    # Fresh scraped apps overwrite stored
+    seen = set()
+    for a in apps:
         if a["reference"] not in seen:
             seen.add(a["reference"])
-            a["storedAt"] = now_ts
-            store_map[a["reference"]] = a  # live data overwrites manual if found
+            store_map[a["reference"]] = a
 
-    # Save updated store
     merged = sorted(store_map.values(), key=lambda x: x.get("storedAt", 0), reverse=True)
-    # Trim to 90 days but NEVER remove manual apps
-    cutoff = (NOW_UTC - timedelta(days=90)).timestamp()
-    merged = [a for a in merged if a.get("storedAt", 0) > cutoff or a["reference"] in {m["reference"] for m in MANUAL_APPS}]
+    # Never remove manual apps even if old
+    manual_refs = {a["reference"] for a in MANUAL_APPS}
+    merged = [a for a in merged
+              if a.get("storedAt", 0) > cutoff or a["reference"] in manual_refs]
+
     store_path.write_text(json.dumps(merged[:60], ensure_ascii=False, indent=2))
-    print(f"  Planning apps total: {len(merged)} ({len(scraped)} scraped live, {len(MANUAL_APPS)} manual)")
+    print(f"  Total planning apps: {len(merged)}")
     for a in merged:
-        print(f"    {a['reference']} | {a['address'][:50]} | {a['status']}")
+        print(f"    {a['reference']} | {a['address'][:45]} | {a['status']}")
 
     write_json("planning.json", merged)
 
-# =============================================================================
-# 3. WEST MIDLANDS POLICE
-# =============================================================================
-WMP_BASE   = "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken"
-WMP_SUFFIX = "top-reported-crimes-in-this-area"
-
-def wmp_fetch(section):
-    r = safe_get(f"{WMP_BASE}/{section}/{WMP_SUFFIX}")
-    return r.text if r and r.status_code == 200 else ""
 
 def scrape_police_events():
     print("\n-- Police PACT Events --")
