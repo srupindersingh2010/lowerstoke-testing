@@ -28,7 +28,9 @@ jobs:
         run: |
           pip install requests beautifulsoup4 lxml
 
-      - name: Run scraper
+     - name: Run scraper
+        env:
+          GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
         run: python scrape.py
 
       - name: Commit updated data
