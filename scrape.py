@@ -232,7 +232,19 @@ def scrape_news():
     if r and r.status_code == 200:
         soup = BeautifulSoup(r.text, "html.parser")
         seen = set()
-        for h2 in soup.find_all("h2"):
+
+        # Coventry news page structure (confirmed June 2026):
+        # Each article is a <li> containing:
+        #   <h2><a href="/news/article/XXXX/title">Title</a></h2>
+        #   <p>Summary text</p>
+        #   <strong>Published: Day, Nth Month YYYY</strong>
+        # Articles are inside <li> elements in a list
+
+        # Try finding articles via li > h2 > a pattern first
+        for li in soup.find_all("li"):
+            h2 = li.find("h2")
+            if not h2:
+                continue
             a = h2.find("a", href=True)
             if not a:
                 continue
@@ -240,27 +252,80 @@ def scrape_news():
             href  = a["href"]
             if not href or not title or title in seen or len(title) < 10:
                 continue
+            # Must be a news article link
+            if "/news/article/" not in href and "/news/" not in href:
+                continue
             seen.add(title)
             link = href if href.startswith("http") else "https://www.coventry.gov.uk" + href
+
+            # Get published date from <strong>Published:...</strong> in same li
             date_str = ""
-            parent = h2.find_parent()
-            if parent:
-                strong = parent.find("strong", string=re.compile(r"Published", re.I))
-                if strong:
-                    date_str = strong.get_text(strip=True).replace("Published:", "").strip()
+            strong = li.find("strong", string=re.compile(r"Published", re.I))
+            if strong:
+                date_str = strong.get_text(strip=True).replace("Published:", "").strip()
+
+            # Get summary text from <p> in same li
+            summary = ""
+            p = li.find("p")
+            if p:
+                summary = p.get_text(strip=True)[:200]
+
             entries.append({
-                "title": title, "link": link, "date": date_str or "Recent",
-                "focused": len(entries) == 0, "source": "coventry.gov.uk/news",
-                "sourceUrl": "https://www.coventry.gov.uk/news", "fetchedAt": STAMP
+                "title":     title,
+                "summary":   summary,
+                "link":      link,
+                "date":      date_str or "Recent",
+                "focused":   len(entries) == 0,
+                "source":    "coventry.gov.uk/news",
+                "sourceUrl": "https://www.coventry.gov.uk/news",
+                "fetchedAt": STAMP
             })
+            print(f"  Article: {title[:70]}")
             if len(entries) >= 6:
                 break
+
+        # Fallback: try any h2 > a with news link if li approach found nothing
+        if not entries:
+            print("  li approach found nothing, trying direct h2 scan...")
+            for h2 in soup.find_all("h2"):
+                a = h2.find("a", href=True)
+                if not a:
+                    continue
+                title = a.get_text(strip=True)
+                href  = a["href"]
+                if not href or not title or title in seen or len(title) < 10:
+                    continue
+                if "/news" not in href:
+                    continue
+                seen.add(title)
+                link = href if href.startswith("http") else "https://www.coventry.gov.uk" + href
+                # Look for date in surrounding elements
+                date_str = ""
+                container = h2.find_parent()
+                if container:
+                    strong = container.find("strong", string=re.compile(r"Published", re.I))
+                    if strong:
+                        date_str = strong.get_text(strip=True).replace("Published:", "").strip()
+                entries.append({
+                    "title": title, "summary": "", "link": link,
+                    "date": date_str or "Recent", "focused": len(entries) == 0,
+                    "source": "coventry.gov.uk/news",
+                    "sourceUrl": "https://www.coventry.gov.uk/news",
+                    "fetchedAt": STAMP
+                })
+                print(f"  Article (h2): {title[:70]}")
+                if len(entries) >= 6:
+                    break
+
     if not entries:
         entries = [{"title": "Visit Coventry Council for the latest news",
-                    "link": "https://www.coventry.gov.uk/news", "date": "See website",
+                    "link": "https://www.coventry.gov.uk/news",
+                    "date": "See website", "summary": "",
                     "focused": True, "source": "coventry.gov.uk/news",
-                    "sourceUrl": "https://www.coventry.gov.uk/news", "fetchedAt": STAMP}]
-    print(f"  News articles: {len(entries)}")
+                    "sourceUrl": "https://www.coventry.gov.uk/news",
+                    "fetchedAt": STAMP}]
+
+    print(f"  Total news articles: {len(entries)}")
     write_json("news.json", entries)
 
 # =============================================================================
@@ -311,18 +376,9 @@ def scrape_planning():
     # ------------------------------------------------------------------
     try:
         ninety_ago = NOW_UTC - timedelta(days=90)
-        api_url = (
-            f"https://www.planning.data.gov.uk/entity.json"
-            f"?dataset=planning-application"
-            f"&geometry_entity=800137"
-            f"&geometry_relation=intersects"
-            f"&entry_date_year={ninety_ago.year}"
-            f"&entry_date_month={ninety_ago.month}"
-            f"&entry_date_day={ninety_ago.day}"
-            f"&entry_date_match=after"
-            f"&limit=100"
-        )
-        print(f"  Calling: {api_url[:80]}...")
+        # Single f-string avoids multiline concat dropping variables
+        api_url = f"https://www.planning.data.gov.uk/entity.json?dataset=planning-application&geometry_entity=800137&geometry_relation=intersects&entry_date_year={ninety_ago.year}&entry_date_month={ninety_ago.month}&entry_date_day={ninety_ago.day}&entry_date_match=after&limit=100"
+        print(f"  Calling: {api_url}")
         r = safe_get(api_url)
         if r and r.status_code == 200:
             entities = r.json().get("entities", [])
