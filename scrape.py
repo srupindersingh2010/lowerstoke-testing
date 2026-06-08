@@ -278,31 +278,7 @@ def scrape_news():
         #   <strong>Published: Day, Nth Month YYYY</strong>
         # Articles are inside <li> elements in a list
 
-        # Coventry news page structure (confirmed June 2026):
-        # <li>
-        #   <h2><a href="/news/article/...">Title</a></h2>
-        #   <p>Summary</p>
-        #   <strong>Published:</strong> Monday, 8th June 2026
-        # </li>
-        # NOTE: <strong> only wraps "Published:" — the date is the next sibling text node.
-        # We must get the parent text and extract date from it, NOT use string= on <strong>.
-
-        def extract_date_from_container(container):
-            """Find Published date by getting full text of container and extracting the date."""
-            if not container:
-                return ""
-            full_text = container.get_text(" ", strip=True)
-            # Match "Published: Monday, 8th June 2026" or "Published: 8 June 2026"
-            m = re.search(
-                r"Published\s*:?\s*(?:[A-Za-z]+,?\s*)?(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(\d{4})",
-                full_text, re.I)
-            if m:
-                day   = m.group(1)
-                month = m.group(2)
-                year  = m.group(3)
-                return f"{day} {month} {year}"
-            return ""
-
+        # Try finding articles via li > h2 > a pattern first
         for li in soup.find_all("li"):
             h2 = li.find("h2")
             if not h2:
@@ -314,15 +290,37 @@ def scrape_news():
             href  = a["href"]
             if not href or not title or title in seen or len(title) < 10:
                 continue
+            # Must be a news article link
             if "/news/article/" not in href and "/news/" not in href:
                 continue
             seen.add(title)
             link = href if href.startswith("http") else "https://www.coventry.gov.uk" + href
 
-            # Extract published date from the li container text
-            date_str = extract_date_from_container(li)
+            # Get published date from <strong>Published:...</strong> in same li
+            date_str = ""
+            # Look for Published date in <strong> tag
+            strong = li.find("strong", string=re.compile(r"Published", re.I))
+            if strong:
+                raw = strong.get_text(strip=True)
+                # Remove "Published:" prefix and clean up
+                date_str = re.sub(r"Published\s*:\s*", "", raw, flags=re.I).strip()
+                # Clean format: "Tuesday, 3rd June 2026" -> "3 June 2026"
+                date_str = re.sub(r"^[A-Za-z]+,?\s*", "", date_str)   # remove weekday
+                date_str = re.sub(r"(\d+)(st|nd|rd|th)", r"", date_str)  # remove ordinal
+                date_str = date_str.strip()
+            # Also try time tag as fallback
+            if not date_str:
+                time_tag = li.find("time")
+                if time_tag:
+                    dt_attr = time_tag.get("datetime", "")
+                    if dt_attr:
+                        try:
+                            d = dt_date.fromisoformat(dt_attr[:10])
+                            date_str = d.strftime("%-d %B %Y")
+                        except Exception:
+                            date_str = time_tag.get_text(strip=True)
 
-            # Get summary from first <p> in li
+            # Get summary text from <p> in same li
             summary = ""
             p = li.find("p")
             if p:
@@ -338,13 +336,13 @@ def scrape_news():
                 "sourceUrl": "https://www.coventry.gov.uk/news",
                 "fetchedAt": STAMP
             })
-            print(f"  Article: {title[:60]} | date: {date_str or 'NOT FOUND'}")
-            if len(entries) >= 8:
+            print(f"  Article: {title[:70]}")
+            if len(entries) >= 6:
                 break
 
-        # Fallback: scan all h2 tags if li approach found nothing
+        # Fallback: try any h2 > a with news link if li approach found nothing
         if not entries:
-            print("  li approach found nothing, trying h2 scan...")
+            print("  li approach found nothing, trying direct h2 scan...")
             for h2 in soup.find_all("h2"):
                 a = h2.find("a", href=True)
                 if not a:
@@ -357,7 +355,13 @@ def scrape_news():
                     continue
                 seen.add(title)
                 link = href if href.startswith("http") else "https://www.coventry.gov.uk" + href
-                date_str = extract_date_from_container(h2.find_parent())
+                # Look for date in surrounding elements
+                date_str = ""
+                container = h2.find_parent()
+                if container:
+                    strong = container.find("strong", string=re.compile(r"Published", re.I))
+                    if strong:
+                        date_str = strong.get_text(strip=True).replace("Published:", "").strip()
                 entries.append({
                     "title": title, "summary": "", "link": link,
                     "date": date_str or "Recent", "focused": len(entries) == 0,
@@ -365,8 +369,8 @@ def scrape_news():
                     "sourceUrl": "https://www.coventry.gov.uk/news",
                     "fetchedAt": STAMP
                 })
-                print(f"  Article (h2): {title[:60]} | date: {date_str or 'NOT FOUND'}")
-                if len(entries) >= 8:
+                print(f"  Article (h2): {title[:70]}")
+                if len(entries) >= 6:
                     break
 
     if not entries:
