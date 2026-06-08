@@ -399,7 +399,6 @@
       <div class="section-header">
         <h3>📸 Councillors' Progress &amp; Update Photos</h3>
         <span class="fetch-stamp" id="ts-gallery"></span>
-        <a href="https://drive.google.com/drive/folders/1ukfcyO4BPjeAv40XVsvcJ-ds4ilwML3y" target="_blank">View Drive folder →</a>
       </div>
       <p style="color:#666; font-size:0.85rem; margin-top:0;">Photos uploaded by councillors in the past 14 days.</p>
       <div class="gallery-grid" id="gallery-box"><div class="loading" style="grid-column:1/-1;">Loading gallery…</div></div>
@@ -465,13 +464,17 @@
     document.getElementById('news-box').innerHTML = data.map(function(n){
       return '<div class="news-card'+(n.focused?' featured':'')+'">'+
         '<div style="flex:1;min-width:0;">'+
+          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'+
+            (n.date && n.date !== "Recent" && n.date !== "See website"
+              ? '<span style="background:#F0F0F0;color:#555;font-size:0.72rem;font-weight:bold;padding:2px 8px;border-radius:3px;white-space:nowrap;">📅 '+esc(n.date)+'</span>'
+              : '')+
+          '</div>'+
           '<h4>'+esc(n.title)+'</h4>'+
           (n.summary ? '<p style="font-size:0.84rem;color:#555;margin:4px 0 6px;line-height:1.5;">'+esc(n.summary)+'</p>' : '')+
-          '<div class="meta">📅 '+esc(n.date)+'</div>'+
+          '<div class="source-link"><a href="https://www.coventry.gov.uk/news" target="_blank">coventry.gov.uk/news</a></div>'+
         '</div>'+
         '<div style="flex-shrink:0;padding-left:12px;text-align:right;">'+
           '<a href="'+esc(n.link)+'" target="_blank" class="read-link" style="white-space:nowrap;">Read full article →</a>'+
-          '<div class="source-link"><a href="https://www.coventry.gov.uk/news" target="_blank">coventry.gov.uk/news</a></div>'+
         '</div>'+
       '</div>';
     }).join('');
@@ -560,8 +563,7 @@
     stamp('ts-gallery', data.length ? data[0].fetchedAt : '');
     if (!data.length) {
       document.getElementById('gallery-box').innerHTML =
-        '<div class="empty-state" style="grid-column:1/-1;">No photos uploaded in the past 14 days. '+
-        '<a href="https://drive.google.com/drive/folders/1ukfcyO4BPjeAv40XVsvcJ-ds4ilwML3y" target="_blank" style="color:var(--labour-red);">Open the shared Drive folder →</a></div>';
+        '<div class="empty-state" style="grid-column:1/-1;">No councillor photos have been uploaded in the past 14 days.</div>';
       return;
     }
     document.getElementById('gallery-box').innerHTML = data.map(function(g){
@@ -569,7 +571,7 @@
         '<div class="gallery-img-wrap"><img src="https://docs.google.com/uc?export=view&id='+esc(g.id)+'" alt="'+esc(g.title)+'" loading="lazy"></div>'+
         '<div class="gallery-info"><h4>'+esc(g.title)+'</h4><p>'+esc(g.description)+'</p>'+
         '<div class="gallery-date">📅 Uploaded: '+esc(g.dateFormatted)+'</div>'+
-        '<a href="'+esc(g.driveLink||'#')+'" target="_blank" class="gallery-link">View full image →</a></div></div>';
+        '</div></div>';
     }).join('');
   }
 
