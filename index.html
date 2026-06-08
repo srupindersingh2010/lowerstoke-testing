@@ -151,7 +151,7 @@
   <!-- PAGE 1 — WARD & COUNCIL -->
   <div id="page1" class="page-view active-view">
     <div class="page-bar">
-      <span>📍 Lower Stoke Ward — News &amp; Information (Information taken from https://www.coventry.gov.uk)</span>
+      <span>📍 Lower Stoke Ward — News &amp; Information</span>
       <span class="live-badge">LIVE DATA</span>
     </div>
     <div class="main-layout">
@@ -212,10 +212,13 @@
 
         <div class="card card-red-top">
           <div class="section-header">
-            <h2>📰 Latest Council News ( Information taken from https://www.coventry.gov.uk/)</h2>
+            <h2>📰 Latest Council News</h2>
             <span class="fetch-stamp" id="ts-news"></span>
             <a href="https://www.coventry.gov.uk/news" target="_blank">All Coventry news →</a>
           </div>
+          <p style="font-size:0.82rem;color:#777;margin:-6px 0 12px;">
+            Source: <a href="https://www.coventry.gov.uk/news" target="_blank" style="color:var(--labour-red);">www.coventry.gov.uk/news</a>
+          </p>
           <div class="news-grid" id="news-box"><div class="loading">Loading news…</div></div>
         </div>
 
@@ -401,7 +404,7 @@
 
     <div class="card card-red-top" style="margin-bottom:20px;">
       <div class="section-header">
-        <h2>📋 Active Casework Log ( Only selected and suitable casework are listed)</h2>
+        <h2>📋 Active Casework Log</h2>
         <span class="fetch-stamp" id="ts-cases"></span>
       </div>
       <p style="color:#555; font-size:0.9rem; margin-top:0;">Neighbourhood issues and resident requests logged across Lower Stoke Ward.</p>
@@ -477,11 +480,9 @@
     document.getElementById('news-box').innerHTML = data.map(function(n){
       return '<div class="news-card'+(n.focused?' featured':'')+'">'+
         '<div style="flex:1;min-width:0;">'+
-          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'+
-            (n.date && n.date !== "Recent" && n.date !== "See website"
-              ? '<span style="background:#F0F0F0;color:#555;font-size:0.72rem;font-weight:bold;padding:2px 8px;border-radius:3px;white-space:nowrap;">📅 '+esc(n.date)+'</span>'
-              : '')+
-          '</div>'+
+          (n.date && n.date !== "Recent" && n.date !== "See website"
+            ? '<div style="margin-bottom:7px;"><span style="background:#E8F4FD;color:#1565C0;font-size:0.78rem;font-weight:bold;padding:3px 10px;border-radius:3px;white-space:nowrap;border:1px solid #BBDEFB;">📅 Published: '+esc(n.date)+'</span></div>'
+            : '')+
           '<h4>'+esc(n.title)+'</h4>'+
           (n.summary ? '<p style="font-size:0.84rem;color:#555;margin:4px 0 6px;line-height:1.5;">'+esc(n.summary)+'</p>' : '')+
           '<div class="source-link"><a href="https://www.coventry.gov.uk/news" target="_blank">coventry.gov.uk/news</a></div>'+
