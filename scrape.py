@@ -296,19 +296,19 @@ def scrape_news():
             seen.add(title)
             link = href if href.startswith("http") else "https://www.coventry.gov.uk" + href
 
-            # Get published date from <strong>Published:...</strong> in same li
+            # Get published date — Coventry HTML structure:
+            # <strong>Published:</strong> Monday, 8th June 2026
+            # The <strong> only wraps "Published:" — date is sibling text after it.
+            # Solution: read full li text and extract date with regex.
             date_str = ""
-            # Look for Published date in <strong> tag
-            strong = li.find("strong", string=re.compile(r"Published", re.I))
-            if strong:
-                raw = strong.get_text(strip=True)
-                # Remove "Published:" prefix and clean up
-                date_str = re.sub(r"Published\s*:\s*", "", raw, flags=re.I).strip()
-                # Clean format: "Tuesday, 3rd June 2026" -> "3 June 2026"
-                date_str = re.sub(r"^[A-Za-z]+,?\s*", "", date_str)   # remove weekday
-                date_str = re.sub(r"(\d+)(st|nd|rd|th)", r"", date_str)  # remove ordinal
-                date_str = date_str.strip()
-            # Also try time tag as fallback
+            li_text = li.get_text(" ", strip=True)
+            date_m = re.search(
+                r"Published.{0,5}(?:[A-Za-z]+,?\s*)?(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(\d{4})",
+                li_text, re.I)
+            if date_m:
+                date_str = date_m.group(1) + " " + date_m.group(2) + " " + date_m.group(3)
+                print(f"    Date found: {date_str}")
+            # Fallback: <time datetime="YYYY-MM-DD"> tag
             if not date_str:
                 time_tag = li.find("time")
                 if time_tag:
@@ -319,7 +319,6 @@ def scrape_news():
                             date_str = d.strftime("%-d %B %Y")
                         except Exception:
                             date_str = time_tag.get_text(strip=True)
-
             # Get summary text from <p> in same li
             summary = ""
             p = li.find("p")
