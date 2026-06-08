@@ -298,9 +298,27 @@ def scrape_news():
 
             # Get published date from <strong>Published:...</strong> in same li
             date_str = ""
+            # Look for Published date in <strong> tag
             strong = li.find("strong", string=re.compile(r"Published", re.I))
             if strong:
-                date_str = strong.get_text(strip=True).replace("Published:", "").strip()
+                raw = strong.get_text(strip=True)
+                # Remove "Published:" prefix and clean up
+                date_str = re.sub(r"Published\s*:\s*", "", raw, flags=re.I).strip()
+                # Clean format: "Tuesday, 3rd June 2026" -> "3 June 2026"
+                date_str = re.sub(r"^[A-Za-z]+,?\s*", "", date_str)   # remove weekday
+                date_str = re.sub(r"(\d+)(st|nd|rd|th)", r"", date_str)  # remove ordinal
+                date_str = date_str.strip()
+            # Also try time tag as fallback
+            if not date_str:
+                time_tag = li.find("time")
+                if time_tag:
+                    dt_attr = time_tag.get("datetime", "")
+                    if dt_attr:
+                        try:
+                            d = dt_date.fromisoformat(dt_attr[:10])
+                            date_str = d.strftime("%-d %B %Y")
+                        except Exception:
+                            date_str = time_tag.get_text(strip=True)
 
             # Get summary text from <p> in same li
             summary = ""
