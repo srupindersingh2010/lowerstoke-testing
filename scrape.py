@@ -641,20 +641,32 @@ def scrape_police_events():
                 continue
             if re.search(r'cookie|report|contact|skip|nav|menu|station|social', title, re.I):
                 continue
+
             date_str = address = ""
             for sib in h5.next_siblings:
-                sib_text = sib.get_text(" ", strip=True) if hasattr(sib, "get_text") else str(sib).strip()
-                if not sib_text or len(sib_text) < 3:
-                    continue
-                if re.search(r'\d{1,2}:\d{2}(AM|PM)', sib_text, re.I) and re.search(r'\d{4}', sib_text):
-                    date_str = sib_text
-                elif not address and len(sib_text) > 5 and "calendar" not in sib_text.lower():
-                    address = sib_text
-                if hasattr(sib, "name") and sib.name in ["h4","h5","h3","h2"]:
+                # Stop at the next heading
+                if hasattr(sib, "name") and sib.name in ["h2","h3","h4","h5","h6"]:
                     break
+                # Split raw text into lines — date and address are on separate lines
+                raw   = sib.get_text(" ", strip=False) if hasattr(sib, "get_text") else str(sib)
+                lines_inner = [l.strip() for l in raw.splitlines() if l.strip()]
+                for line in lines_inner:
+                    if "calendar" in line.lower() or "add to" in line.lower():
+                        continue
+                    # A date/time line has HH:MM and a month name or 4-digit year
+                    if (re.search(r'\d{1,2}:\d{2}', line) and
+                            re.search(r'\d{4}|\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b', line, re.I)):
+                        if not date_str:
+                            date_str = line
+                    else:
+                        # Address line — strip leading dots WMP sometimes adds
+                        clean = line.strip('. ,').strip()
+                        if clean:
+                            address += (', ' if address else '') + clean
+
             if title and date_str:
                 events.append({"title": title, "date": date_str,
-                                "address": address or "Coventry",
+                                "address": address.strip() or "Coventry",
                                 "sourceUrl": f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}",
                                 "fetchedAt": STAMP})
     wmp_url = f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}"
@@ -842,4 +854,3 @@ if __name__ == "__main__":
             traceback.print_exc()
     print("\n=== Done ===")
     sys.exit(0)
-
