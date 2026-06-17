@@ -665,6 +665,10 @@ def scrape_police_events():
                             address += (', ' if address else '') + clean
 
             if title and date_str:
+                # Only include Lower Stoke meetings — exclude Upper Stoke, Wyken, etc.
+                if not re.search(r'lower stoke', title, re.I):
+                    print(f"  Skipping (not Lower Stoke): {title[:60]}")
+                    continue
                 events.append({"title": title, "date": date_str,
                                 "address": address.strip() or "Coventry",
                                 "sourceUrl": f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}",
