@@ -1,1 +1,65 @@
-[]
+[
+  {
+    "title": "Community Pact Meeting - Upper Stoke",
+    "date": "6:00PM - 7:00PM, Fri 28 August 2026",
+    "address": "Stoke St Michael's Church, Coventry",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Quarterly Wyken PACT meeting",
+    "date": "6:00PM - 7:00PM, Tue 15 September 2026",
+    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Lower Stoke PACT meeting",
+    "date": "6:00PM - 7:00PM, Wed 16 September 2026",
+    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Lower Stoke PACT meeting",
+    "date": "6:00PM - 7:00PM, Tue 15 December 2026",
+    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Wyken quarterly PACT meeting",
+    "date": "6:00PM - 7:00PM, Tue 22 December 2026",
+    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Lower Stoke PACT meeting",
+    "date": "6:00PM - 7:00PM, Mon 15 March 2027",
+    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Wyken Quarterly PACT meeting",
+    "date": "6:00PM - 7:00PM, Tue 23 March 2027",
+    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Lower Stoke PACT meeting",
+    "date": "6:00PM - 7:00PM, Mon 21 June 2027",
+    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  },
+  {
+    "title": "Wyken Quarterly PACT meeting",
+    "date": "6:00PM - 7:00PM, Tue 22 June 2027",
+    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
+    "fetchedAt": "17 June 2026 at 08:00"
+  }
+]
