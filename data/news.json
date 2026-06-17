@@ -1,12 +1,62 @@
 [
   {
-    "title": "Visit Coventry Council for the latest news",
-    "link": "https://www.coventry.gov.uk/news",
-    "date": "See website",
-    "summary": "",
+    "title": "City to unite to thank Armed Forces",
+    "summary": "Armed Forces Day will be held later this month, with Coventry residents invited to join the country’s tribute at a parade and service in the city.",
+    "link": "https://www.coventry.gov.uk/news/article/5518/city-to-unite-to-thank-armed-forces",
+    "date": "17 June 2026",
     "focused": true,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "17 June 2026 at 14:36"
+    "fetchedAt": "17 June 2026 at 15:20"
+  },
+  {
+    "title": "Free summer holiday activities and meals for Coventry children",
+    "summary": "Coventry City Council is encouraging parents and carers to check if their children are eligible for FREE holiday activities and nutritious hot meals through the Holiday Activities and Food  programme.",
+    "link": "https://www.coventry.gov.uk/news/article/5517/free-summer-holiday-activities-and-meals-for-coventry-children",
+    "date": "11 June 2026",
+    "focused": false,
+    "source": "coventry.gov.uk/news",
+    "sourceUrl": "https://www.coventry.gov.uk/news",
+    "fetchedAt": "17 June 2026 at 15:20"
+  },
+  {
+    "title": "Coventry City Football Club to be awarded the Honorary Freedom of the City",
+    "summary": "Coventry City Council has called an Extraordinary General Meeting (EGM) at which councillors will be asked to award the Sky Blues the Honorary Freedom of the City.",
+    "link": "https://www.coventry.gov.uk/news/article/5516/coventry-city-football-club-to-be-awarded-the-honorary-freedom-of-the-city",
+    "date": "10 June 2026",
+    "focused": false,
+    "source": "coventry.gov.uk/news",
+    "sourceUrl": "https://www.coventry.gov.uk/news",
+    "fetchedAt": "17 June 2026 at 15:20"
+  },
+  {
+    "title": "City to stage first ever Windrush Festival",
+    "summary": "Coventry is to stage its first Windrush Festival, with five days of events and activities to celebrate the anniversary and pay tribute to those who travelled to build new lives and a new city.",
+    "link": "https://www.coventry.gov.uk/news/article/5515/city-to-stage-first-ever-windrush-festival",
+    "date": "8 June 2026",
+    "focused": false,
+    "source": "coventry.gov.uk/news",
+    "sourceUrl": "https://www.coventry.gov.uk/news",
+    "fetchedAt": "17 June 2026 at 15:20"
+  },
+  {
+    "title": "Ambitious plan to transform support for Coventry children with special educational needs",
+    "summary": "Coventry City Council has published plans to transform how children and young people with special educational needs and disabilities (SEND) are supported across the city.",
+    "link": "https://www.coventry.gov.uk/news/article/5514/ambitious-plan-to-transform-support-for-coventry-children-with-special-educational-needs",
+    "date": "2 June 2026",
+    "focused": false,
+    "source": "coventry.gov.uk/news",
+    "sourceUrl": "https://www.coventry.gov.uk/news",
+    "fetchedAt": "17 June 2026 at 15:20"
+  },
+  {
+    "title": "City Centre shop closed that persistently sold illegal tobacco, vapes, and dangerous toys",
+    "summary": "Spon Mini Market, located on Spon Street within the Coventry City Centre, has been ordered to close for persistently selling illegal tobacco, vapes, and dangerous toys.",
+    "link": "https://www.coventry.gov.uk/news/article/5513/city-centre-shop-closed-that-persistently-sold-illegal-tobacco-vapes-and-dangerous-toys",
+    "date": "2 June 2026",
+    "focused": false,
+    "source": "coventry.gov.uk/news",
+    "sourceUrl": "https://www.coventry.gov.uk/news",
+    "fetchedAt": "17 June 2026 at 15:20"
   }
 ]
