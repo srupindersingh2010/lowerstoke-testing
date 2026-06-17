@@ -1,65 +1,26 @@
 [
   {
-    "title": "Community Pact Meeting - Upper Stoke",
-    "date": "6:00PM - 7:00PM, Fri 28 August 2026",
-    "address": "Stoke St Michael's Church, Coventry",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
+    "reference": "PL/2026/0000951/TCA",
+    "dateLodged": "4/6/2026",
+    "address": "13 Central Avenue, Coventry, CV2 4DN",
+    "description": "TCA Application for trees in a conservation area — T1 Damson - Cut back Damson overhanging lawn area.  T2 Sycamore - Remove small self set Sycamore to ground level.   T3 Lime - Reduce Lime by 3-4m and cut back over garden.",
+    "status": "Received",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000951%2FTCA",
+    "source": "Coventry Planning (via Drive: Councillor List 30.5.26 - 5.6.26)",
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "17 June 2026 at 16:35",
+    "storedAt": 1781710542.884618
   },
   {
-    "title": "Quarterly Wyken PACT meeting",
-    "date": "6:00PM - 7:00PM, Tue 15 September 2026",
-    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
-  },
-  {
-    "title": "Lower Stoke PACT meeting",
-    "date": "6:00PM - 7:00PM, Wed 16 September 2026",
-    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
-  },
-  {
-    "title": "Lower Stoke PACT meeting",
-    "date": "6:00PM - 7:00PM, Tue 15 December 2026",
-    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
-  },
-  {
-    "title": "Wyken quarterly PACT meeting",
-    "date": "6:00PM - 7:00PM, Tue 22 December 2026",
-    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
-  },
-  {
-    "title": "Lower Stoke PACT meeting",
-    "date": "6:00PM - 7:00PM, Mon 15 March 2027",
-    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
-  },
-  {
-    "title": "Wyken Quarterly PACT meeting",
-    "date": "6:00PM - 7:00PM, Tue 23 March 2027",
-    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
-  },
-  {
-    "title": "Lower Stoke PACT meeting",
-    "date": "6:00PM - 7:00PM, Mon 21 June 2027",
-    "address": "St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
-  },
-  {
-    "title": "Wyken Quarterly PACT meeting",
-    "date": "6:00PM - 7:00PM, Tue 22 June 2027",
-    "address": "Wyken Community Centre, Westmorland Rd, Coventry CV2 5PY",
-    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area",
-    "fetchedAt": "17 June 2026 at 08:00"
+    "reference": "PL/2026/0000932/PAPV",
+    "dateLodged": "1/6/2026",
+    "address": "Ravensdale Primary School Ravensdale Road, Coventry, CV2 5GQ",
+    "description": "PAPV Application to determine if prior approval is required for a proposed installation, alteration or replacement of other solar photovoltaics (PV) equipment on the roofs of non-domestic buildings — Prior approval application for roof mounted solar panels",
+    "status": "Received",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000932%2FPAPV",
+    "source": "Coventry Planning (via Drive: Councillor List 30.5.26 - 5.6.26)",
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "17 June 2026 at 16:35",
+    "storedAt": 1781710542.884618
   }
 ]
