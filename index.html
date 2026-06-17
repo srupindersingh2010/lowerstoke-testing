@@ -565,8 +565,26 @@
   }
 
   function renderPlanning(data) {
+    var portalUrl = 'https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke';
+
+    // Check for siteDown marker written by the scraper when all sources were unreachable
+    if (data.length === 1 && data[0].siteDown) {
+      document.getElementById('planning-box').innerHTML =
+        '<tr><td colspan="4" style="text-align:center;padding:20px;">' +
+        '<span style="color:#E65100;font-weight:bold;">⚠️ The planning data sources were temporarily unavailable when data was last updated (' + esc(data[0].fetchedAt) + ').</span><br>' +
+        '<span style="color:#777;font-size:0.85rem;">Please check directly: </span>' +
+        '<a href="' + portalUrl + '" target="_blank" style="color:var(--labour-red);font-weight:bold;">Coventry Planning Portal →</a>' +
+        '</td></tr>';
+      return;
+    }
+
     stamp('ts-planning', data.length ? data[0].fetchedAt : '');
-    if (!data.length) { document.getElementById('planning-box').innerHTML = '<tr><td colspan="4" style="text-align:center;color:#777;">No applications found. <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke" target="_blank" style="color:var(--labour-red);">Search the planning portal →</a></td></tr>'; return; }
+    if (!data.length) {
+      document.getElementById('planning-box').innerHTML =
+        '<tr><td colspan="4" style="text-align:center;color:#777;">No applications found for Lower Stoke Ward. ' +
+        '<a href="' + portalUrl + '" target="_blank" style="color:var(--labour-red);">Search the planning portal →</a></td></tr>';
+      return;
+    }
     document.getElementById('planning-box').innerHTML = data.map(function(p){
       return '<tr><td><a href="'+esc(p.portalLink)+'" target="_blank" style="color:var(--labour-red);font-weight:bold;text-decoration:underline;">'+esc(p.reference)+'</a><br><span style="font-size:0.72rem;color:#aaa;">'+esc(p.source||'')+'</span></td>'+
         '<td style="color:#555;">'+esc(p.dateLodged)+'</td>'+
@@ -574,6 +592,7 @@
         '<td><span class="badge badge-blue">'+esc(p.status)+'</span></td></tr>';
     }).join('');
   }
+
 
   function renderCrimes(data) {
     document.getElementById('crime-count').textContent = data.length;
@@ -603,21 +622,40 @@
   }
 
   function renderEvents(data) {
+    var wmpUrl = 'https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area';
+
+    // Check for siteDown marker written by the scraper when WMP was unreachable
+    if (data.length === 1 && data[0].siteDown) {
+      var msg = '<tr><td colspan="4" style="text-align:center;padding:20px;">' +
+        '<span style="color:#E65100;font-weight:bold;">⚠️ West Midlands Police website was temporarily unavailable when data was last updated (' + esc(data[0].fetchedAt) + ').</span><br>' +
+        '<span style="color:#777;font-size:0.85rem;">Please check directly: </span>' +
+        '<a href="' + wmpUrl + '" target="_blank" style="color:var(--labour-red);font-weight:bold;">westmidlands.police.uk →</a>' +
+        '</td></tr>';
+      document.getElementById('events-box').innerHTML  = msg;
+      document.getElementById('events-box2').innerHTML = msg.replace('colspan="4"', 'colspan="3"');
+      return;
+    }
+
     stamp('ts-events', data.length ? data[0].fetchedAt : '');
-    var rows = data.length
-      ? data.map(function(e){
-          return '<tr><td><strong>'+esc(e.title)+'</strong></td><td>'+esc(e.date)+'</td><td>'+esc(e.address)+'</td>'+
-            '<td><a href="'+(e.sourceUrl||'https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area')+'" target="_blank" style="font-size:0.75rem;color:var(--labour-red);">WMP →</a></td></tr>';
-        }).join('')
-      : '<tr><td colspan="4" style="text-align:center;color:#777;">No upcoming events. <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area" target="_blank" style="color:var(--labour-red);">Check WMP website →</a></td></tr>';
-    document.getElementById('events-box').innerHTML  = rows;
-    // Also populate page3 copy
-    var rows2 = data.length
-      ? data.map(function(e){ return '<tr><td><strong>'+esc(e.title)+'</strong></td><td>'+esc(e.date)+'</td><td>'+esc(e.address)+'</td></tr>'; }).join('')
-      : '<tr><td colspan="3" style="text-align:center;color:#777;">No upcoming events listed.</td></tr>';
+
+    if (!data.length) {
+      var noEvents = '<tr><td colspan="4" style="text-align:center;color:#777;">No upcoming events listed on the WMP website. <a href="' + wmpUrl + '" target="_blank" style="color:var(--labour-red);">Check WMP website →</a></td></tr>';
+      document.getElementById('events-box').innerHTML  = noEvents;
+      document.getElementById('events-box2').innerHTML = noEvents.replace('colspan="4"', 'colspan="3"');
+      return;
+    }
+
+    var rows = data.map(function(e) {
+      return '<tr><td><strong>'+esc(e.title)+'</strong></td><td>'+esc(e.date)+'</td><td>'+esc(e.address)+'</td>'+
+        '<td><a href="'+(e.sourceUrl||wmpUrl)+'" target="_blank" style="font-size:0.75rem;color:var(--labour-red);">WMP →</a></td></tr>';
+    }).join('');
+    document.getElementById('events-box').innerHTML = rows;
+
+    var rows2 = data.map(function(e) {
+      return '<tr><td><strong>'+esc(e.title)+'</strong></td><td>'+esc(e.date)+'</td><td>'+esc(e.address)+'</td></tr>';
+    }).join('');
     document.getElementById('events-box2').innerHTML = rows2;
   }
-
   function renderCasework(data) {
     stamp('ts-cases', data.length ? data[0].fetchedAt : '');
     if (!data.length) {
