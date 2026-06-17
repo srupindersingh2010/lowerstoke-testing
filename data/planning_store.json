@@ -1,5 +1,29 @@
 [
   {
+    "reference": "PL/2026/0000951/TCA",
+    "dateLodged": "4/6/2026",
+    "address": "13 Central Avenue, Coventry, CV2 4DN",
+    "description": "TCA Application for trees in a conservation area — T1 Damson - Cut back Damson overhanging lawn area.  T2 Sycamore - Remove small self set Sycamore to ground level.   T3 Lime - Reduce Lime by 3-4m and cut back over garden.",
+    "status": "Received",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000951%2FTCA",
+    "source": "Coventry Planning (via Drive: Councillor List 30.5.26 - 5.6.26)",
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "17 June 2026 at 15:35",
+    "storedAt": 1781706924.057137
+  },
+  {
+    "reference": "PL/2026/0000932/PAPV",
+    "dateLodged": "1/6/2026",
+    "address": "Ravensdale Primary School Ravensdale Road, Coventry, CV2 5GQ",
+    "description": "PAPV Application to determine if prior approval is required for a proposed installation, alteration or replacement of other solar photovoltaics (PV) equipment on the roofs of non-domestic buildings — Prior approval application for roof mounted solar panels",
+    "status": "Received",
+    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000932%2FPAPV",
+    "source": "Coventry Planning (via Drive: Councillor List 30.5.26 - 5.6.26)",
+    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
+    "fetchedAt": "17 June 2026 at 15:35",
+    "storedAt": 1781706924.057137
+  },
+  {
     "reference": "PL/2026/0000653/HHA",
     "dateLodged": "20/4/2026",
     "address": "9 Browning Road, Coventry, CV2 5HR",
@@ -34,17 +58,5 @@
     "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
     "fetchedAt": "17 June 2026 at 15:27",
     "storedAt": 1781706420.114686
-  },
-  {
-    "reference": "PL/2026/0000951/TCA",
-    "dateLodged": "2026",
-    "address": "13 Central Avenue, Coventry, CV2 4DN",
-    "description": "TCA — Trees in a Conservation Area. T1 Damson: Cut back Damson overhanging lawn area. T2 Sycamore: Remove self-set Sycamore to ground level. T3 Lime: Reduce by 3–4m and cut back over garden.",
-    "status": "Under Consultation",
-    "portalLink": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplication&id=PL%2F2026%2F0000951%2FTCA",
-    "source": "planandregulatory.coventry.gov.uk",
-    "sourceUrl": "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke",
-    "fetchedAt": "Manually added 7 June 2026",
-    "storedAt": 1749340800
   }
 ]
