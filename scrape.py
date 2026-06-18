@@ -950,7 +950,12 @@ def scrape_council_meetings():
                     r"-\s+((?:Committee Room|Council Chamber|Diamond Room|Council House)[^-\n]+?)$",
                     li_text)
                 location   = loc_m.group(1).strip() if loc_m else "Council House, Coventry"
-                agenda_url = f"{BASE_URL}{href}" if href.startswith("/") else href
+                if href.startswith("http"):
+                    agenda_url = href
+                elif href.startswith("/"):
+                    agenda_url = f"{BASE_URL}{href}"
+                else:
+                    agenda_url = f"{BASE_URL}/{href}"
                 mid_m      = re.search(r"MId=(\d+)", href)
                 attend_url = (f"{BASE_URL}/mgMeetingAttendance.aspx?ID={mid_m.group(1)}"
                               if mid_m else "")
@@ -1056,7 +1061,13 @@ def scrape_wmca_meetings():
                 title      = re.sub(r"\s+on\s+\d{2}/\d{2}.*$", "", link_text).strip()
                 loc_m      = re.search(r"-\s+([^-]{10,})$", li_text)
                 location   = loc_m.group(1).strip() if loc_m else "16 Summer Lane, Birmingham"
-                agenda_url = f"{BASE_URL}{href}" if href.startswith("/") else href
+                # Always build absolute URL using BASE_URL
+                if href.startswith("http"):
+                    agenda_url = href
+                elif href.startswith("/"):
+                    agenda_url = f"{BASE_URL}{href}"
+                else:
+                    agenda_url = f"{BASE_URL}/{href}"
                 key = f"{current_date}{title}"
                 if key in seen:
                     continue
