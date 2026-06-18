@@ -910,6 +910,17 @@ def scrape_council_meetings():
             continue
         print(f"  Month {dt.month}/{dt.year}: {len(html)} chars")
 
+        # DEBUG: show all h1/h2/h3/h4 tags and first li
+        soup_debug = BeautifulSoup(html, "html.parser")
+        all_h = soup_debug.find_all(["h1","h2","h3","h4"])
+        print(f"  DEBUG headings found: {len(all_h)}")
+        for hx in all_h[:8]:
+            print(f"    <{hx.name}>: {hx.get_text(strip=True)[:80]}")
+        all_li = soup_debug.find_all("li")
+        print(f"  DEBUG li items found: {len(all_li)}")
+        for li in all_li[:3]:
+            print(f"    li: {li.get_text(strip=True)[:100]}")
+
         soup        = BeautifulSoup(html, "html.parser")
         cutoff      = NOW_UTC.date() + timedelta(days=30)
         week_cutoff = NOW_UTC.date() + timedelta(days=7)
