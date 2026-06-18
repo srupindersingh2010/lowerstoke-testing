@@ -500,14 +500,7 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="section-header">
-        <h3>📸 Councillors' Progress &amp; Update Photos</h3>
-        <span class="fetch-stamp" id="ts-gallery"></span>
-      </div>
-      <p style="color:#666; font-size:0.85rem; margin-top:0;">Photos uploaded by councillors in the past 14 days.</p>
-      <div class="gallery-grid" id="gallery-box"><div class="loading" style="grid-column:1/-1;">Loading gallery…</div></div>
-    </div>
+
   </div><!-- /page5 -->
 
 </div><!-- /container -->
@@ -735,21 +728,7 @@
     document.getElementById('casework-box').innerHTML = html;
   }
 
-  function renderGallery(data) {
-    stamp('ts-gallery', data.length ? data[0].fetchedAt : '');
-    if (!data.length) {
-      document.getElementById('gallery-box').innerHTML =
-        '<div class="empty-state" style="grid-column:1/-1;">No councillor photos have been uploaded in the past 14 days.</div>';
-      return;
-    }
-    document.getElementById('gallery-box').innerHTML = data.map(function(g){
-      return '<div class="gallery-card">'+
-        '<div class="gallery-img-wrap"><img src="https://docs.google.com/uc?export=view&id='+esc(g.id)+'" alt="'+esc(g.title)+'" loading="lazy"></div>'+
-        '<div class="gallery-info"><h4>'+esc(g.title)+'</h4><p>'+esc(g.description)+'</p>'+
-        '<div class="gallery-date">📅 Uploaded: '+esc(g.dateFormatted)+'</div>'+
-        '</div></div>';
-    }).join('');
-  }
+
 
   // ── LOAD ALL DATA ─────────────────────────────────────────────────────────
   loadJSON('meta.json', function(d){
@@ -775,11 +754,7 @@
   loadJSON('council_meetings.json', renderMeetings);
   loadJSON('casework.json',      renderCasework);
 
-  // Gallery — only if the JSON file exists (Drive access optional)
-  fetch('data/gallery.json?v=' + Date.now())
-    .then(function(r){ return r.ok ? r.json() : []; })
-    .then(renderGallery)
-    .catch(function(){ renderGallery([]); });
+
 </script>
 </body>
 </html>
