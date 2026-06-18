@@ -1001,9 +1001,87 @@ def scrape_council_meetings():
     write_json("council_meetings.json", meetings)
 
 
+def scrape_wmca_meetings():
+    """Scrape WMCA meetings for next 30 days."""
+    print("\n-- WMCA Meetings (next 30 days) --")
+    BASE_URL  = "https://governance.wmca.org.uk"
+    meetings  = []
+    seen      = set()
+
+    for offset in range(2):
+        dt   = NOW_UTC + timedelta(days=offset * 32)
+        url  = (f"{BASE_URL}/mgCalendarAgendaView.aspx"
+                f"?RPID=0&M={dt.month}&DD={dt.year}&CID=0&OT=&C=-1&MR=1")
+        html = browser_get(url)
+        if not html or len(html) < 500:
+            print(f"  Could not fetch WMCA month {dt.month}/{dt.year}")
+            continue
+        print(f"  WMCA Month {dt.month}/{dt.year}: {len(html)} chars")
+
+        soup        = BeautifulSoup(html, "html.parser")
+        cutoff      = NOW_UTC.date() + timedelta(days=30)
+        week_cutoff = NOW_UTC.date() + timedelta(days=7)
+        current_date = None
+        current_day  = None
+
+        for elem in soup.find_all(True):
+            if elem.name == "p":
+                date_m = re.match(
+                    r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+"
+                    r"(\d{1,2})(?:st|nd|rd|th)\s+(\w+),\s+(\d{4})",
+                    elem.get_text(strip=True))
+                if date_m:
+                    try:
+                        current_date = datetime.strptime(
+                            f"{date_m.group(2)} {date_m.group(3)} {date_m.group(4)}",
+                            "%d %B %Y").date()
+                        current_day = date_m.group(1)
+                    except ValueError:
+                        current_date = None
+            elif elem.name == "li" and current_date:
+                a = elem.find("a", href=re.compile(r"ieListDocuments"))
+                if not a:
+                    continue
+                if current_date < NOW_UTC.date() or current_date > cutoff:
+                    continue
+                li_text    = elem.get_text(" ", strip=True)
+                href       = a["href"]
+                link_text  = a.get_text(strip=True)
+                # Strip PROVISIONAL prefix
+                link_text  = re.sub(r"^PROVISIONAL\s*-\s*", "", link_text).strip()
+                time_m     = re.match(
+                    r"(\d{1,2}\.\d{2}\s*(?:am|pm)(?:\s*-\s*\d{1,2}\.\d{2}\s*(?:am|pm))?)",
+                    li_text)
+                time_str   = time_m.group(1).strip() if time_m else ""
+                title      = re.sub(r"\s+on\s+\d{2}/\d{2}.*$", "", link_text).strip()
+                # Extract location (after last dash)
+                loc_m      = re.search(r"-\s+([^-]{10,})$", li_text)
+                location   = loc_m.group(1).strip() if loc_m else "16 Summer Lane, Birmingham"
+                agenda_url = f"{BASE_URL}{href}" if href.startswith("/") else href
+                key = f"{current_date}{title}"
+                if key in seen:
+                    continue
+                seen.add(key)
+                meetings.append({
+                    "date":       current_date.strftime("%-d %B %Y"),
+                    "dayOfWeek":  current_day,
+                    "time":       time_str,
+                    "title":      title,
+                    "location":   location,
+                    "agendaUrl":  agenda_url,
+                    "withinWeek": current_date <= week_cutoff,
+                    "sourceUrl":  url,
+                    "fetchedAt":  STAMP,
+                })
+                print(f"  Added: {current_date} {time_str} — {title[:50]}")
+
+    print(f"  Total WMCA meetings: {len(meetings)}")
+    write_json("wmca_meetings.json", meetings)
+
+
 if __name__ == "__main__":
     print(f"=== Lower Stoke Ward Scraper - {STAMP} ===\n")
-    for fn in [scrape_news, scrape_planning, scrape_council_meetings, scrape_police_events,
+    for fn in [scrape_news, scrape_planning, scrape_council_meetings, scrape_wmca_meetings, scrape_police_events,
                scrape_police_team, scrape_police_crimes, scrape_casework,
                write_metadata]:
         try:
