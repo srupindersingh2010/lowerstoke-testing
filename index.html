@@ -467,15 +467,6 @@
       <span class="live-badge">LIVE DATA</span>
     </div>
 
-    <div class="card card-red-top" style="margin-bottom:20px;">
-      <div class="section-header">
-        <h2>📋 Active Casework Log ( Only selected and suitable casework are listed)</h2>
-        <span class="fetch-stamp" id="ts-cases"></span>
-      </div>
-      <p style="color:#555; font-size:0.9rem; margin-top:0;">Neighbourhood issues and resident requests logged across Lower Stoke Ward.</p>
-      <div id="casework-box"><div class="loading">Loading casework…</div></div>
-    </div>
-
     <div class="card" style="margin-bottom:20px;">
       <div class="section-header">
         <h3>🏛️ Coventry Council Meetings — Next 30 Days</h3>
@@ -500,6 +491,38 @@
       </div>
     </div>
 
+    <div class="card" style="margin-bottom:20px;">
+      <div class="section-header">
+        <h3>🏙️ West Midlands Combined Authority (WMCA) Meetings — Next 30 Days</h3>
+        <span class="fetch-stamp" id="ts-wmca"></span>
+        <a href="https://governance.wmca.org.uk/mgCalendarMonthView.aspx?GL=1&bcr=1" target="_blank">Full WMCA calendar →</a>
+      </div>
+      <p style="font-size:0.85rem;color:#666;margin-top:0;">
+        Upcoming public meetings of the West Midlands Combined Authority boards and committees.
+        Source: <a href="https://governance.wmca.org.uk" target="_blank" style="color:var(--labour-red);">governance.wmca.org.uk</a>
+      </p>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr>
+            <th style="width:18%;">Date</th>
+            <th style="width:15%;">Time</th>
+            <th style="width:42%;">Meeting</th>
+            <th style="width:20%;">Location</th>
+            <th style="width:5%;"></th>
+          </tr></thead>
+          <tbody id="wmca-box"><tr><td colspan="5" class="loading">Loading WMCA meetings…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card card-red-top" style="margin-bottom:20px;">
+      <div class="section-header">
+        <h2>📋 Active Casework Log ( Only selected and suitable casework are listed)</h2>
+        <span class="fetch-stamp" id="ts-cases"></span>
+      </div>
+      <p style="color:#555; font-size:0.9rem; margin-top:0;">Neighbourhood issues and resident requests logged across Lower Stoke Ward.</p>
+      <div id="casework-box"><div class="loading">Loading casework…</div></div>
+    </div>
 
   </div><!-- /page5 -->
 
@@ -703,6 +726,28 @@
     }).join('');
   }
 
+  function renderWmcaMeetings(data) {
+    stamp('ts-wmca', data.length ? data[0].fetchedAt : '');
+    if (!data.length) {
+      document.getElementById('wmca-box').innerHTML =
+        '<tr><td colspan="5" style="text-align:center;color:#777;">No WMCA meetings scheduled in the next 30 days. ' +
+        '<a href="https://governance.wmca.org.uk/mgCalendarMonthView.aspx?GL=1&bcr=1" target="_blank" style="color:var(--labour-red);">Check full WMCA calendar →</a></td></tr>';
+      return;
+    }
+    document.getElementById('wmca-box').innerHTML = data.map(function(m) {
+      var rowStyle = m.withinWeek ? ' style="background:#E8F5E9;"' : '';
+      return '<tr' + rowStyle + '>' +
+        '<td><strong>' + esc(m.dayOfWeek) + '</strong><br><span style="color:#555;font-size:0.85rem;">' + esc(m.date) + '</span>' +
+        (m.withinWeek ? '<br><span style="background:#2E7D32;color:#fff;font-size:0.65rem;padding:1px 5px;border-radius:2px;font-weight:bold;">THIS WEEK</span>' : '') +
+        '</td>' +
+        '<td style="color:#555;white-space:nowrap;">' + esc(m.time) + '</td>' +
+        '<td><strong>' + esc(m.title) + '</strong></td>' +
+        '<td style="font-size:0.82rem;color:#666;">' + esc(m.location) + '</td>' +
+        '<td>' + (m.agendaUrl ? '<a href="' + esc(m.agendaUrl) + '" target="_blank" style="font-size:0.75rem;color:var(--labour-red);">Agenda →</a>' : '') + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
   function renderCasework(data) {
     stamp('ts-cases', data.length ? data[0].fetchedAt : '');
     if (!data.length) {
@@ -752,6 +797,7 @@
     .then(function(d){ if (d && d.length && !d[0].siteDown) renderEvents(d); })
     .catch(function(){});
   loadJSON('council_meetings.json', renderMeetings);
+  loadJSON('wmca_meetings.json',    renderWmcaMeetings);
   loadJSON('casework.json',      renderCasework);
 
 
