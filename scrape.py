@@ -904,12 +904,12 @@ def scrape_council_meetings():
         dt  = NOW_UTC + timedelta(days=offset * 32)
         url = (f"{BASE_URL}/mgCalendarAgendaView.aspx"
                f"?RPID=0&M={dt.month}&DD={dt.year}&CID=0&OT=&C=-1&MR=1")
-        r   = safe_get(url)
-        if not r or r.status_code != 200:
+        html = browser_get(url)
+        if not html or len(html) < 500:
             print(f"  Could not fetch month {dt.month}/{dt.year}")
             continue
-        print(f"  Month {dt.month}/{dt.year}: {len(r.text)} chars")
-        soup    = BeautifulSoup(r.text, "html.parser")
+        print(f"  Month {dt.month}/{dt.year}: {len(html)} chars")
+        soup    = BeautifulSoup(html, "html.parser")
         content = soup.get_text("\n", strip=True)
         cutoff       = NOW_UTC.date() + timedelta(days=30)
         week_cutoff  = NOW_UTC.date() + timedelta(days=7)
