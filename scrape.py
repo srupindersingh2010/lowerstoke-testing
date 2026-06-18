@@ -910,46 +910,35 @@ def scrape_council_meetings():
             continue
         print(f"  Month {dt.month}/{dt.year}: {len(html)} chars")
 
-        # DEBUG: show all h1/h2/h3/h4 tags and first li
-        soup_debug = BeautifulSoup(html, "html.parser")
-        all_h = soup_debug.find_all(["h1","h2","h3","h4"])
-        print(f"  DEBUG headings found: {len(all_h)}")
-        for hx in all_h[:8]:
-            print(f"    <{hx.name}>: {hx.get_text(strip=True)[:80]}")
-        all_li = soup_debug.find_all("li")
-        print(f"  DEBUG li items found: {len(all_li)}")
-        for li in all_li[:3]:
-            print(f"    li: {li.get_text(strip=True)[:100]}")
-
         soup        = BeautifulSoup(html, "html.parser")
         cutoff      = NOW_UTC.date() + timedelta(days=30)
         week_cutoff = NOW_UTC.date() + timedelta(days=7)
 
-        for h3 in soup.find_all("h3"):
-            date_m = re.match(
-                r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+"
-                r"(\d{1,2})(?:st|nd|rd|th)\s+(\w+),\s+(\d{4})",
-                h3.get_text(strip=True))
-            if not date_m:
-                continue
-            try:
-                meeting_date = datetime.strptime(
-                    f"{date_m.group(2)} {date_m.group(3)} {date_m.group(4)}",
-                    "%d %B %Y").date()
-            except ValueError:
-                continue
-            if meeting_date < NOW_UTC.date() or meeting_date > cutoff:
-                continue
-            day_name = date_m.group(1)
-
-            ul = h3.find_next_sibling("ul")
-            if not ul:
-                continue
-            for li in ul.find_all("li"):
-                li_text   = li.get_text(" ", strip=True)
-                a         = li.find("a", href=True)
+        # Walk all elements in order: <p> tags contain date headers,
+        # <li> tags with ieListDocuments links contain meetings
+        current_date = None
+        current_day  = None
+        for elem in soup.find_all(True):
+            if elem.name == "p":
+                date_m = re.match(
+                    r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+"
+                    r"(\d{1,2})(?:st|nd|rd|th)\s+(\w+),\s+(\d{4})",
+                    elem.get_text(strip=True))
+                if date_m:
+                    try:
+                        current_date = datetime.strptime(
+                            f"{date_m.group(2)} {date_m.group(3)} {date_m.group(4)}",
+                            "%d %B %Y").date()
+                        current_day = date_m.group(1)
+                    except ValueError:
+                        current_date = None
+            elif elem.name == "li" and current_date:
+                a = elem.find("a", href=re.compile(r"ieListDocuments"))
                 if not a:
                     continue
+                if current_date < NOW_UTC.date() or current_date > cutoff:
+                    continue
+                li_text    = elem.get_text(" ", strip=True)
                 href       = a["href"]
                 link_text  = a.get_text(strip=True)
                 time_m     = re.match(
@@ -960,20 +949,19 @@ def scrape_council_meetings():
                 loc_m      = re.search(
                     r"-\s+((?:Committee Room|Council Chamber|Diamond Room|Council House)[^-\n]+?)$",
                     li_text)
-                location   = loc_m.group(1).strip() if loc_m else "Council House"
+                location   = loc_m.group(1).strip() if loc_m else "Council House, Coventry"
                 agenda_url = f"{BASE_URL}{href}" if href.startswith("/") else href
                 mid_m      = re.search(r"MId=(\d+)", href)
                 attend_url = (f"{BASE_URL}/mgMeetingAttendance.aspx?ID={mid_m.group(1)}"
                               if mid_m else "")
-
-                key = f"{meeting_date}{title}"
+                key = f"{current_date}{title}"
                 if key in seen:
                     continue
                 seen.add(key)
 
                 our_cllrs_attending = []
                 attendance_checked  = False
-                if attend_url and meeting_date <= week_cutoff:
+                if attend_url and current_date <= week_cutoff:
                     ra = safe_get(attend_url)
                     if ra and ra.status_code == 200:
                         attendance_checked = True
@@ -991,23 +979,23 @@ def scrape_council_meetings():
                                         cells[0].get_text(strip=True))
                                     if display not in our_cllrs_attending:
                                         our_cllrs_attending.append(display)
-                    print(f"  Attendance {meeting_date} {title[:35]}: {our_cllrs_attending or 'none'}")
+                    print(f"  Attendance {current_date} {title[:30]}: {our_cllrs_attending or 'none'}")
 
                 meetings.append({
-                    "date":              meeting_date.strftime("%-d %B %Y"),
-                    "dayOfWeek":         day_name,
+                    "date":              current_date.strftime("%-d %B %Y"),
+                    "dayOfWeek":         current_day,
                     "time":              time_str,
                     "title":             title,
                     "location":          location,
                     "agendaUrl":         agenda_url,
                     "attendanceUrl":     attend_url,
-                    "withinWeek":        meeting_date <= week_cutoff,
+                    "withinWeek":        current_date <= week_cutoff,
                     "attendanceChecked": attendance_checked,
                     "ourCouncillors":    our_cllrs_attending,
                     "sourceUrl":         url,
                     "fetchedAt":         STAMP,
                 })
-                print(f"  Added: {meeting_date} {time_str} — {title[:50]}")
+                print(f"  Added: {current_date} {time_str} — {title[:50]}")
 
     print(f"  Total meetings: {len(meetings)}")
     write_json("council_meetings.json", meetings)
