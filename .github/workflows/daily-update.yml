@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Python dependencies
-        run: pip install requests beautifulsoup4 google-auth google-auth-httplib2 google-api-python-client playwright
+        run: pip install requests beautifulsoup4 google-auth google-auth-httplib2 google-api-python-client playwright==1.44.0
 
       - name: Run scraper
         env:
