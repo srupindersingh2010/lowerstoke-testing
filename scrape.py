@@ -1002,9 +1002,9 @@ def scrape_council_meetings():
 
 
 def scrape_wmca_meetings():
-    """Scrape WMCA meetings for next 30 days."""
+    """Scrape WMCA meetings for next 30 days from wmca.moderngov.co.uk."""
     print("\n-- WMCA Meetings (next 30 days) --")
-    BASE_URL  = "https://governance.wmca.org.uk"
+    BASE_URL  = "https://wmca.moderngov.co.uk"
     meetings  = []
     seen      = set()
 
@@ -1026,10 +1026,11 @@ def scrape_wmca_meetings():
 
         for elem in soup.find_all(True):
             if elem.name == "p":
+                txt = elem.get_text(strip=True)
+                # WMCA format: "Monday 22nd June 2026" (no commas)
                 date_m = re.match(
-                    r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+"
-                    r"(\d{1,2})(?:st|nd|rd|th)\s+(\w+),\s+(\d{4})",
-                    elem.get_text(strip=True))
+                    r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+"
+                    r"(\d{1,2})(?:st|nd|rd|th)\s+(\w+)\s+(\d{4})", txt)
                 if date_m:
                     try:
                         current_date = datetime.strptime(
@@ -1047,14 +1048,12 @@ def scrape_wmca_meetings():
                 li_text    = elem.get_text(" ", strip=True)
                 href       = a["href"]
                 link_text  = a.get_text(strip=True)
-                # Strip PROVISIONAL prefix
                 link_text  = re.sub(r"^PROVISIONAL\s*-\s*", "", link_text).strip()
                 time_m     = re.match(
                     r"(\d{1,2}\.\d{2}\s*(?:am|pm)(?:\s*-\s*\d{1,2}\.\d{2}\s*(?:am|pm))?)",
                     li_text)
                 time_str   = time_m.group(1).strip() if time_m else ""
                 title      = re.sub(r"\s+on\s+\d{2}/\d{2}.*$", "", link_text).strip()
-                # Extract location (after last dash)
                 loc_m      = re.search(r"-\s+([^-]{10,})$", li_text)
                 location   = loc_m.group(1).strip() if loc_m else "16 Summer Lane, Birmingham"
                 agenda_url = f"{BASE_URL}{href}" if href.startswith("/") else href
