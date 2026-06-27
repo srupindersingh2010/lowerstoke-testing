@@ -1,13 +1,23 @@
 [
   {
-    "title": "Joint inspections crackdown on illegal HMOs",
-    "summary": "Coventry City Council’s Safer Housing and Communities team, along with partners, have carried out a series of targeted enforcement visits across the city.",
-    "link": "https://www.coventry.gov.uk/news/article/5525/joint-inspections-crackdown-on-illegal-hmos",
+    "title": "5 things to know about the Renters Right's Act",
+    "summary": "The renters right act came into effect in May 2026.",
+    "link": "https://www.coventry.gov.uk/news/article/5526/5-things-to-know-about-the-renters-right-s-act",
     "date": "26 June 2026",
     "focused": true,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "26 June 2026 at 11:54"
+    "fetchedAt": "27 June 2026 at 10:32"
+  },
+  {
+    "title": "Joint inspections crackdown on illegal HMOs",
+    "summary": "Coventry City Council’s Safer Housing and Communities team, along with partners, have carried out a series of targeted enforcement visits across the city.",
+    "link": "https://www.coventry.gov.uk/news/article/5525/joint-inspections-crackdown-on-illegal-hmos",
+    "date": "26 June 2026",
+    "focused": false,
+    "source": "coventry.gov.uk/news",
+    "sourceUrl": "https://www.coventry.gov.uk/news",
+    "fetchedAt": "27 June 2026 at 10:32"
   },
   {
     "title": "Barry named Coventry’s latest Good Citizen",
@@ -17,7 +27,7 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "26 June 2026 at 11:54"
+    "fetchedAt": "27 June 2026 at 10:32"
   },
   {
     "title": "Victorious Sky Blues awarded Honorary Freedom of the City",
@@ -27,7 +37,7 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "26 June 2026 at 11:54"
+    "fetchedAt": "27 June 2026 at 10:32"
   },
   {
     "title": "Coventry Launches “Best Start in Life” Strategy to Improve Outcomes for Children and Families",
@@ -37,7 +47,7 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "26 June 2026 at 11:54"
+    "fetchedAt": "27 June 2026 at 10:32"
   },
   {
     "title": "Homegrown talent and national stars come together for Godiva in the City",
@@ -47,16 +57,6 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "26 June 2026 at 11:54"
-  },
-  {
-    "title": "Major city-wide collaboration to drive new era for arts and culture in Coventry",
-    "summary": "Working in partnership with Coventry University, Coventry City Council is pleased to be involved in the delivery of a major new initiative - Shape Coventry.",
-    "link": "https://www.coventry.gov.uk/news/article/5519/major-city-wide-collaboration-to-drive-new-era-for-arts-and-culture-in-coventry",
-    "date": "17 June 2026",
-    "focused": false,
-    "source": "coventry.gov.uk/news",
-    "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "26 June 2026 at 11:54"
+    "fetchedAt": "27 June 2026 at 10:32"
   }
 ]
