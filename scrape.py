@@ -436,7 +436,64 @@ def scrape_planning():
             print(f"  planning.data.gov.uk error: {e}")
 
     # ------------------------------------------------------------------
-    # Write results — or siteDown if all three sources failed
+    # Source 4: Idox search.do backend API (two-step: session then POST)
+    # The Idox JS frontend calls this endpoint directly. We replicate the
+    # same two-step flow: GET the search page for a session cookie, then
+    # POST the ward search form. Works from server IPs on many councils.
+    # ------------------------------------------------------------------
+    if not apps:
+        print("  Trying Idox search.do backend API...")
+        try:
+            BASE = "https://planandregulatory.coventry.gov.uk/planning"
+            session = requests.Session()
+            session.headers.update(HEADERS)
+
+            # Step 1: GET search page to establish session cookie
+            r1 = session.get(f"{BASE}/index.html?fa=search", timeout=15)
+            print(f"  Idox session GET: {r1.status_code} ({len(r1.text)} chars)")
+
+            if r1.status_code == 200:
+                # Step 2: POST the advanced search form with ward=Lower Stoke
+                # These are the standard Idox PublicAccess form field names
+                form_data = {
+                    "searchType":        "Application",
+                    "ward":              "Lower Stoke",
+                    "application_ward":  "Lower Stoke",
+                    "applicationType":   "",
+                    "applicantName":     "",
+                    "description":       "",
+                    "address":           "",
+                    "caseNo":            "",
+                    "date(applicationValidatedStart)": "",
+                    "date(applicationValidatedEnd)":   "",
+                    "action":            "Search",
+                }
+                r2 = session.post(
+                    f"{BASE}/search.do?action=Search&searchType=Application",
+                    data=form_data,
+                    timeout=20
+                )
+                print(f"  Idox search POST: {r2.status_code} ({len(r2.text)} chars)")
+                # Log snippet for diagnosis
+                body_start = r2.text.lower().find("<body")
+                snippet = r2.text[body_start:body_start+400] if body_start > -1 else r2.text[:400]
+                print(f"  Idox response snippet: {snippet[:300]!r}")
+
+                if r2.status_code == 200 and len(r2.text) > 1000:
+                    found = parse_portal_table(r2.text,
+                                               f"{BASE}/search.do")
+                    if found:
+                        apps = found
+                        print(f"  Idox API: {len(apps)} Lower Stoke apps found")
+                    else:
+                        print("  Idox API: no Lower Stoke rows in response")
+            else:
+                print(f"  Idox session blocked: {r1.status_code}")
+        except Exception as e:
+            print(f"  Idox search.do error: {e}")
+
+    # ------------------------------------------------------------------
+    # Write results — or siteDown if all sources failed
     # ------------------------------------------------------------------
     if apps:
         print(f"  Total planning apps: {len(apps)}")
