@@ -22,11 +22,9 @@ jobs:
           fetch-depth: 0
 
       - name: Install Python dependencies
-        run: pip install requests beautifulsoup4 google-auth google-auth-httplib2 google-api-python-client playwright==1.44.0
+        run: pip install requests beautifulsoup4 playwright==1.44.0
 
       - name: Run scraper
-        env:
-          GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
         run: python scrape.py
 
       - name: Commit and push updated data
