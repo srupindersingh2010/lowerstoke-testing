@@ -290,10 +290,25 @@
           <div class="section-header">
             <h2>🏗️ Planning Applications — Lower Stoke Ward</h2>
             <span class="fetch-stamp" id="ts-planning"></span>
-            <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke" target="_blank">Full planning portal →</a>
           </div>
-          <p style="font-size:0.85rem; color:#666; margin-top:0;">Applications for Lower Stoke Ward. Click any reference number to view full details on the planning portal.</p>
-          <div style="overflow-x:auto;">
+
+          <!-- Portal link card — always shown -->
+          <div style="background:#F8F9FA; border:2px solid var(--labour-red); border-radius:8px; padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+            <div>
+              <div style="font-size:1rem; font-weight:bold; color:var(--charcoal); margin-bottom:4px;">🏛️ Coventry City Council Planning Portal</div>
+              <div style="font-size:0.85rem; color:#555; margin-bottom:10px;">View all current and recent planning applications for Lower Stoke Ward directly on the Council's official planning portal.</div>
+              <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke"
+                 target="_blank"
+                 style="display:inline-block; background:var(--labour-red); color:#fff; font-weight:bold; font-size:0.92rem; padding:10px 20px; border-radius:4px; text-decoration:none;">
+                View Lower Stoke Planning Applications →
+              </a>
+            </div>
+            <div style="font-size:2.5rem; flex-shrink:0;">🏗️</div>
+          </div>
+
+          <!-- Scraped data table — shown only when scraper succeeds -->
+          <div id="planning-table-wrap" style="display:none; overflow-x:auto;">
+            <p style="font-size:0.85rem; color:#666; margin:0 0 8px;">Recent applications automatically fetched from the Council portal:</p>
             <table class="data-table">
               <thead><tr>
                 <th style="width:18%;">Reference</th>
@@ -301,7 +316,7 @@
                 <th style="width:50%;">Address &amp; Proposal</th>
                 <th style="width:16%;">Status</th>
               </tr></thead>
-              <tbody id="planning-box"><tr><td colspan="4" class="loading">Loading planning data…</td></tr></tbody>
+              <tbody id="planning-box"></tbody>
             </table>
           </div>
         </div>
@@ -613,20 +628,14 @@
   }
 
   function renderPlanning(data) {
-    var portalUrl = 'https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke';
-    // siteDown marker: Coventry Planning Portal was unreachable during last scraper run
-    if (data.length === 1 && data[0].siteDown) {
-      document.getElementById('planning-box').innerHTML =
-        '<tr><td colspan="4" style="text-align:center;padding:18px;">' +
-        '<strong style="color:#E65100;">⚠️ The Coventry Planning Portal was temporarily unavailable</strong> ' +
-        '<span style="color:#777;font-size:0.85rem;">(last checked: ' + esc(data[0].fetchedAt) + ')</span><br>' +
-        '<span style="color:#555;font-size:0.85rem;">Planning information on this site comes directly from the Council&#39;s portal. No data is shown when the portal cannot be reached.</span><br><br>' +
-        '<a href="' + portalUrl + '" target="_blank" style="color:var(--labour-red);font-weight:bold;">View Planning Applications on the Coventry Planning Portal →</a>' +
-        '</td></tr>';
+    // If siteDown or no data — the portal link card is always visible, nothing else to do
+    if (!data.length || (data.length === 1 && data[0].siteDown)) {
+      stamp('ts-planning', data.length ? data[0].fetchedAt : '');
       return;
     }
-    stamp('ts-planning', data.length ? data[0].fetchedAt : '');
-    if (!data.length) { document.getElementById('planning-box').innerHTML = '<tr><td colspan="4" style="text-align:center;color:#777;">No applications found. <a href="' + portalUrl + '" target="_blank" style="color:var(--labour-red);">Search the planning portal →</a></td></tr>'; return; }
+    // Scraper succeeded — show the table as well as the portal link card
+    stamp('ts-planning', data[0].fetchedAt);
+    document.getElementById('planning-table-wrap').style.display = 'block';
     document.getElementById('planning-box').innerHTML = data.map(function(p){
       return '<tr><td><a href="'+esc(p.portalLink)+'" target="_blank" style="color:var(--labour-red);font-weight:bold;text-decoration:underline;">'+esc(p.reference)+'</a><br><span style="font-size:0.72rem;color:#aaa;">'+esc(p.source||'')+'</span></td>'+
         '<td style="color:#555;">'+esc(p.dateLodged)+'</td>'+
