@@ -614,13 +614,14 @@
 
   function renderPlanning(data) {
     var portalUrl = 'https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke';
-    // siteDown marker: all planning data sources were unreachable during last update
+    // siteDown marker: Coventry Planning Portal was unreachable during last scraper run
     if (data.length === 1 && data[0].siteDown) {
       document.getElementById('planning-box').innerHTML =
         '<tr><td colspan="4" style="text-align:center;padding:18px;">' +
-        '<strong style="color:#E65100;">⚠️ Planning data sources were temporarily unavailable</strong> ' +
+        '<strong style="color:#E65100;">⚠️ The Coventry Planning Portal was temporarily unavailable</strong> ' +
         '<span style="color:#777;font-size:0.85rem;">(last checked: ' + esc(data[0].fetchedAt) + ')</span><br>' +
-        '<a href="' + portalUrl + '" target="_blank" style="color:var(--labour-red);font-weight:bold;">Check directly on the Coventry Planning Portal →</a>' +
+        '<span style="color:#555;font-size:0.85rem;">Planning information on this site comes directly from the Council's portal. No data is shown when the portal cannot be reached.</span><br><br>' +
+        '<a href="' + portalUrl + '" target="_blank" style="color:var(--labour-red);font-weight:bold;">View Planning Applications on the Coventry Planning Portal →</a>' +
         '</td></tr>';
       return;
     }
