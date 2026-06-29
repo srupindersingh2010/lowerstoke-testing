@@ -269,76 +269,184 @@ def scrape_news():
 
 # =============================================================================
 # 2. PLANNING APPLICATIONS
-#    Single source of truth: Coventry Planning Portal (Playwright).
-#    Only applications that appear on the Council's portal are shown.
-#    If the portal is unreachable, a siteDown marker is written so the
-#    site can display an appropriate notice rather than stale data.
+#    Source 1: Coventry Planning Portal weekly list    (Playwright)
+#    Source 2: Coventry Planning Portal ward search    (Playwright)
+#    Source 3: planning.data.gov.uk open API           (plain HTTP, no auth)
+#    Sources are tried in order; whichever succeeds first is used.
+#    All three draw from Coventry Council data — nothing else is shown.
+#    If all three fail, a siteDown marker is written.
 # =============================================================================
 def scrape_planning():
     print("\n-- Planning Applications --")
     apps = []
 
     WEEKLY_URL = "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getReceivedWeeklyList"
-    portal_html = browser_get(WEEKLY_URL)
+    WARD_URL   = "https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower+Stoke"
 
-    # If the portal could not be reached at all, write a siteDown marker.
-    # The website should detect this and show "Council portal unavailable"
-    # rather than showing no results or stale data.
-    if not portal_html or len(portal_html) < 1000:
-        print(f"  Portal returned {len(portal_html) if portal_html else 0} chars — writing siteDown marker")
+    def parse_portal_table(html, source_url):
+        """Parse a planning portal HTML page and return Lower Stoke apps."""
+        found = []
+        soup  = BeautifulSoup(html, "html.parser")
+        table = soup.find("table", class_=re.compile(r"search", re.I)) or soup.find("table")
+        if not table:
+            print("  No table found in portal page")
+            return found
+        headers = [th.get_text(strip=True).lower() for th in table.find_all("th")]
+        print(f"  Portal table headers: {headers}")
+        for tr in table.find_all("tr")[1:]:
+            cells = tr.find_all("td")
+            if not cells:
+                continue
+            col = {}
+            for i, h in enumerate(headers):
+                if i < len(cells):
+                    col[h] = cells[i].get_text(strip=True)
+            ward = col.get("ward", "")
+            if "lower stoke" not in ward.lower():
+                continue
+            ref_link    = cells[0].find("a") if cells else None
+            reference   = ref_link.get_text(strip=True) if ref_link else col.get("reference", "")
+            href        = ref_link.get("href", "") if ref_link else ""
+            portal_link = (
+                f"https://planandregulatory.coventry.gov.uk{href}"
+                if href.startswith("/")
+                else PORTAL + "?fa=getApplication&ref=" + reference
+            )
+            found.append({
+                "reference":   reference,
+                "address":     col.get("address", ""),
+                "description": col.get("proposal", col.get("description", "")),
+                "status":      col.get("status", "Received"),
+                "dateLodged":  col.get("valid date", col.get("date", "")),
+                "ward":        ward,
+                "portalLink":  portal_link,
+                "source":      "planandregulatory.coventry.gov.uk",
+                "sourceUrl":   source_url,
+                "fetchedAt":   STAMP,
+            })
+            print(f"  Portal app: {reference} | {col.get('address','')[:40]}")
+        return found
+
+    def browser_get_planning(url):
+        """
+        Fetch a planning portal page, waiting up to 20s for the results
+        table to appear after JavaScript renders it.
+        Falls back to plain browser_get if Playwright or the wait fails.
+        """
+        try:
+            from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
+            with sync_playwright() as p:
+                browser = p.chromium.launch(
+                    headless=True,
+                    args=["--no-sandbox", "--disable-dev-shm-usage",
+                          "--disable-blink-features=AutomationControlled"]
+                )
+                ctx  = browser.new_context(
+                    user_agent=(
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/124.0.0.0 Safari/537.36"
+                    ),
+                    locale="en-GB",
+                    viewport={"width": 1280, "height": 800},
+                )
+                page = ctx.new_page()
+                page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                # Wait for the results table OR any <table> to appear
+                try:
+                    page.wait_for_selector("table", timeout=20000)
+                    print(f"  Table appeared in DOM")
+                except PWTimeout:
+                    print(f"  No table appeared after 20s — grabbing HTML anyway")
+                html = page.content()
+                browser.close()
+                print(f"  BROWSER GET (planning) {url[:80]} -> {len(html)} chars")
+                # Log a snippet so we can diagnose what the portal returned
+                snippet = html[html.lower().find("<body"):html.lower().find("<body")+500] if "<body" in html.lower() else html[:500]
+                print(f"  HTML snippet: {snippet[:300]!r}")
+                return html
+        except Exception as e:
+            print(f"  BROWSER GET (planning) {url[:80]} -> ERROR: {e}")
+            return browser_get(url)
+
+    # ------------------------------------------------------------------
+    # Source 1: weekly received list (Playwright, waits for table)
+    # ------------------------------------------------------------------
+    print("  Trying weekly received list...")
+    html = browser_get_planning(WEEKLY_URL)
+    if html and len(html) > 1000:
+        apps = parse_portal_table(html, WEEKLY_URL)
+
+    # ------------------------------------------------------------------
+    # Source 2: ward search page (Playwright, waits for table)
+    # ------------------------------------------------------------------
+    if not apps:
+        print("  Weekly list empty — trying ward search page...")
+        html2 = browser_get_planning(WARD_URL)
+        if html2 and len(html2) > 1000:
+            apps = parse_portal_table(html2, WARD_URL)
+
+    # ------------------------------------------------------------------
+    # Source 3: planning.data.gov.uk open API
+    # Free government API, no auth, no bot detection.
+    # Lower Stoke ward entity = 800137.
+    # Returns Coventry Council planning data — same underlying source.
+    # ------------------------------------------------------------------
+    if not apps:
+        print("  Portal blocked — trying planning.data.gov.uk API...")
+        try:
+            ninety_ago = NOW_UTC - timedelta(days=90)
+            api_url = (
+                "https://www.planning.data.gov.uk/entity.json"
+                "?dataset=planning-application"
+                "&geometry_entity=800137"
+                "&geometry_relation=intersects"
+                f"&entry_date__gte={ninety_ago.strftime('%Y-%m-%d')}"
+                "&limit=100"
+            )
+            r = safe_get(api_url)
+            if r and r.status_code == 200:
+                entities = r.json().get("entities", [])
+                print(f"  planning.data.gov.uk: {len(entities)} entities returned")
+                for e in entities:
+                    ref  = (e.get("reference") or "").strip()
+                    if not ref:
+                        continue
+                    addr = (e.get("name") or e.get("address-text") or "Lower Stoke, Coventry").strip()
+                    desc = (e.get("description") or e.get("development-description") or
+                            "Click reference to view full details.").strip()
+                    stat = (e.get("status") or e.get("decision") or "Received").strip()
+                    date = e.get("start-date") or e.get("entry-date") or ""
+                    ref_enc = ref.replace("/", "%2F")
+                    apps.append({
+                        "reference":   ref,
+                        "dateLodged":  fmt_date(date) if date else "",
+                        "address":     addr,
+                        "description": desc,
+                        "status":      stat,
+                        "portalLink":  f"{PORTAL}?fa=getApplication&id={ref_enc}",
+                        "source":      "planning.data.gov.uk (Coventry Council data)",
+                        "sourceUrl":   PORTAL + "?fa=getApplications&ward=Lower%20Stoke",
+                        "fetchedAt":   STAMP,
+                    })
+                    print(f"  API: {ref} | {addr[:45]} | {stat}")
+            else:
+                print(f"  planning.data.gov.uk: {r.status_code if r else 'no response'}")
+        except Exception as e:
+            print(f"  planning.data.gov.uk error: {e}")
+
+    # ------------------------------------------------------------------
+    # Write results — or siteDown if all three sources failed
+    # ------------------------------------------------------------------
+    if apps:
+        print(f"  Total planning apps: {len(apps)}")
+        for a in apps:
+            print(f"    {a['reference']} | {a['address'][:40]} | {a['status']}")
+        write_json("planning.json", apps)
+    else:
+        print("  All sources failed — writing siteDown marker")
         write_json("planning.json", [{"siteDown": True, "fetchedAt": STAMP,
                                       "sourceUrl": WEEKLY_URL}])
-        return
-
-    psoup = BeautifulSoup(portal_html, "html.parser")
-    table = psoup.find("table", class_=re.compile(r"search", re.I)) or psoup.find("table")
-
-    if not table:
-        print("  Portal reachable but no table found — writing siteDown marker")
-        write_json("planning.json", [{"siteDown": True, "fetchedAt": STAMP,
-                                      "sourceUrl": WEEKLY_URL}])
-        return
-
-    headers = [th.get_text(strip=True).lower() for th in table.find_all("th")]
-    print(f"  Portal table headers: {headers}")
-
-    for tr in table.find_all("tr")[1:]:
-        cells = tr.find_all("td")
-        if not cells:
-            continue
-        col = {}
-        for i, h in enumerate(headers):
-            if i < len(cells):
-                col[h] = cells[i].get_text(strip=True)
-        ward = col.get("ward", "")
-        if "lower stoke" not in ward.lower():
-            continue
-        ref_link  = cells[0].find("a") if cells else None
-        reference = ref_link.get_text(strip=True) if ref_link else col.get("reference", "")
-        href      = ref_link.get("href", "") if ref_link else ""
-        portal_link = (
-            f"https://planandregulatory.coventry.gov.uk{href}"
-            if href.startswith("/")
-            else PORTAL + "?fa=getApplication&ref=" + reference
-        )
-        apps.append({
-            "reference":   reference,
-            "address":     col.get("address", ""),
-            "description": col.get("proposal", col.get("description", "")),
-            "status":      col.get("status", "Received"),
-            "dateLodged":  col.get("valid date", col.get("date", "")),
-            "ward":        ward,
-            "portalLink":  portal_link,
-            "source":      "planandregulatory.coventry.gov.uk",
-            "sourceUrl":   WEEKLY_URL,
-            "fetchedAt":   STAMP,
-        })
-        print(f"  Portal app: {reference} | {col.get('address','')[:40]}")
-
-    print(f"  Total planning apps from portal: {len(apps)}")
-    for a in apps:
-        print(f"    {a['reference']} | {a['address'][:40]} | {a['status']}")
-    write_json("planning.json", apps)
 
 # =============================================================================
 # 3. WEST MIDLANDS POLICE
