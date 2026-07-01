@@ -1,13 +1,23 @@
 [
   {
+    "title": "More locations to offer data support",
+    "summary": "Coventry residents can now access data support from more locations across the city.",
+    "link": "https://www.coventry.gov.uk/news/article/4509/more-locations-to-offer-data-support",
+    "date": "30 June 2026",
+    "focused": true,
+    "source": "coventry.gov.uk/news",
+    "sourceUrl": "https://www.coventry.gov.uk/news",
+    "fetchedAt": "1 July 2026 at 11:45"
+  },
+  {
     "title": "Coventry backs national Anti-Social Behaviour Awareness Week 2026",
     "summary": "Coventry City Council is proud to stand with organisations across the UK in support of Anti-Social Behaviour (ASB) Awareness Week 2026.",
     "link": "https://www.coventry.gov.uk/news/article/5527/coventry-backs-national-anti-social-behaviour-awareness-week-2026",
     "date": "29 June 2026",
-    "focused": true,
+    "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "title": "5 things to know about the Renters Right's Act",
@@ -17,7 +27,7 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "title": "Joint inspections crackdown on illegal HMOs",
@@ -27,7 +37,7 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "title": "Barry named Coventry’s latest Good Citizen",
@@ -37,7 +47,7 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "title": "Victorious Sky Blues awarded Honorary Freedom of the City",
@@ -47,16 +57,6 @@
     "focused": false,
     "source": "coventry.gov.uk/news",
     "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "30 June 2026 at 11:58"
-  },
-  {
-    "title": "Coventry Launches “Best Start in Life” Strategy to Improve Outcomes for Children and Families",
-    "summary": "Coventry City Council, in partnership with key local organisations, is proud to announce the launch of its “Best Start in Life” Strategy.",
-    "link": "https://www.coventry.gov.uk/news/article/5521/coventry-launches-best-start-in-life-strategy-to-improve-outcomes-for-children-and-families",
-    "date": "23 June 2026",
-    "focused": false,
-    "source": "coventry.gov.uk/news",
-    "sourceUrl": "https://www.coventry.gov.uk/news",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "fetchedAt": "1 July 2026 at 11:45"
   }
 ]

@@ -1,21 +1,5 @@
 [
   {
-    "date": "30 June 2026",
-    "dayOfWeek": "Tuesday",
-    "time": "10.00 am",
-    "title": "Meeting ofLicensing and Regulatory Sub Committee (1) (Hackney Carrion 30/06 at 10.00 am...",
-    "location": "Council House, Coventry",
-    "agendaUrl": "https://edemocracy.coventry.gov.uk/ieListDocuments.aspx?CId=778&MId=13718",
-    "attendanceUrl": "https://edemocracy.coventry.gov.uk/mgMeetingAttendance.aspx?ID=13718",
-    "withinWeek": true,
-    "attendanceChecked": true,
-    "ourCouncillors": [
-      "Shahnaz Akhter"
-    ],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
-  },
-  {
     "date": "1 July 2026",
     "dayOfWeek": "Wednesday",
     "time": "2.00 pm - 4.00 pm",
@@ -26,8 +10,8 @@
     "withinWeek": true,
     "attendanceChecked": true,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "2 July 2026",
@@ -40,8 +24,8 @@
     "withinWeek": true,
     "attendanceChecked": true,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "3 July 2026",
@@ -56,8 +40,8 @@
     "ourCouncillors": [
       "Shahnaz Akhter"
     ],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "7 July 2026",
@@ -73,8 +57,8 @@
       "John Douglas McNicholas",
       "Rupinder Singh"
     ],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "8 July 2026",
@@ -84,11 +68,11 @@
     "location": "Council House, Coventry",
     "agendaUrl": "https://edemocracy.coventry.gov.uk/ieListDocuments.aspx?CId=575&MId=13779",
     "attendanceUrl": "https://edemocracy.coventry.gov.uk/mgMeetingAttendance.aspx?ID=13779",
-    "withinWeek": false,
-    "attendanceChecked": false,
+    "withinWeek": true,
+    "attendanceChecked": true,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "14 July 2026",
@@ -101,8 +85,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "15 July 2026",
@@ -115,8 +99,22 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
+  },
+  {
+    "date": "15 July 2026",
+    "dayOfWeek": "Wednesday",
+    "time": "1.00 pm - 2.00 pm",
+    "title": "Meeting ofCabinet Member for Adult Serviceson 15/07 at 1.00 pm - 2.00 pm",
+    "location": "Council House, Coventry",
+    "agendaUrl": "https://edemocracy.coventry.gov.uk/ieListDocuments.aspx?CId=710&MId=13839",
+    "attendanceUrl": "https://edemocracy.coventry.gov.uk/mgMeetingAttendance.aspx?ID=13839",
+    "withinWeek": false,
+    "attendanceChecked": false,
+    "ourCouncillors": [],
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "15 July 2026",
@@ -129,8 +127,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "16 July 2026",
@@ -143,8 +141,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "16 July 2026",
@@ -157,8 +155,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "22 July 2026",
@@ -171,8 +169,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "23 July 2026",
@@ -185,8 +183,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "27 July 2026",
@@ -199,8 +197,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "28 July 2026",
@@ -213,8 +211,8 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   },
   {
     "date": "29 July 2026",
@@ -227,7 +225,7 @@
     "withinWeek": false,
     "attendanceChecked": false,
     "ourCouncillors": [],
-    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=6&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "30 June 2026 at 11:58"
+    "sourceUrl": "https://edemocracy.coventry.gov.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
+    "fetchedAt": "1 July 2026 at 11:45"
   }
 ]
