@@ -547,7 +547,7 @@
 
 <footer>
  <p>© <span id="yr"></span> Lower Stoke Ward Newsletter — Data updated automatically every day at 08:00</p>
-    <p>© <span id="yr"></span> Created and maintained by civiccraft.co.uk  target="_blank" rel="noopener">civiccraft.co.uk</p>
+    <p>© <span class="yr2"></span> Created and maintained by <a href="https://www.civiccraft.co.uk" target="_blank" rel="noopener">civiccraft.co.uk</a></p>
                  <div>📧 <a href="mailto:info@civiccraft.co.uk">info@civiccraft.co.uk</a></div>                                                                
   <p style="margin-top:4px;">
     <a href="Information taken from" target="_blank">Information taken from</a> ·
@@ -559,6 +559,7 @@
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
+  document.querySelectorAll('.yr2').forEach(function(el){ el.textContent = new Date().getFullYear(); });
 
   // ── HELPERS ──────────────────────────────────────────────────────────────────
   function esc(s) {
