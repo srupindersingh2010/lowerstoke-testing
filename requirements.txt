@@ -1,1 +1,4 @@
+pyyaml
+jinja2
+weasyprint
 
