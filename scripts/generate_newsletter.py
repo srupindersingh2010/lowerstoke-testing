@@ -57,8 +57,10 @@ def truncate(text, max_len=180):
 
 def clean_meeting_title(raw_title, fallback):
     """council_meetings.json titles look like 'Meeting ofCabineton 07/07 at ...'
-    Pull out just the committee name."""
-    match = re.match(r"^Meeting of(.*?)on \d{1,2}/\d{1,2}", raw_title or "")
+    (using non-breaking spaces around the date). Pull out just the
+    committee name."""
+    normalized = (raw_title or "").replace("\xa0", " ")
+    match = re.match(r"^Meeting of(.*?)on\s+\d{1,2}/\d{1,2}", normalized)
     if match:
         name = match.group(1).strip()
         if name:
