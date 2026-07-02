@@ -2,15 +2,9 @@ name: Send weekly newsletter
 
 on:
   schedule:
-    # 07:00 UTC every Tuesday.
-    # This is 08:00 during British Summer Time (late Mar–late Oct) and
-    # 07:00 during GMT (late Oct–late Mar). GitHub Actions cron can't
-    # follow local timezones directly, so during the winter weeks the
-    # send will land an hour earlier than 8am. Adjust the "7" below if
-    # you'd rather it be consistently accurate for one season over the
-    # other.
+    # 07:00 UTC every Tuesday (~8am UK time, see README note on DST).
     - cron: "0 7 * * 2"
-  workflow_dispatch: {} # lets you trigger it manually from the Actions tab to test
+  workflow_dispatch: {}
 
 jobs:
   send-newsletter:
@@ -48,4 +42,3 @@ jobs:
         with:
           name: newsletter-${{ github.run_id }}
           path: output/
-
