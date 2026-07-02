@@ -1,1 +1,51 @@
+name: Send weekly newsletter
+
+on:
+  schedule:
+    # 07:00 UTC every Tuesday.
+    # This is 08:00 during British Summer Time (late Mar–late Oct) and
+    # 07:00 during GMT (late Oct–late Mar). GitHub Actions cron can't
+    # follow local timezones directly, so during the winter weeks the
+    # send will land an hour earlier than 8am. Adjust the "7" below if
+    # you'd rather it be consistently accurate for one season over the
+    # other.
+    - cron: "0 7 * * 2"
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab to test
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies for WeasyPrint (PDF rendering)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 \
+            libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build and send newsletter
+        env:
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
+          TO_ADDRESS: ${{ secrets.TO_ADDRESS }}
+        run: python scripts/generate_newsletter.py
+
+      - name: Upload generated files as a workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsletter-${{ github.run_id }}
+          path: output/
 
