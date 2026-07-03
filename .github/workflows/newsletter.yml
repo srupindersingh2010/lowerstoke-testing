@@ -27,6 +27,9 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Scrape Coventry police news (last 7 days)
+        run: python scripts/scrape_police_news.py
+
       - name: Build and send newsletter
         env:
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
