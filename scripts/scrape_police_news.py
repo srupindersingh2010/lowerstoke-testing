@@ -21,11 +21,25 @@ OUTPUT_FILE = ROOT / "data" / "police_news.json"
 
 SEARCH_URL = "https://www.westmidlands.police.uk/news/news-search/?q=Lower+Stoke+Coventry"
 PAGINATED_URL = "https://www.westmidlands.police.uk/news/news-search/GetPaginatedResults/?q=Lower+Stoke+Coventry&page={page}"
-HEADERS = {
+HOMEPAGE_URL = "https://www.westmidlands.police.uk/"
+
+BROWSER_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/125.0 Safari/537.36"
-    )
+        "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+    ),
+    "Accept": (
+        "text/html,application/xhtml+xml,application/xml;q=0.9,"
+        "image/avif,image/webp,*/*;q=0.8"
+    ),
+    "Accept-Language": "en-GB,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "same-origin",
+    "Sec-Fetch-User": "?1",
 }
 
 MAX_PAGES = 3  # safety cap so a scraper bug can't loop forever
@@ -96,11 +110,28 @@ def parse_articles(html):
     return articles
 
 
-def fetch_page(page_num):
-    url = SEARCH_URL if page_num == 1 else PAGINATED_URL.format(page=page_num)
-    resp = requests.get(url, headers=HEADERS, timeout=20)
+def fetch_page(session, page_num):
+    if page_num == 1:
+        url = SEARCH_URL
+        referer = HOMEPAGE_URL
+    else:
+        url = PAGINATED_URL.format(page=page_num)
+        referer = SEARCH_URL
+
+    resp = session.get(url, headers={**BROWSER_HEADERS, "Referer": referer}, timeout=20)
     resp.raise_for_status()
     return resp.text
+
+
+def make_session():
+    session = requests.Session()
+    # Visit the homepage first to pick up any cookies the site's bot
+    # protection expects to see before allowing deeper pages.
+    try:
+        session.get(HOMEPAGE_URL, headers=BROWSER_HEADERS, timeout=20)
+    except requests.RequestException:
+        pass  # non-fatal — proceed and let the real request surface any error
+    return session
 
 
 def main():
@@ -109,8 +140,9 @@ def main():
     seen_links = set()
 
     try:
+        session = make_session()
         for page_num in range(1, MAX_PAGES + 1):
-            html = fetch_page(page_num)
+            html = fetch_page(session, page_num)
             page_articles = parse_articles(html)
 
             if not page_articles:
