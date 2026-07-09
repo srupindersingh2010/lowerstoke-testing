@@ -56,6 +56,11 @@ MISSION_BULLETS = [
     "Contact us: phone, WhatsApp, email, social media or in person.",
 ]
 
+GREETING_TEXT = (
+    "Greetings from Rupinder, John and Shahnaz, your Lower Stoke "
+    "Councillor Team. We hope this newsletter finds you well."
+)
+
 # Longer, warmer version shown at the very top, just under the masthead —
 # distinct styling from the rest of the newsletter. Each item pairs a
 # short lead-in line with its bullet point, edit freely.
@@ -162,6 +167,7 @@ def build_static_info():
     return {
         "mission_statement": MISSION_STATEMENT,
         "mission_bullets": MISSION_BULLETS,
+        "greeting_text": GREETING_TEXT,
         "top_intro_lead": TOP_INTRO_LEAD,
         "top_intro_items": TOP_INTRO_ITEMS,
         "councillor_phones": phones,
@@ -386,6 +392,7 @@ HTML_TEMPLATE = """
   body { font-family: Arial, Helvetica, sans-serif; color: #222; max-width: 640px; margin: 0 auto; }
   h1 { color: #14532d; font-size: 22px; margin-bottom: 4px; }
   .subtitle { color: #666; font-size: 12px; margin-top: 0; margin-bottom: 18px; }
+  .greeting { font-family: Georgia, 'Times New Roman', serif; font-size: 17px; color: #14532d; font-weight: bold; margin: 4px 0 14px 0; line-height: 1.4; }
   h2 { color: #14532d; font-size: 16px; border-bottom: 1px solid #ddd; padding-bottom: 4px; margin-top: 28px; }
   ul { padding-left: 0; list-style: none; }
   li { margin-bottom: 14px; border-left: 3px solid #e5e5e5; padding-left: 10px; }
@@ -424,15 +431,7 @@ HTML_TEMPLATE = """
   <h1>{{ issue_title }}</h1>
   <p class="subtitle">{{ issue_date }} &middot; data refreshed {{ data_refreshed }}</p>
 
-  <div class="top-welcome">
-    <p class="lead">{{ static_info.top_intro_lead }}</p>
-    {% for item in static_info.top_intro_items %}
-    <div class="intro-item">
-      <span class="lead-in">{{ item.lead_in }}</span>
-      <span class="bullet">&#10003; {{ item.bullet }}</span>
-    </div>
-    {% endfor %}
-  </div>
+  <p class="greeting">{{ static_info.greeting_text }}</p>
 
   <p class="intro">{{ intro }}</p>
 
@@ -453,19 +452,14 @@ HTML_TEMPLATE = """
   </ul>
   {% endfor %}
 
-  <div class="mission-banner">
-    <p>{{ static_info.mission_statement }}</p>
-    <ul>
-      {% for bullet in static_info.mission_bullets %}
-      <li>&#10003; {{ bullet }}</li>
-      {% endfor %}
-    </ul>
-    {% if static_info.councillor_phones %}
-    <div class="phones">
-      <strong>Councillor phone numbers:</strong>
-      {% for p in static_info.councillor_phones %}{{ p.name }}: {{ p.mobile }}{% if not loop.last %} &middot; {% endif %}{% endfor %}
+  <div class="top-welcome">
+    <p class="lead">{{ static_info.top_intro_lead }}</p>
+    {% for item in static_info.top_intro_items %}
+    <div class="intro-item">
+      <span class="lead-in">{{ item.lead_in }}</span>
+      <span class="bullet">&#10003; {{ item.bullet }}</span>
     </div>
-    {% endif %}
+    {% endfor %}
   </div>
 
   <h2 class="councillors-heading">Your Lower Stoke Councillors</h2>
@@ -485,10 +479,10 @@ HTML_TEMPLATE = """
   </div>
 
   <div class="street-surgery">
-    {{ static_info.street_surgery_note }}<br>
+    <strong>{{ static_info.street_surgery_note }}</strong><br>
     {{ static_info.unified_email_note }}<br>
     {{ static_info.website_note }}<br>
-    {{ static_info.subscribe_note }}
+    <strong>{{ static_info.subscribe_note }}</strong>
   </div>
 
   <div class="footer">{{ footer_note }}</div>
