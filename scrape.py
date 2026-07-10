@@ -557,11 +557,25 @@ def scrape_police_events():
                                 "sourceUrl": f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}",
                                 "fetchedAt": STAMP})
     wmp_url = f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}"
-    # No hardcoded meetings — all events come live from the WMP website.
-    # If browser_get returned empty, signal the page to show a "site down" notice.
-    wmp_url = f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}"
-    if not html:
-        print("  WMP site unreachable — writing siteDown marker")
+
+    # Supplement / fallback: official data.police.uk neighbourhood events API.
+    # This works even when the WMP website blocks server requests.
+    api_events = police_api_get(f"{NEIGHBOURHOOD}/events") or []
+    for ev in api_events:
+        title = re.sub(r'\s+', ' ', (ev.get("title") or "Neighbourhood event")).strip()
+        start = str(ev.get("start_date") or "")
+        try:
+            dt = datetime.fromisoformat(start)
+            date_str = dt.strftime("%-I:%M%p, %a %-d %B %Y")
+        except Exception:
+            date_str = start
+        addr = re.sub(r'\s+', ' ', (ev.get("address") or "Coventry")).strip()
+        if not any(e["title"].lower() == title.lower() and e["date"] == date_str for e in events):
+            events.append({"title": title, "date": date_str, "address": addr,
+                           "sourceUrl": wmp_url, "fetchedAt": STAMP})
+
+    if not html and not events:
+        print("  WMP site unreachable and no API events — writing siteDown marker")
         write_json("police_events.json", [{"siteDown": True, "fetchedAt": STAMP,
                                            "sourceUrl": wmp_url}])
         return
@@ -597,6 +611,18 @@ def scrape_police_team():
                 team.append({"name": name, "rank": rank or "Neighbourhood Officer",
                               "bio": bio, "sourceUrl": f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}",
                               "fetchedAt": STAMP})
+    # Supplement from the official neighbourhood team API
+    api_team = police_api_get(f"{NEIGHBOURHOOD}/people") or []
+    for o in api_team:
+        name = re.sub(r'\s+', ' ', (o.get("name") or "")).strip()
+        if not name or any(t["name"].lower() == name.lower() for t in team):
+            continue
+        bio = re.sub(r'<[^>]+>', ' ', o.get("bio") or "").strip()
+        bio = re.sub(r'\s+', ' ', bio)[:500]
+        team.append({"name": name, "rank": o.get("rank") or "Neighbourhood Officer",
+                     "bio": bio, "sourceUrl": f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}",
+                     "fetchedAt": STAMP})
+
     confirmed = {"name":"Manwar Porter","rank":"Inspector",
                  "bio":"Local Policing Inspector for the North East Sector of Coventry covering Stoke & Wyken. Primary focus on antisocial behaviour, vehicle crime, and retail crime.",
                  "sourceUrl":f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}","fetchedAt":STAMP}
@@ -605,60 +631,258 @@ def scrape_police_team():
     print(f"  Total officers: {len(team)}")
     write_json("police_team.json", team)
 
-def scrape_police_crimes():
-    print("\n-- Police Crime Priorities --")
-    priorities = []
-    html = wmp_fetch("meetings-and-events")
-    if html:
-        soup = BeautifulSoup(html, "html.parser")
-        crimes_heading = soup.find(string=re.compile("Top reported crimes", re.I))
-        if crimes_heading:
-            section = crimes_heading.find_parent()
-            for h4 in section.find_all_next("h4"):
-                title = h4.get_text(strip=True)
-                if not title or len(title) < 4:
-                    continue
-                if re.search(r'your local|on the team|about|contact|station|social|news|meeting|priority|crime map|crime level|crime per|footer', title, re.I):
-                    break
-                count_tag = h4.find_next_sibling()
-                count = count_tag.get_text(strip=True) if count_tag else ""
-                if not re.match(r'^\d+$', count):
-                    count = ""
-                priorities.append({
-                    "title": title,
-                    "issue": f"{count} reported (latest period, Stoke & Wyken)" if count else "Reported in Stoke & Wyken",
-                    "count": count,
-                    "action": "West Midlands Police are actively targeting this crime type in the Stoke & Wyken neighbourhood.",
-                    "status": "Active Priority",
-                    "source": "westmidlands.police.uk",
-                    "sourceUrl": f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}",
-                    "fetchedAt": STAMP
-                })
+# =============================================================================
+# 3b. DATA.POLICE.UK — OFFICIAL OPEN DATA API
+# This is the definitive source that powers the WMP website's own crime
+# widgets. It's a plain JSON API (no key, no blocking), so it is far more
+# reliable than scraping westmidlands.police.uk, which 403-blocks servers.
+# Crime stats are published nationally ONCE A MONTH (usually ~2 months behind),
+# so counts change monthly by design; priorities/events/news change more often.
+# =============================================================================
+POLICE_API      = "https://data.police.uk/api"
+NEIGHBOURHOOD   = "west-midlands/stoke-and-wyken"
+PUBLIC_AREA_URL = "https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/"
+
+CRIME_CATEGORY_NAMES = {
+    "anti-social-behaviour":  "Anti-Social Behaviour",
+    "bicycle-theft":          "Bicycle Theft",
+    "burglary":               "Burglary",
+    "criminal-damage-arson":  "Criminal Damage and Arson",
+    "drugs":                  "Drugs",
+    "other-theft":            "Other Theft",
+    "possession-of-weapons":  "Possession of Weapons",
+    "public-order":           "Public Order",
+    "robbery":                "Robbery",
+    "shoplifting":            "Shoplifting",
+    "theft-from-the-person":  "Theft from the Person",
+    "vehicle-crime":          "Vehicle Crime",
+    "violent-crime":          "Violence and Sexual Offences",
+    "other-crime":            "Other Crime",
+}
+
+def police_api_get(path, params=None, timeout=25):
+    """GET a data.police.uk API endpoint. Returns parsed JSON or None."""
+    url = f"{POLICE_API}/{path.lstrip('/')}"
     try:
-        r = requests.get("https://data.police.uk/api/priorities?neighbourhood=west-midlands/stoke-and-wyken", timeout=10)
+        r = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+        print(f"  API GET {url[:90]} -> {r.status_code}")
         if r.status_code == 200:
-            for item in r.json():
-                t = item.get("issue_title","")
-                if t and not any(p["title"].lower() == t.lower() for p in priorities):
-                    priorities.append({
-                        "title": t,
-                        "issue": re.sub(r'<[^>]+>','',item.get("issue","")).strip(),
-                        "action": re.sub(r'<[^>]+>','',item.get("action","")).strip() or "Active policing response in place.",
-                        "status": "Active Priority", "source": "data.police.uk",
-                        "sourceUrl": "https://data.police.uk", "fetchedAt": STAMP
-                    })
+            return r.json()
     except Exception as e:
-        print(f"  data.police.uk error: {e}")
-    if not priorities:
-        wmp_url = f"{WMP_BASE}/meetings-and-events/{WMP_SUFFIX}"
-        priorities = [
-            {"title":"Violence and Sexual Offences","issue":"161 reported (Apr 2026)","count":"161","action":"Targeted policing operations and victim support services in place.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
-            {"title":"Shoplifting","issue":"45 reported (Apr 2026)","count":"45","action":"High-visibility patrols at retail locations including Binley Road.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
-            {"title":"Criminal Damage and Arson","issue":"41 reported (Apr 2026)","count":"41","action":"Increased patrols in hotspot areas.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
-            {"title":"Other Theft","issue":"33 reported (Apr 2026)","count":"33","action":"Intelligence-led operations targeting repeat offenders.","status":"Active Priority","source":"westmidlands.police.uk","sourceUrl":wmp_url,"fetchedAt":STAMP},
-        ]
-    print(f"  Total crime priorities: {len(priorities)}")
-    write_json("police_crimes.json", priorities)
+        print(f"  API GET {url[:90]} -> ERROR: {e}")
+    return None
+
+def month_display(ym):
+    """'2026-05' -> 'May 2026'"""
+    try:
+        return datetime.strptime(ym, "%Y-%m").strftime("%B %Y")
+    except Exception:
+        return ym
+
+def previous_month(ym):
+    y, m = int(ym[:4]), int(ym[5:7])
+    m -= 1
+    if m == 0:
+        y, m = y - 1, 12
+    return f"{y:04d}-{m:02d}"
+
+def fetch_neighbourhood_boundary():
+    """Boundary of Stoke & Wyken as a list of [lat, lng] float pairs."""
+    data = police_api_get(f"{NEIGHBOURHOOD}/boundary")
+    pts = []
+    if isinstance(data, list):
+        for p in data:
+            try:
+                pts.append([float(p["latitude"]), float(p["longitude"])])
+            except Exception:
+                continue
+    return pts
+
+def fetch_month_crimes(poly_pts, month):
+    """
+    All street-level crimes inside the neighbourhood boundary for a month.
+    Uses POST because the full boundary polygon exceeds GET URL limits.
+    Returns a list of crime dicts, or None on failure (as opposed to a
+    genuinely empty month, which returns []).
+    """
+    if not poly_pts:
+        return None
+    poly = ":".join(f"{lat:.5f},{lng:.5f}" for lat, lng in poly_pts)
+    try:
+        r = requests.post(f"{POLICE_API}/crimes-street/all-crime",
+                          data={"poly": poly, "date": month},
+                          headers={"User-Agent": HEADERS["User-Agent"]},
+                          timeout=40)
+        print(f"  API POST crimes-street/all-crime date={month} -> {r.status_code}")
+        if r.status_code == 200:
+            return r.json()
+    except Exception as e:
+        print(f"  API POST crimes-street error: {e}")
+    # Fallback: 1-mile radius around the centre of the ward (GET, short URL)
+    centre = police_api_get(f"crimes-street/all-crime",
+                            params={"lat": "52.4105", "lng": "-1.4700", "date": month})
+    return centre
+
+def scrape_police_crimes():
+    """
+    Writes:
+      police_crimes.json    — top reported crime types with real monthly counts
+      police_crime_map.json — individual crime points + ward boundary for the map
+      police_priorities.json— current neighbourhood policing priorities (issue/action)
+    """
+    print("\n-- Police Crimes (data.police.uk official API) --")
+
+    # 1. Latest month of published crime data
+    latest = police_api_get("crime-last-updated") or {}
+    month  = str(latest.get("date", ""))[:7]  # '2026-05-01' -> '2026-05'
+    if not re.match(r'^\d{4}-\d{2}$', month):
+        month = (NOW_UTC - timedelta(days=62)).strftime("%Y-%m")
+
+    # 2. Ward boundary + crimes (step back up to 3 months if needed)
+    boundary = fetch_neighbourhood_boundary()
+    crimes, used_month = None, month
+    for _ in range(4):
+        crimes = fetch_month_crimes(boundary, used_month)
+        if crimes:
+            break
+        used_month = previous_month(used_month)
+    crimes = crimes or []
+    m_disp = month_display(used_month)
+    print(f"  {len(crimes)} crimes for {m_disp}")
+
+    # 3. Aggregate counts per category -> police_crimes.json
+    counts = {}
+    for c in crimes:
+        cat = c.get("category", "other-crime")
+        counts[cat] = counts.get(cat, 0) + 1
+    rows = []
+    for cat, n in sorted(counts.items(), key=lambda kv: -kv[1]):
+        rows.append({
+            "title":     CRIME_CATEGORY_NAMES.get(cat, cat.replace("-", " ").title()),
+            "issue":     f"{n} reported in {m_disp}",
+            "count":     str(n),
+            "action":    "See the West Midlands Police neighbourhood page for the team's current activity on this crime type.",
+            "status":    "Top Reported Crime",
+            "month":     used_month,
+            "monthDisplay": m_disp,
+            "total":     len(crimes),
+            "source":    "data.police.uk (official police open data)",
+            "sourceUrl": PUBLIC_AREA_URL,
+            "fetchedAt": STAMP,
+        })
+    if rows:
+        write_json("police_crimes.json", rows)
+    else:
+        # API unreachable — keep yesterday's file rather than writing junk,
+        # but leave a marker if no file exists at all.
+        if not (DATA_DIR / "police_crimes.json").exists():
+            write_json("police_crimes.json", [{"siteDown": True, "fetchedAt": STAMP,
+                                               "sourceUrl": PUBLIC_AREA_URL}])
+        print("  WARNING: no crime data fetched — keeping previous file")
+
+    # 4. Map data -> police_crime_map.json (points + simplified boundary)
+    if crimes:
+        step   = max(1, len(boundary) // 150)
+        b_slim = boundary[::step]
+        points = []
+        for c in crimes:
+            loc = c.get("location") or {}
+            try:
+                points.append({
+                    "lat":    float(loc.get("latitude")),
+                    "lng":    float(loc.get("longitude")),
+                    "cat":    c.get("category", "other-crime"),
+                    "street": (loc.get("street") or {}).get("name", ""),
+                })
+            except Exception:
+                continue
+        write_json("police_crime_map.json", {
+            "month": used_month, "monthDisplay": m_disp,
+            "total": len(points), "fetchedAt": STAMP,
+            "categories": CRIME_CATEGORY_NAMES,
+            "boundary": b_slim, "crimes": points,
+        })
+
+    # 5. Neighbourhood policing priorities (correct endpoint) -> police_priorities.json
+    pris  = police_api_get(f"{NEIGHBOURHOOD}/priorities") or []
+    plist = []
+    for item in pris:
+        issue  = re.sub(r'<[^>]+>', ' ', item.get("issue")  or "").strip()
+        action = re.sub(r'<[^>]+>', ' ', item.get("action") or "").strip()
+        issue  = re.sub(r'\s+', ' ', issue)
+        action = re.sub(r'\s+', ' ', action)
+        if not issue:
+            continue
+        plist.append({
+            "issue":     issue,
+            "action":    action,
+            "issueDate": fmt_date(item.get("issue-date", "")),
+            "actionDate": fmt_date(item.get("action-date", "")),
+            "source":    "data.police.uk",
+            "sourceUrl": PUBLIC_AREA_URL,
+            "fetchedAt": STAMP,
+        })
+    write_json("police_priorities.json", plist)
+
+def scrape_police_news():
+    """
+    West Midlands Police news filtered to Coventry -> police_news.json
+    Same schema as the newsletter's scrape_police_news.py so both can share it.
+    """
+    print("\n-- Police News (WMP RSS, Coventry items) --")
+    import xml.etree.ElementTree as ET
+    from email.utils import parsedate_to_datetime
+
+    RSS_URL   = "https://www.westmidlands.police.uk/news/west-midlands/news/GetNewsRss/"
+    DAYS_BACK = 14
+    cutoff    = NOW_UTC - timedelta(days=DAYS_BACK)
+    articles  = []
+
+    xml_text = ""
+    try:
+        r = requests.get(RSS_URL, headers=HEADERS, timeout=20)
+        if r.status_code == 200 and "<item" in r.text:
+            xml_text = r.text
+        else:
+            print(f"  RSS GET -> {r.status_code}")
+    except Exception as e:
+        print(f"  RSS GET error: {e}")
+
+    if xml_text:
+        try:
+            root = ET.fromstring(xml_text.encode("utf-8"))
+            for item in root.iter("item"):
+                title   = (item.findtext("title") or "").strip()
+                link    = (item.findtext("link") or "").strip()
+                summary = re.sub(r'<[^>]+>', ' ', item.findtext("description") or "").strip()
+                summary = re.sub(r'\s+', ' ', summary)[:400]
+                pub_raw = (item.findtext("pubDate") or "").strip()
+                try:
+                    pub = parsedate_to_datetime(pub_raw)
+                    if pub.tzinfo is None:
+                        pub = pub.replace(tzinfo=timezone.utc)
+                except Exception:
+                    continue
+                if pub < cutoff:
+                    continue
+                if "coventry" not in f"{title} {summary}".lower():
+                    continue
+                articles.append({
+                    "title": title, "link": link, "summary": summary,
+                    "published": pub.isoformat(),
+                    "published_display": pub.strftime("%-d %B %Y"),
+                    "source": "westmidlands.police.uk",
+                    "fetchedAt": STAMP,
+                })
+        except Exception as e:
+            print(f"  RSS parse error: {e}")
+
+    articles.sort(key=lambda a: a["published"], reverse=True)
+    print(f"  {len(articles)} Coventry police news item(s) in last {DAYS_BACK} days")
+    if articles or not (DATA_DIR / "police_news.json").exists():
+        write_json("police_news.json", articles)
+    else:
+        print("  RSS unavailable — keeping previous police_news.json")
 
 # =============================================================================
 # 4. CASEWORK LOG
@@ -929,7 +1153,7 @@ def scrape_wmca_meetings():
 if __name__ == "__main__":
     print(f"=== Lower Stoke Ward Scraper - {STAMP} ===\n")
     for fn in [scrape_news, scrape_planning, scrape_council_meetings, scrape_wmca_meetings, scrape_police_events,
-               scrape_police_team, scrape_police_crimes, scrape_casework,
+               scrape_police_team, scrape_police_crimes, scrape_police_news, scrape_casework,
                write_metadata]:
         try:
             fn()
