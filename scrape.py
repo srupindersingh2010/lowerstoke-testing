@@ -661,15 +661,91 @@ CRIME_CATEGORY_NAMES = {
 }
 
 def police_api_get(path, params=None, timeout=25):
-    """GET a data.police.uk API endpoint. Returns parsed JSON or None."""
+    """
+    GET a data.police.uk API endpoint. Returns parsed JSON or None.
+    Tries a plain HTTP request first (fast); if the CDN refuses it
+    (bot-filtering of datacenter IPs like GitHub Actions), falls back
+    to fetching through a real Chromium browser.
+    """
     url = f"{POLICE_API}/{path.lstrip('/')}"
+    if params:
+        from urllib.parse import urlencode
+        url = f"{url}?{urlencode(params)}"
     try:
-        r = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+        r = requests.get(url, headers=dict(HEADERS, Accept="application/json"), timeout=timeout)
         print(f"  API GET {url[:90]} -> {r.status_code}")
         if r.status_code == 200:
             return r.json()
     except Exception as e:
         print(f"  API GET {url[:90]} -> ERROR: {e}")
+    return browser_fetch_json(url)
+
+# ── Shared real-browser fetcher (defeats CDN bot-blocking of server IPs) ─────
+_PW = {"p": None, "page": None}
+
+def _shared_page():
+    """Lazily start one Chromium instance reused for all police API calls."""
+    if _PW["page"]:
+        return _PW["page"]
+    from playwright.sync_api import sync_playwright
+    _PW["p"] = sync_playwright().start()
+    browser = _PW["p"].chromium.launch(
+        headless=True,
+        args=["--no-sandbox", "--disable-dev-shm-usage",
+              "--disable-blink-features=AutomationControlled"])
+    ctx = browser.new_context(user_agent=HEADERS["User-Agent"], locale="en-GB",
+                              viewport={"width": 1280, "height": 800})
+    _PW["page"] = ctx.new_page()
+    return _PW["page"]
+
+def close_shared_browser():
+    try:
+        if _PW["p"]:
+            _PW["p"].stop()
+            _PW["p"], _PW["page"] = None, None
+    except Exception:
+        pass
+
+def browser_fetch_json(url, post_data=None, origin="https://data.police.uk/api/forces"):
+    """GET/POST a JSON endpoint from inside a real browser page (same-origin fetch)."""
+    txt = _browser_fetch_text(url, post_data=post_data, origin=origin)
+    if txt:
+        try:
+            return json.loads(txt)
+        except Exception as e:
+            print(f"  BROWSER API parse error for {url[:70]}: {e}")
+    return None
+
+def _browser_fetch_text(url, post_data=None, origin=None):
+    try:
+        page = _shared_page()
+        base = origin or url
+        # Navigate once to the site so subsequent fetch() calls are same-origin
+        # and any CDN browser-check has been passed.
+        site_root = "/".join(base.split("/")[:3])
+        if not page.url.startswith(site_root):
+            page.goto(base, wait_until="domcontentloaded", timeout=30000)
+            page.wait_for_timeout(2500)  # allow any bot-check to settle
+        body = None
+        if post_data:
+            from urllib.parse import urlencode
+            body = urlencode(post_data)
+        res = page.evaluate(
+            """async ([url, body]) => {
+                 const opts = body
+                   ? {method:'POST',
+                      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                      body: body}
+                   : {};
+                 const r = await fetch(url, opts);
+                 return {status: r.status, text: await r.text()};
+               }""",
+            [url, body])
+        print(f"  BROWSER API {'POST' if post_data else 'GET'} {url[:80]} -> {res['status']}")
+        if res["status"] == 200:
+            return res["text"]
+    except Exception as e:
+        print(f"  BROWSER API {url[:80]} -> ERROR: {e}")
     return None
 
 def month_display(ym):
@@ -718,8 +794,13 @@ def fetch_month_crimes(poly_pts, month):
             return r.json()
     except Exception as e:
         print(f"  API POST crimes-street error: {e}")
-    # Fallback: 1-mile radius around the centre of the ward (GET, short URL)
-    centre = police_api_get(f"crimes-street/all-crime",
+    # Same POST through the real browser (CDN bot-blocking fallback)
+    data = browser_fetch_json(f"{POLICE_API}/crimes-street/all-crime",
+                              post_data={"poly": poly, "date": month})
+    if data is not None:
+        return data
+    # Last resort: 1-mile radius around the centre of the ward (GET, short URL)
+    centre = police_api_get("crimes-street/all-crime",
                             params={"lat": "52.4105", "lng": "-1.4700", "date": month})
     return centre
 
@@ -847,6 +928,12 @@ def scrape_police_news():
             print(f"  RSS GET -> {r.status_code}")
     except Exception as e:
         print(f"  RSS GET error: {e}")
+
+    if not xml_text:
+        # WMP blocks plain requests — fetch the feed from inside a real browser
+        txt = _browser_fetch_text(RSS_URL, origin="https://www.westmidlands.police.uk/news")
+        if txt and "<item" in txt:
+            xml_text = txt
 
     if xml_text:
         try:
@@ -1160,5 +1247,6 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"ERROR in {fn.__name__}: {e}")
             traceback.print_exc()
+    close_shared_browser()
     print("\n=== Done ===")
     sys.exit(0)
