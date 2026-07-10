@@ -801,6 +801,7 @@
       document.getElementById('map-fallback').style.display = 'block';
       return;
     }
+    if (window._crimeMap) { window._crimeMap.remove(); window._crimeMap = null; }
     stamp('ts-map', d.fetchedAt);
     document.getElementById('map-month').textContent =
       d.total + ' crimes plotted for ' + (d.monthDisplay || '') + ' (latest published month)';
@@ -986,14 +987,103 @@
   });
   loadJSON('news.json',          renderNews);
   loadJSON('planning.json',      renderPlanning);
-  loadJSON('police_crimes.json', renderCrimes);
+  // ── LIVE POLICE DATA (fetched in the visitor's browser from data.police.uk)
+  // GitHub's servers are blocked by the police CDN, but ordinary visitors'
+  // browsers are not — and the API allows cross-origin requests. So we fetch
+  // live here, and fall back to the repo's JSON files only if that fails.
+  var PAPI = 'https://data.police.uk/api';
+  var NBH  = 'west-midlands/stoke-and-wyken';
+  var CAT_NAMES = {
+    'anti-social-behaviour':'Anti-Social Behaviour','bicycle-theft':'Bicycle Theft',
+    'burglary':'Burglary','criminal-damage-arson':'Criminal Damage and Arson','drugs':'Drugs',
+    'other-theft':'Other Theft','possession-of-weapons':'Possession of Weapons',
+    'public-order':'Public Order','robbery':'Robbery','shoplifting':'Shoplifting',
+    'theft-from-the-person':'Theft from the Person','vehicle-crime':'Vehicle Crime',
+    'violent-crime':'Violence and Sexual Offences','other-crime':'Other Crime'
+  };
+  function prevMonth(ym){ var y=+ym.slice(0,4), m=+ym.slice(5,7)-1; if(m===0){y--;m=12;} return y+'-'+('0'+m).slice(-2); }
+  function monthName(ym){ try { return new Date(ym+'-01T12:00:00').toLocaleDateString('en-GB',{month:'long',year:'numeric'}); } catch(e){ return ym; } }
+  function stripHtml(s){ return String(s||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(); }
+
+  async function loadPoliceLive() {
+    var nowStamp = new Date().toLocaleString('en-GB',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    // 1. Latest published month
+    var lu = await (await fetch(PAPI + '/crime-last-updated')).json();
+    var month = String(lu.date || '').slice(0, 7);
+    if (!/^\d{4}-\d{2}$/.test(month)) throw new Error('no month');
+    // 2. Neighbourhood boundary
+    var bd = await (await fetch(PAPI + '/' + NBH + '/boundary')).json();
+    var boundary = bd.map(function(p){ return [ +p.latitude, +p.longitude ]; });
+    var poly = boundary.map(function(p){ return p[0].toFixed(5) + ',' + p[1].toFixed(5); }).join(':');
+    // 3. Crimes for that month (step back if not yet published)
+    var crimes = null;
+    for (var i = 0; i < 4; i++) {
+      if (i > 0) month = prevMonth(month);
+      var r = await fetch(PAPI + '/crimes-street/all-crime', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'poly=' + encodeURIComponent(poly) + '&date=' + month
+      });
+      if (r.ok) { crimes = await r.json(); if (crimes.length) break; }
+    }
+    if (!crimes || !crimes.length) throw new Error('no crimes returned');
+    var mDisp = monthName(month);
+
+    // 4. Aggregate into the table format
+    var counts = {};
+    crimes.forEach(function(c){ var k = c.category || 'other-crime'; counts[k] = (counts[k]||0)+1; });
+    var rows = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a]; }).map(function(cat){
+      return {
+        title: CAT_NAMES[cat] || cat, count: String(counts[cat]),
+        issue: counts[cat] + ' reported in ' + mDisp,
+        action: 'See the West Midlands Police neighbourhood page for the team\u2019s current activity on this crime type.',
+        status: 'Top Reported Crime', total: crimes.length, monthDisplay: mDisp,
+        sourceUrl: 'https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/',
+        fetchedAt: nowStamp + ' (live)'
+      };
+    });
+    renderCrimes(rows);
+
+    // 5. Map data
+    var step = Math.max(1, Math.floor(boundary.length / 150));
+    renderCrimeMap({
+      monthDisplay: mDisp, total: crimes.length, fetchedAt: nowStamp + ' (live)',
+      categories: CAT_NAMES,
+      boundary: boundary.filter(function(_, idx){ return idx % step === 0; }),
+      crimes: crimes.map(function(c){
+        var loc = c.location || {};
+        return { lat: +loc.latitude, lng: +loc.longitude,
+                 cat: c.category || 'other-crime',
+                 street: (loc.street || {}).name || '' };
+      }).filter(function(c){ return isFinite(c.lat) && isFinite(c.lng); })
+    });
+
+    // 6. Priorities (best-effort — don't fail the whole load if missing)
+    try {
+      var pr = await (await fetch(PAPI + '/' + NBH + '/priorities')).json();
+      renderPriorities(pr.map(function(p){
+        return { issue: stripHtml(p.issue), action: stripHtml(p.action),
+                 issueDate: p['issue-date'] ? new Date(p['issue-date']).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '',
+                 sourceUrl: 'https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/',
+                 fetchedAt: nowStamp + ' (live)' };
+      }).filter(function(p){ return p.issue; }));
+    } catch(e) { loadJSON('police_priorities.json', renderPriorities); }
+    return true;
+  }
+
+  // Try live first; fall back to the repo's data files if the API is unreachable
+  loadPoliceLive().catch(function(err){
+    console.warn('Live police data unavailable, using repo files:', err);
+    loadJSON('police_crimes.json', renderCrimes);
+    loadJSON('police_priorities.json', renderPriorities);
+    fetch('data/police_crime_map.json?v=' + Date.now())
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(renderCrimeMap)
+      .catch(function(){ renderCrimeMap(null); });
+  });
+
   loadJSON('police_team.json',   renderTeam);
-  loadJSON('police_priorities.json', renderPriorities);
   loadJSON('police_news.json',       renderPoliceNews);
-  fetch('data/police_crime_map.json?v=' + Date.now())
-    .then(function(r){ return r.ok ? r.json() : null; })
-    .then(renderCrimeMap)
-    .catch(function(){ renderCrimeMap(null); });
   // Police events: load from JSON (updated by scraper), fall back to known meetings
   var KNOWN_PACT_EVENTS = [
     {"title":"Lower Stoke PACT meeting","date":"6:00PM - 7:00PM, Wed 16 September 2026","address":"St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB","sourceUrl":"https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area","fetchedAt":"Source: westmidlands.police.uk"},
