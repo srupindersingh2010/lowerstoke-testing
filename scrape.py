@@ -560,7 +560,7 @@ def scrape_police_events():
 
     # Supplement / fallback: official data.police.uk neighbourhood events API.
     # This works even when the WMP website blocks server requests.
-    api_events = police_api_get(f"{NEIGHBOURHOOD}/events") or []
+    api_events = police_api_get(f"{get_neighbourhood_path()}/events") or []
     for ev in api_events:
         title = re.sub(r'\s+', ' ', (ev.get("title") or "Neighbourhood event")).strip()
         start = str(ev.get("start_date") or "")
@@ -612,7 +612,7 @@ def scrape_police_team():
                               "bio": bio, "sourceUrl": f"{WMP_BASE}/on-the-team/{WMP_SUFFIX}",
                               "fetchedAt": STAMP})
     # Supplement from the official neighbourhood team API
-    api_team = police_api_get(f"{NEIGHBOURHOOD}/people") or []
+    api_team = police_api_get(f"{get_neighbourhood_path()}/people") or []
     for o in api_team:
         name = re.sub(r'\s+', ' ', (o.get("name") or "")).strip()
         if not name or any(t["name"].lower() == name.lower() for t in team):
@@ -640,8 +640,35 @@ def scrape_police_team():
 # so counts change monthly by design; priorities/events/news change more often.
 # =============================================================================
 POLICE_API      = "https://data.police.uk/api"
-NEIGHBOURHOOD   = "west-midlands/stoke-and-wyken"
+POLICE_FORCE    = "west-midlands"
+NBH_DEFAULT_ID  = "CV005"   # Stoke & Wyken's API code (from police.uk event links)
+_NBH_CACHE      = {"path": None}
 PUBLIC_AREA_URL = "https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/"
+
+def get_neighbourhood_path():
+    """
+    'west-midlands/CV005' — resolved dynamically because the API uses internal
+    codes (NOT the website slug 'stoke-and-wyken'), and codes can change when
+    forces redraw neighbourhoods. Order: locate by coordinates -> search the
+    force's neighbourhood list by name -> known default.
+    """
+    if _NBH_CACHE["path"]:
+        return _NBH_CACHE["path"]
+    loc = police_api_get("locate-neighbourhood", params={"q": "52.4105,-1.4700"})
+    if isinstance(loc, dict) and loc.get("force") and loc.get("neighbourhood"):
+        _NBH_CACHE["path"] = f"{loc['force']}/{loc['neighbourhood']}"
+        print(f"  Neighbourhood resolved by location: {_NBH_CACHE['path']}")
+        return _NBH_CACHE["path"]
+    lst = police_api_get(f"{POLICE_FORCE}/neighbourhoods")
+    if isinstance(lst, list):
+        for n in lst:
+            if re.search(r'stoke\s+and\s+wyken', str(n.get("name", "")), re.I):
+                _NBH_CACHE["path"] = f"{POLICE_FORCE}/{n['id']}"
+                print(f"  Neighbourhood resolved by name: {_NBH_CACHE['path']}")
+                return _NBH_CACHE["path"]
+    _NBH_CACHE["path"] = f"{POLICE_FORCE}/{NBH_DEFAULT_ID}"
+    print(f"  Neighbourhood defaulted to: {_NBH_CACHE['path']}")
+    return _NBH_CACHE["path"]
 
 CRIME_CATEGORY_NAMES = {
     "anti-social-behaviour":  "Anti-Social Behaviour",
@@ -671,40 +698,26 @@ def police_api_get(path, params=None, timeout=25):
     if params:
         from urllib.parse import urlencode
         url = f"{url}?{urlencode(params)}"
-    try:
-        r = requests.get(url, headers=dict(HEADERS, Accept="application/json"), timeout=timeout)
-        print(f"  API GET {url[:90]} -> {r.status_code}")
-        if r.status_code == 200:
-            return r.json()
-    except Exception as e:
-        print(f"  API GET {url[:90]} -> ERROR: {e}")
+    import time
+    for attempt in range(3):
+        try:
+            r = requests.get(url, headers=dict(HEADERS, Accept="application/json"), timeout=timeout)
+            print(f"  API GET {url[:90]} -> {r.status_code}")
+            if r.status_code == 200:
+                return r.json()
+            if r.status_code == 429:          # rate-limited: back off and retry
+                time.sleep(3 * (attempt + 1))
+                continue
+            if r.status_code == 404:          # wrong path — retrying won't help
+                return None
+            break
+        except Exception as e:
+            print(f"  API GET {url[:90]} -> ERROR: {e}")
+            break
     return browser_fetch_json(url)
 
-# ── Shared real-browser fetcher (defeats CDN bot-blocking of server IPs) ─────
-_PW = {"p": None, "page": None}
-
-def _shared_page():
-    """Lazily start one Chromium instance reused for all police API calls."""
-    if _PW["page"]:
-        return _PW["page"]
-    from playwright.sync_api import sync_playwright
-    _PW["p"] = sync_playwright().start()
-    browser = _PW["p"].chromium.launch(
-        headless=True,
-        args=["--no-sandbox", "--disable-dev-shm-usage",
-              "--disable-blink-features=AutomationControlled"])
-    ctx = browser.new_context(user_agent=HEADERS["User-Agent"], locale="en-GB",
-                              viewport={"width": 1280, "height": 800})
-    _PW["page"] = ctx.new_page()
-    return _PW["page"]
-
 def close_shared_browser():
-    try:
-        if _PW["p"]:
-            _PW["p"].stop()
-            _PW["p"], _PW["page"] = None, None
-    except Exception:
-        pass
+    pass  # browser fallback is now self-contained per call
 
 def browser_fetch_json(url, post_data=None, origin="https://data.police.uk/api/forces"):
     """GET/POST a JSON endpoint from inside a real browser page (same-origin fetch)."""
@@ -717,20 +730,24 @@ def browser_fetch_json(url, post_data=None, origin="https://data.police.uk/api/f
     return None
 
 def _browser_fetch_text(url, post_data=None, origin=None):
+    """One-shot real-browser fetch: launches and closes its own Chromium so it
+    can never clash with the other Playwright helper (browser_get)."""
     try:
-        page = _shared_page()
+        from playwright.sync_api import sync_playwright
+        from urllib.parse import urlencode
+        body = urlencode(post_data) if post_data else None
         base = origin or url
-        # Navigate once to the site so subsequent fetch() calls are same-origin
-        # and any CDN browser-check has been passed.
-        site_root = "/".join(base.split("/")[:3])
-        if not page.url.startswith(site_root):
+        with sync_playwright() as p:
+            browser = p.chromium.launch(
+                headless=True,
+                args=["--no-sandbox", "--disable-dev-shm-usage",
+                      "--disable-blink-features=AutomationControlled"])
+            ctx = browser.new_context(user_agent=HEADERS["User-Agent"], locale="en-GB",
+                                      viewport={"width": 1280, "height": 800})
+            page = ctx.new_page()
             page.goto(base, wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(2500)  # allow any bot-check to settle
-        body = None
-        if post_data:
-            from urllib.parse import urlencode
-            body = urlencode(post_data)
-        res = page.evaluate(
+            res = page.evaluate(
             """async ([url, body]) => {
                  const opts = body
                    ? {method:'POST',
@@ -740,7 +757,8 @@ def _browser_fetch_text(url, post_data=None, origin=None):
                  const r = await fetch(url, opts);
                  return {status: r.status, text: await r.text()};
                }""",
-            [url, body])
+                [url, body])
+            browser.close()
         print(f"  BROWSER API {'POST' if post_data else 'GET'} {url[:80]} -> {res['status']}")
         if res["status"] == 200:
             return res["text"]
@@ -764,7 +782,7 @@ def previous_month(ym):
 
 def fetch_neighbourhood_boundary():
     """Boundary of Stoke & Wyken as a list of [lat, lng] float pairs."""
-    data = police_api_get(f"{NEIGHBOURHOOD}/boundary")
+    data = police_api_get(f"{get_neighbourhood_path()}/boundary")
     pts = []
     if isinstance(data, list):
         for p in data:
@@ -781,25 +799,25 @@ def fetch_month_crimes(poly_pts, month):
     Returns a list of crime dicts, or None on failure (as opposed to a
     genuinely empty month, which returns []).
     """
-    if not poly_pts:
-        return None
-    poly = ":".join(f"{lat:.5f},{lng:.5f}" for lat, lng in poly_pts)
-    try:
-        r = requests.post(f"{POLICE_API}/crimes-street/all-crime",
-                          data={"poly": poly, "date": month},
-                          headers={"User-Agent": HEADERS["User-Agent"]},
-                          timeout=40)
-        print(f"  API POST crimes-street/all-crime date={month} -> {r.status_code}")
-        if r.status_code == 200:
-            return r.json()
-    except Exception as e:
-        print(f"  API POST crimes-street error: {e}")
-    # Same POST through the real browser (CDN bot-blocking fallback)
-    data = browser_fetch_json(f"{POLICE_API}/crimes-street/all-crime",
-                              post_data={"poly": poly, "date": month})
-    if data is not None:
-        return data
-    # Last resort: 1-mile radius around the centre of the ward (GET, short URL)
+    if poly_pts:
+        poly = ":".join(f"{lat:.5f},{lng:.5f}" for lat, lng in poly_pts)
+        try:
+            r = requests.post(f"{POLICE_API}/crimes-street/all-crime",
+                              data={"poly": poly, "date": month},
+                              headers={"User-Agent": HEADERS["User-Agent"]},
+                              timeout=40)
+            print(f"  API POST crimes-street/all-crime date={month} -> {r.status_code}")
+            if r.status_code == 200:
+                return r.json()
+        except Exception as e:
+            print(f"  API POST crimes-street error: {e}")
+        # Same POST through the real browser (CDN bot-blocking fallback)
+        data = browser_fetch_json(f"{POLICE_API}/crimes-street/all-crime",
+                                  post_data={"poly": poly, "date": month})
+        if data is not None:
+            return data
+    # Last resort (also used when the boundary couldn't be fetched):
+    # 1-mile radius around the centre of the ward — short GET URL
     centre = police_api_get("crimes-street/all-crime",
                             params={"lat": "52.4105", "lng": "-1.4700", "date": month})
     return centre
@@ -885,7 +903,7 @@ def scrape_police_crimes():
         })
 
     # 5. Neighbourhood policing priorities (correct endpoint) -> police_priorities.json
-    pris  = police_api_get(f"{NEIGHBOURHOOD}/priorities") or []
+    pris  = police_api_get(f"{get_neighbourhood_path()}/priorities") or []
     plist = []
     for item in pris:
         issue  = re.sub(r'<[^>]+>', ' ', item.get("issue")  or "").strip()
@@ -930,12 +948,22 @@ def scrape_police_news():
         print(f"  RSS GET error: {e}")
 
     if not xml_text:
-        # WMP blocks plain requests — fetch the feed from inside a real browser
-        txt = _browser_fetch_text(RSS_URL, origin="https://www.westmidlands.police.uk/news")
-        if txt and "<item" in txt:
-            xml_text = txt
+        # WMP's site blocks GitHub's IPs outright (403 even via a real browser,
+        # per the Actions log) — so fall back to Google News RSS, which is
+        # server-friendly and aggregates WMP + local outlets like CoventryLive.
+        gn_url = ("https://news.google.com/rss/search?"
+                  "q=%22West%20Midlands%20Police%22%20Coventry%20when:14d"
+                  "&hl=en-GB&gl=GB&ceid=GB:en")
+        try:
+            r = requests.get(gn_url, headers=HEADERS, timeout=20)
+            print(f"  Google News RSS -> {r.status_code}")
+            if r.status_code == 200 and "<item" in r.text:
+                xml_text = r.text
+        except Exception as e:
+            print(f"  Google News RSS error: {e}")
 
     if xml_text:
+        is_google = "news.google.com" in xml_text
         try:
             root = ET.fromstring(xml_text.encode("utf-8"))
             for item in root.iter("item"):
@@ -943,6 +971,9 @@ def scrape_police_news():
                 link    = (item.findtext("link") or "").strip()
                 summary = re.sub(r'<[^>]+>', ' ', item.findtext("description") or "").strip()
                 summary = re.sub(r'\s+', ' ', summary)[:400]
+                publisher = (item.findtext("source") or "").strip()
+                if is_google and publisher and title.endswith(" - " + publisher):
+                    title = title[: -(len(publisher) + 3)].strip()
                 pub_raw = (item.findtext("pubDate") or "").strip()
                 try:
                     pub = parsedate_to_datetime(pub_raw)
@@ -952,13 +983,15 @@ def scrape_police_news():
                     continue
                 if pub < cutoff:
                     continue
-                if "coventry" not in f"{title} {summary}".lower():
+                # WMP's force-wide feed needs a Coventry filter; the Google News
+                # query is already scoped to Coventry so no further filter there.
+                if not is_google and "coventry" not in f"{title} {summary}".lower():
                     continue
                 articles.append({
                     "title": title, "link": link, "summary": summary,
                     "published": pub.isoformat(),
                     "published_display": pub.strftime("%-d %B %Y"),
-                    "source": "westmidlands.police.uk",
+                    "source": publisher or "westmidlands.police.uk",
                     "fetchedAt": STAMP,
                 })
         except Exception as e:
