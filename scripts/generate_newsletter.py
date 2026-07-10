@@ -334,6 +334,32 @@ def build_policing_section():
     return {"heading": "Local Policing", "entries": entries}
 
 
+def build_police_priorities_section():
+    """Current Stoke & Wyken neighbourhood policing priorities — the
+    issue/action statements the local team publishes (data/police_priorities.json,
+    maintained by the daily site update from the official data.police.uk API)."""
+    items = load_json("police_priorities.json", [])
+    if not items:
+        return None
+    entries = []
+    for item in items[:4]:
+        issue = item.get("issue", "").strip()
+        if not issue:
+            continue
+        meta = "Neighbourhood Priority"
+        if item.get("issueDate"):
+            meta += f" · issued {item['issueDate']}"
+        entries.append({
+            "title": issue if len(issue) <= 120 else issue[:117] + "...",
+            "detail": truncate(item.get("action", "")),
+            "meta": meta,
+            "link": item.get("sourceUrl"),
+        })
+    if not entries:
+        return None
+    return {"heading": "Policing Priorities in Stoke & Wyken", "entries": entries}
+
+
 def build_police_news_section():
     items = load_json("police_news.json", [])
     if not items:
@@ -358,6 +384,7 @@ def build_content():
         build_casework_section,
         build_planning_section,
         build_policing_section,
+        build_police_priorities_section,
         build_police_news_section,
     ):
         section = builder()
