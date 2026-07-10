@@ -465,12 +465,12 @@
     <!-- POLICE NEWS -->
     <div class="card" style="margin-top:20px;">
       <div class="section-header">
-        <h3>📰 West Midlands Police News — Coventry</h3>
+        <h3>📰 Police &amp; Crime News — Coventry</h3>
         <span class="fetch-stamp" id="ts-police-news"></span>
         <a href="https://www.westmidlands.police.uk/news" target="_blank">All WMP news →</a>
       </div>
       <p style="font-size:0.85rem;color:#555;margin:-6px 0 14px;">
-        Recent stories from West Midlands Police mentioning Coventry — updated daily and shared in the weekly newsletter email.
+        Recent Coventry policing stories from West Midlands Police and local news outlets — updated daily and shared in the weekly newsletter email.
       </p>
       <div id="police-news-box"><div class="loading">Loading police news…</div></div>
     </div>
@@ -777,7 +777,7 @@
           (n.published_display ? '<span style="background:#F0F0F0;color:#555;font-size:0.72rem;font-weight:bold;padding:2px 8px;border-radius:3px;">📅 '+esc(n.published_display)+'</span>' : '')+
           '<h4 style="margin-top:6px;">'+esc(n.title)+'</h4>'+
           (n.summary ? '<p style="font-size:0.84rem;color:#555;margin:4px 0 6px;line-height:1.5;">'+esc(n.summary)+'</p>' : '')+
-          '<div class="source-link"><a href="https://www.westmidlands.police.uk/news" target="_blank">westmidlands.police.uk</a></div>'+
+          '<div class="source-link">'+esc(n.source||'westmidlands.police.uk')+'</div>'+
         '</div>'+
         '<div style="flex-shrink:0;padding-left:12px;text-align:right;">'+
           '<a href="'+esc(n.link)+'" target="_blank" class="read-link" style="white-space:nowrap;">Read full story →</a>'+
@@ -992,7 +992,22 @@
   // browsers are not — and the API allows cross-origin requests. So we fetch
   // live here, and fall back to the repo's JSON files only if that fails.
   var PAPI = 'https://data.police.uk/api';
-  var NBH  = 'west-midlands/stoke-and-wyken';
+  async function resolveNbh() {
+    // The API uses internal codes (e.g. west-midlands/CV005), NOT the website
+    // slug 'stoke-and-wyken'. Resolve by coordinates, then by name, then default.
+    try {
+      var r = await fetch(PAPI + '/locate-neighbourhood?q=52.4105,-1.4700');
+      if (r.ok) { var j = await r.json(); if (j.force && j.neighbourhood) return j.force + '/' + j.neighbourhood; }
+    } catch(e) {}
+    try {
+      var r2 = await fetch(PAPI + '/west-midlands/neighbourhoods');
+      if (r2.ok) {
+        var hit = (await r2.json()).find(function(n){ return /stoke and wyken/i.test(n.name || ''); });
+        if (hit) return 'west-midlands/' + hit.id;
+      }
+    } catch(e) {}
+    return 'west-midlands/CV005';
+  }
   var CAT_NAMES = {
     'anti-social-behaviour':'Anti-Social Behaviour','bicycle-theft':'Bicycle Theft',
     'burglary':'Burglary','criminal-damage-arson':'Criminal Damage and Arson','drugs':'Drugs',
@@ -1007,6 +1022,31 @@
 
   async function loadPoliceLive() {
     var nowStamp = new Date().toLocaleString('en-GB',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    var NBH = await resolveNbh();
+    // Best-effort extras first (never fail the main crime load):
+    // live neighbourhood team and PACT events from the official API
+    fetch(PAPI + '/' + NBH + '/people').then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(team){
+        if (!team || !team.length) return;
+        renderTeam(team.map(function(o){
+          return { name: stripHtml(o.name), rank: o.rank || 'Neighbourhood Officer',
+                   bio: stripHtml(o.bio).slice(0, 500),
+                   sourceUrl: 'https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/',
+                   fetchedAt: nowStamp + ' (live)' };
+        }));
+      }).catch(function(){});
+    fetch(PAPI + '/' + NBH + '/events').then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(evs){
+        if (!evs || !evs.length) return;
+        renderEvents(evs.map(function(ev){
+          var when = ev.start_date || '';
+          try { when = new Date(ev.start_date).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'long',year:'numeric',hour:'numeric',minute:'2-digit'}); } catch(e) {}
+          return { title: stripHtml(ev.title) || 'Neighbourhood event', date: when,
+                   address: stripHtml(ev.address) || 'Coventry',
+                   sourceUrl: 'https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/',
+                   fetchedAt: nowStamp + ' (live)' };
+        }));
+      }).catch(function(){});
     // 1. Latest published month
     var lu = await (await fetch(PAPI + '/crime-last-updated')).json();
     var month = String(lu.date || '').slice(0, 7);
