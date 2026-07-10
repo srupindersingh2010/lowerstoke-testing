@@ -528,12 +528,19 @@ def build_pdf(html_str, out_path):
 
 
 def send_email(html_str, pdf_path, content):
-    smtp_server = os.environ["SMTP_SERVER"]
-    smtp_port = int(os.environ.get("SMTP_PORT", "465"))
-    smtp_username = os.environ["SMTP_USERNAME"]
-    smtp_password = os.environ["SMTP_PASSWORD"]
-    from_address = os.environ["FROM_ADDRESS"]
-    to_address = os.environ["TO_ADDRESS"]
+    smtp_server = os.environ.get("SMTP_SERVER", "").strip()
+    smtp_username = os.environ.get("SMTP_USERNAME", "").strip()
+    smtp_password = os.environ.get("SMTP_PASSWORD", "").strip()
+    from_address = os.environ.get("FROM_ADDRESS", "").strip()
+    to_address = os.environ.get("TO_ADDRESS", "").strip()
+    smtp_port = int(os.environ.get("SMTP_PORT") or "465")
+
+    if not all([smtp_server, smtp_username, smtp_password, from_address, to_address]):
+        # e.g. the testing repository, where SMTP secrets are deliberately
+        # not configured: build everything but never send.
+        print("SMTP secrets not configured — DRY RUN, email not sent.")
+        print("Review the generated newsletter in the workflow's artifact (output/ folder).")
+        return
 
     msg = EmailMessage()
     msg["Subject"] = f"{content['issue_title']} — {content['issue_date']}"
