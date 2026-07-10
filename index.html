@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lower Stoke Ward Newsletter</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css">
+  <style>
+    #crime-map { height: 440px; width: 100%; border-radius: 6px; border: 1px solid #D5D8DC; background: #EAECEE; }
+    .map-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .map-controls select { padding: 6px 10px; border: 1px solid #CCC; border-radius: 4px; font-size: 0.85rem; background: #FFF; }
+    .map-legend { font-size: 0.75rem; color: #555; display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .map-legend span { display: inline-flex; align-items: center; gap: 4px; }
+    .map-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .priority-card { background: var(--light-bg); border-left: 4px solid var(--labour-red); border-radius: 0 6px 6px 0; padding: 14px 16px; margin-bottom: 12px; }
+    .priority-card h4 { margin: 0 0 6px; color: var(--charcoal); font-size: 0.95rem; }
+    .priority-card p { margin: 4px 0; font-size: 0.85rem; color: #555; line-height: 1.55; }
+    .priority-card .p-label { font-weight: bold; color: var(--labour-red); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  </style>
   <style>
     :root {
       --labour-red: #E30613;
@@ -346,9 +361,9 @@
           <div class="lbl">West Midlands Police</div>
         </div>
         <div class="stat-card" style="border-top-color:var(--labour-red);">
-          <div class="lbl">Active Crime Priorities</div>
+          <div class="lbl">Reported Crimes</div>
           <div class="num" id="crime-count">–</div>
-          <div class="lbl">Currently listed</div>
+          <div class="lbl" id="crime-count-month">Latest published month</div>
         </div>
         <div class="stat-card">
           <div class="lbl">Neighbourhood Officers</div>
@@ -358,25 +373,62 @@
       </div>
 
       <div class="section-header" style="margin-top:20px;">
-        <h3>🎯 Top Reported Crime Priorities</h3>
+        <h3>🎯 Top Reported Crimes — Stoke &amp; Wyken</h3>
         <span class="fetch-stamp" id="ts-crime"></span>
-        <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area" target="_blank">View on WMP website →</a>
+        <a href="https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/" target="_blank">View on police.uk →</a>
       </div>
+      <p id="crime-month-note" style="font-size:0.8rem;color:#aaa;margin:-4px 0 10px;"></p>
       <div style="overflow-x:auto;">
         <table class="data-table">
           <thead><tr>
-            <th style="width:22%;">Crime Type</th>
+            <th style="width:30%;">Crime Type</th>
             <th style="width:15%;">Reported</th>
-            <th style="width:48%;">Police Action</th>
+            <th style="width:40%;">More Information</th>
             <th style="width:15%;">Status</th>
           </tr></thead>
           <tbody id="crimes-box"><tr><td colspan="4" class="loading">Loading crime data…</td></tr></tbody>
         </table>
       </div>
       <p style="font-size:0.78rem; color:#aaa; margin:10px 0 0;">
-        Sources: <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/" target="_blank" style="color:#aaa;">westmidlands.police.uk</a>
-        &amp; <a href="https://data.police.uk" target="_blank" style="color:#aaa;">data.police.uk</a>
+        Source: <a href="https://data.police.uk" target="_blank" style="color:#aaa;">data.police.uk</a> — the official Home Office open-data service that powers the police.uk and WMP crime pages. National crime statistics are published once a month.
       </p>
+    </div>
+
+    <!-- CRIME MAP -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="section-header">
+        <h3>🗺️ Crime Map — Stoke &amp; Wyken Neighbourhood</h3>
+        <span class="fetch-stamp" id="ts-map"></span>
+        <a href="https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/" target="_blank">Full map on police.uk →</a>
+      </div>
+      <div class="map-controls">
+        <label for="map-cat" style="font-size:0.85rem;color:#555;font-weight:bold;">Show:</label>
+        <select id="map-cat"><option value="all">All crime types</option></select>
+        <span id="map-month" style="font-size:0.82rem;color:#777;"></span>
+      </div>
+      <div id="crime-map"></div>
+      <div id="map-fallback" style="display:none;padding:16px;background:#FFF3E0;border-radius:6px;border-left:4px solid #E65100;margin-top:10px;">
+        Map data is not available yet — it appears after the next daily update.
+        <a href="https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);font-weight:bold;">View the official crime map on police.uk →</a>
+      </div>
+      <div class="map-legend" id="map-legend"></div>
+      <p style="font-size:0.75rem;color:#aaa;margin:8px 0 0;">
+        Numbers on the map show how many crimes were reported in that area — click to zoom in, and click an individual dot for details.
+        Locations are approximate points assigned by police.uk to protect privacy. Source: <a href="https://data.police.uk" target="_blank" style="color:#aaa;">data.police.uk</a>.
+      </p>
+    </div>
+
+    <!-- NEIGHBOURHOOD POLICING PRIORITIES -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="section-header">
+        <h3>📌 Current Neighbourhood Policing Priorities</h3>
+        <span class="fetch-stamp" id="ts-priorities"></span>
+        <a href="https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/" target="_blank">View on police.uk →</a>
+      </div>
+      <p style="font-size:0.85rem;color:#555;margin:-6px 0 14px;">
+        What the Stoke &amp; Wyken policing team says it is focusing on right now, and the action being taken — published by West Midlands Police and updated regularly.
+      </p>
+      <div id="priorities-box"><div class="loading">Loading priorities…</div></div>
     </div>
 
     <div class="card" style="margin-bottom:20px;">
@@ -408,6 +460,19 @@
           <tbody id="events-box"></tbody>
         </table>
       </div>
+    </div>
+
+    <!-- POLICE NEWS -->
+    <div class="card" style="margin-top:20px;">
+      <div class="section-header">
+        <h3>📰 West Midlands Police News — Coventry</h3>
+        <span class="fetch-stamp" id="ts-police-news"></span>
+        <a href="https://www.westmidlands.police.uk/news" target="_blank">All WMP news →</a>
+      </div>
+      <p style="font-size:0.85rem;color:#555;margin:-6px 0 14px;">
+        Recent stories from West Midlands Police mentioning Coventry — updated daily and shared in the weekly newsletter email.
+      </p>
+      <div id="police-news-box"><div class="loading">Loading police news…</div></div>
     </div>
   </div><!-- /page2 -->
 
@@ -557,6 +622,8 @@
   </p>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
   document.querySelectorAll('.yr2').forEach(function(el){ el.textContent = new Date().getFullYear(); });
@@ -596,6 +663,13 @@
     document.getElementById(id).classList.add('active-view');
     if (btn) btn.classList.add('active');
     window.scrollTo({top:0, behavior:'smooth'});
+    // Leaflet can't size itself while its container is hidden — refresh on tab open
+    if (id === 'page2' && window._crimeMap) {
+      setTimeout(function(){
+        window._crimeMap.invalidateSize();
+        if (window._crimeBounds) window._crimeMap.fitBounds(window._crimeBounds, {padding:[10,10]});
+      }, 60);
+    }
   }
 
   // ── RENDER FUNCTIONS ──────────────────────────────────────────────────────
@@ -650,16 +724,134 @@
   }
 
   function renderCrimes(data) {
-    document.getElementById('crime-count').textContent = data.length;
+    var noData = !data.length || (data.length === 1 && data[0].siteDown);
     stamp('ts-crime', data.length ? data[0].fetchedAt : '');
-    if (!data.length) { document.getElementById('crimes-box').innerHTML = '<tr><td colspan="4" style="text-align:center;color:#777;">No data available. <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);">Visit WM Police →</a></td></tr>'; return; }
+    if (noData) {
+      document.getElementById('crimes-box').innerHTML = '<tr><td colspan="4" style="text-align:center;color:#777;">No data available. <a href="https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);">Visit police.uk →</a></td></tr>';
+      return;
+    }
+    var total = data[0].total, monthDisp = data[0].monthDisplay;
+    if (!total) { total = 0; data.forEach(function(c){ total += parseInt(c.count||'0',10)||0; }); }
+    document.getElementById('crime-count').textContent = total || data.length;
+    if (monthDisp) {
+      document.getElementById('crime-count-month').textContent = monthDisp;
+      document.getElementById('crime-month-note').textContent =
+        'Data for ' + monthDisp + ' — the most recent month published nationally by police.uk (statistics are released monthly, around two months in arrears).';
+    }
     document.getElementById('crimes-box').innerHTML = data.map(function(c){
       return '<tr><td style="font-weight:bold;color:var(--charcoal);">'+esc(c.title)+'</td>'+
-        '<td style="color:#888;font-size:0.82rem;">'+esc(c.issue||c.count||'')+'</td>'+
+        '<td style="color:var(--labour-red);font-weight:bold;font-size:1rem;">'+esc(c.count||'')+'</td>'+
         '<td style="color:#555;font-size:0.85rem;line-height:1.5;">'+esc(c.action||'')+'<br>'+
         (c.sourceUrl?'<a href="'+esc(c.sourceUrl)+'" target="_blank" style="font-size:0.75rem;color:#aaa;">View source →</a>':'')+'</td>'+
         '<td><span class="badge badge-red">'+esc(c.status||'Active')+'</span></td></tr>';
     }).join('');
+  }
+
+  function renderPriorities(data) {
+    var box = document.getElementById('priorities-box');
+    stamp('ts-priorities', data.length ? data[0].fetchedAt : '');
+    if (!data.length) {
+      box.innerHTML = '<div style="padding:14px;background:var(--light-bg);border-radius:6px;color:#777;font-size:0.88rem;">No priorities currently published for Stoke &amp; Wyken. <a href="https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);font-weight:bold;">Check on police.uk →</a></div>';
+      return;
+    }
+    box.innerHTML = data.map(function(p){
+      return '<div class="priority-card">'+
+        '<h4>'+esc(p.issue)+'</h4>'+
+        (p.issueDate ? '<p style="font-size:0.72rem;color:#aaa;margin:0 0 6px;">Raised: '+esc(p.issueDate)+'</p>' : '')+
+        (p.action ? '<p><span class="p-label">Police action:</span> '+esc(p.action)+'</p>' : '')+
+        '<a href="'+esc(p.sourceUrl||'https://www.police.uk/pu/your-area/west-midlands-police/stoke-and-wyken/')+'" target="_blank" style="font-size:0.78rem;color:var(--labour-red);">Read more on police.uk →</a>'+
+      '</div>';
+    }).join('');
+  }
+
+  function renderPoliceNews(data) {
+    var box = document.getElementById('police-news-box');
+    stamp('ts-police-news', data.length ? data[0].fetchedAt : '');
+    if (!data.length) {
+      box.innerHTML = '<div style="padding:14px;background:var(--light-bg);border-radius:6px;color:#777;font-size:0.88rem;">No Coventry stories in the last two weeks. <a href="https://www.westmidlands.police.uk/news" target="_blank" style="color:var(--labour-red);font-weight:bold;">Browse all WMP news →</a></div>';
+      return;
+    }
+    box.innerHTML = data.map(function(n){
+      return '<div class="news-card">'+
+        '<div style="flex:1;min-width:0;">'+
+          (n.published_display ? '<span style="background:#F0F0F0;color:#555;font-size:0.72rem;font-weight:bold;padding:2px 8px;border-radius:3px;">📅 '+esc(n.published_display)+'</span>' : '')+
+          '<h4 style="margin-top:6px;">'+esc(n.title)+'</h4>'+
+          (n.summary ? '<p style="font-size:0.84rem;color:#555;margin:4px 0 6px;line-height:1.5;">'+esc(n.summary)+'</p>' : '')+
+          '<div class="source-link"><a href="https://www.westmidlands.police.uk/news" target="_blank">westmidlands.police.uk</a></div>'+
+        '</div>'+
+        '<div style="flex-shrink:0;padding-left:12px;text-align:right;">'+
+          '<a href="'+esc(n.link)+'" target="_blank" class="read-link" style="white-space:nowrap;">Read full story →</a>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  // ── CRIME MAP (Leaflet + data.police.uk points) ───────────────────────────
+  var CRIME_COLORS = {
+    'violent-crime':'#C0392B','anti-social-behaviour':'#E67E22','vehicle-crime':'#2980B9',
+    'burglary':'#8E44AD','shoplifting':'#16A085','criminal-damage-arson':'#D35400',
+    'other-theft':'#27AE60','public-order':'#F39C12','drugs':'#7F8C8D','robbery':'#900C3F',
+    'bicycle-theft':'#1ABC9C','theft-from-the-person':'#2ECC71','possession-of-weapons':'#34495E',
+    'other-crime':'#95A5A6'
+  };
+  function renderCrimeMap(d) {
+    var mapEl = document.getElementById('crime-map');
+    if (!window.L || !d || !d.crimes || !d.crimes.length) {
+      mapEl.style.display = 'none';
+      document.getElementById('map-fallback').style.display = 'block';
+      return;
+    }
+    stamp('ts-map', d.fetchedAt);
+    document.getElementById('map-month').textContent =
+      d.total + ' crimes plotted for ' + (d.monthDisplay || '') + ' (latest published month)';
+
+    var map = L.map('crime-map', {scrollWheelZoom:false}).setView([52.4105,-1.47],13);
+    window._crimeMap = map;
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+
+    if (d.boundary && d.boundary.length > 2) {
+      var poly = L.polygon(d.boundary, {color:'#2C3E50', weight:2, fill:false, dashArray:'6 4'}).addTo(map);
+      window._crimeBounds = poly.getBounds();
+      map.fitBounds(window._crimeBounds, {padding:[10,10]});
+    }
+
+    var catNames = d.categories || {};
+    var present = {};
+    d.crimes.forEach(function(c){ present[c.cat] = (present[c.cat]||0)+1; });
+
+    // Populate filter dropdown + legend
+    var sel = document.getElementById('map-cat');
+    Object.keys(present).sort(function(a,b){ return present[b]-present[a]; }).forEach(function(cat){
+      var opt = document.createElement('option');
+      opt.value = cat;
+      opt.textContent = (catNames[cat]||cat) + ' (' + present[cat] + ')';
+      sel.appendChild(opt);
+    });
+    document.getElementById('map-legend').innerHTML =
+      Object.keys(present).sort(function(a,b){ return present[b]-present[a]; }).slice(0,8).map(function(cat){
+        return '<span><i style="background:'+(CRIME_COLORS[cat]||'#95A5A6')+';"></i>'+esc(catNames[cat]||cat)+'</span>';
+      }).join('');
+
+    var cluster = null;
+    function draw(filterCat) {
+      if (cluster) { map.removeLayer(cluster); }
+      cluster = L.markerClusterGroup({maxClusterRadius:46, showCoverageOnHover:false});
+      d.crimes.forEach(function(c){
+        if (filterCat !== 'all' && c.cat !== filterCat) return;
+        var m = L.circleMarker([c.lat, c.lng], {
+          radius:7, weight:1, color:'#FFF', fillOpacity:0.9,
+          fillColor: CRIME_COLORS[c.cat] || '#95A5A6'
+        });
+        m.bindPopup('<strong>'+esc(catNames[c.cat]||c.cat)+'</strong><br>'+
+                    esc(c.street||'Location approximate')+'<br>'+
+                    '<span style="color:#888;font-size:0.8em;">'+esc(d.monthDisplay||'')+'</span>');
+        cluster.addLayer(m);
+      });
+      map.addLayer(cluster);
+    }
+    draw('all');
+    sel.addEventListener('change', function(){ draw(sel.value); });
   }
 
   function renderTeam(data) {
@@ -796,6 +988,12 @@
   loadJSON('planning.json',      renderPlanning);
   loadJSON('police_crimes.json', renderCrimes);
   loadJSON('police_team.json',   renderTeam);
+  loadJSON('police_priorities.json', renderPriorities);
+  loadJSON('police_news.json',       renderPoliceNews);
+  fetch('data/police_crime_map.json?v=' + Date.now())
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(renderCrimeMap)
+    .catch(function(){ renderCrimeMap(null); });
   // Police events: load from JSON (updated by scraper), fall back to known meetings
   var KNOWN_PACT_EVENTS = [
     {"title":"Lower Stoke PACT meeting","date":"6:00PM - 7:00PM, Wed 16 September 2026","address":"St Margaret's Church, 50 Walsgrave Road, Coventry CV2 4EB","sourceUrl":"https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/meetings-and-events/top-reported-crimes-in-this-area","fetchedAt":"Source: westmidlands.police.uk"},
