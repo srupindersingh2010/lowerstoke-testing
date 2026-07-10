@@ -8,7 +8,7 @@
     "agendaUrl": "https://wmca.moderngov.co.uk/ieListDocuments.aspx?CId=356&MId=2283",
     "withinWeek": true,
     "sourceUrl": "https://wmca.moderngov.co.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "10 July 2026 at 10:33"
+    "fetchedAt": "10 July 2026 at 21:45"
   },
   {
     "date": "14 July 2026",
@@ -19,7 +19,7 @@
     "agendaUrl": "https://wmca.moderngov.co.uk/ieListDocuments.aspx?CId=136&MId=2268",
     "withinWeek": true,
     "sourceUrl": "https://wmca.moderngov.co.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "10 July 2026 at 10:33"
+    "fetchedAt": "10 July 2026 at 21:45"
   },
   {
     "date": "17 July 2026",
@@ -30,18 +30,18 @@
     "agendaUrl": "https://wmca.moderngov.co.uk/ieListDocuments.aspx?CId=137&MId=2148",
     "withinWeek": true,
     "sourceUrl": "https://wmca.moderngov.co.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "10 July 2026 at 10:33"
+    "fetchedAt": "10 July 2026 at 21:45"
   },
   {
     "date": "20 July 2026",
     "dayOfWeek": "Monday",
     "time": "10.00 am",
     "title": "Meeting ofInvestment Boardon 20/07 at 10.00 am",
-    "location": "Room 116, West Midlands Combined Authority, 16 Summer Lane, Birmingham, B19 3SD",
+    "location": "West Midlands Regional Chamber, WMCA Offices, 16 Summer Lane, Birmingham, B19 3SD",
     "agendaUrl": "https://wmca.moderngov.co.uk/ieListDocuments.aspx?CId=135&MId=2137",
     "withinWeek": false,
     "sourceUrl": "https://wmca.moderngov.co.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "10 July 2026 at 10:33"
+    "fetchedAt": "10 July 2026 at 21:45"
   },
   {
     "date": "29 July 2026",
@@ -52,6 +52,6 @@
     "agendaUrl": "https://wmca.moderngov.co.uk/ieListDocuments.aspx?CId=305&MId=2294",
     "withinWeek": false,
     "sourceUrl": "https://wmca.moderngov.co.uk/mgCalendarAgendaView.aspx?RPID=0&M=7&DD=2026&CID=0&OT=&C=-1&MR=1",
-    "fetchedAt": "10 July 2026 at 10:33"
+    "fetchedAt": "10 July 2026 at 21:45"
   }
 ]

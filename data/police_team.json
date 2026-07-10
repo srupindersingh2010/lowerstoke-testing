@@ -1,9 +1,79 @@
 [
   {
+    "name": "Chris Harris - Neighbourhood Sergeant",
+    "rank": "Sergeant",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Jacob Richmond - Local Action Team",
+    "rank": "Police Constable",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Jamie Munro - Dedicated Neighbourhood Officer - Wyken",
+    "rank": "Police Constable",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Karmjit Hundel - Dedicated Neighbourhood Officer - Upper Stoke",
+    "rank": "Police Constable",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Nicholas Bavington - Dedicated Neighbourhood Officer - Lower Stoke",
+    "rank": "Police Constable",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Rhianon Budden - Local Action Team",
+    "rank": "Police Constable",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "San Virdee",
+    "rank": "PCSO",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Sylwia Walsh - Local Action Team",
+    "rank": "Police Constable",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Amy Middleton - Local Action Team",
+    "rank": "Police Constable",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
     "name": "Manwar Porter",
     "rank": "Inspector",
-    "bio": "Local Policing Inspector for the North East Sector of Coventry covering Stoke & Wyken. Primary focus on antisocial behaviour, vehicle crime, and retail crime.",
+    "bio": "My policing career began in 2003 when I joined the Metropolitan Police Service as a response PC working out of West End Central Police Station, where we covered the districts of Soho and Mayfair. I transferred to West Midlands Police in 2004 and have amassed extensive experience across various policing roles both in uniform and plain clothes. I have worked as a Staff Officer to the Head of the Counter Terrorism Unit; run a Prisoner Management Team at Stechford; been a Detective Constable investi",
     "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
-    "fetchedAt": "10 July 2026 at 10:33"
+    "fetchedAt": "10 July 2026 at 21:45"
+  },
+  {
+    "name": "Erin Butler",
+    "rank": "PCSO",
+    "bio": "",
+    "sourceUrl": "https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/on-the-team/top-reported-crimes-in-this-area",
+    "fetchedAt": "10 July 2026 at 21:45"
   }
 ]
