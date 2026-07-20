@@ -268,40 +268,26 @@
 
         <div class="card">
           <div class="section-header">
-            <h2>🏗️ Planning Applications — Lower Stoke Ward</h2>
+            <h2>🏗️ <a href="https://tinyurl.com/cov-plan-recent" target="_blank" style="color:inherit;">Planning Applications — Lower Stoke Ward</a></h2>
             <span class="fetch-stamp" id="ts-planning"></span>
+            <a href="https://tinyurl.com/cov-plan-recent" target="_blank">All recent applications →</a>
           </div>
 
-          <!-- Portal link card — always shown -->
-          <div style="background:#F8F9FA; border:2px solid var(--labour-red); border-radius:8px; padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+          <div style="background:#F8F9FA; border:2px solid var(--labour-red); border-radius:8px; padding:20px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
             <div style="flex:1; min-width:0;">
-              <div style="font-size:1rem; font-weight:bold; color:var(--charcoal); margin-bottom:4px;">🏛️ Coventry City Council Planning Portal</div>
-              <div style="font-size:0.85rem; color:#555; margin-bottom:10px;">To view current Lower Stoke planning applications, click below then on the search page enter:</div>
-              <div style="background:#fff; border:1px solid #E0E0E0; border-radius:4px; padding:10px 14px; margin-bottom:12px; font-size:0.83rem; line-height:2;">
-                <div>📍 <strong>Address:</strong> <code style="background:#F0F0F0; padding:1px 6px; border-radius:3px;">Lower Stoke</code></div>
-                <div>📅 <strong>Valid Date From:</strong> <code style="background:#F0F0F0; padding:1px 6px; border-radius:3px;">leave blank for all recent</code> &nbsp;or enter a date to filter</div>
+              <div style="font-size:1rem; font-weight:bold; color:var(--charcoal); margin-bottom:4px;">🏛️ See the latest planning applications in Coventry</div>
+              <div style="font-size:0.85rem; color:#555; margin-bottom:12px;">
+                Click the button below to open the Council's list of recent planning applications,<br>
+                then look for <strong>Lower Stoke</strong> under the <strong>Ward</strong> column to find applications in our ward.
               </div>
-              <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=search"
+              <a href="https://tinyurl.com/cov-plan-recent"
                  target="_blank"
                  style="display:inline-block; background:var(--labour-red); color:#fff; font-weight:bold; font-size:0.92rem; padding:10px 20px; border-radius:4px; text-decoration:none;">
-                Search Lower Stoke Planning Applications →
+                🔎 View Recent Planning Applications →
               </a>
+              <div style="font-size:0.75rem; color:#888; margin-top:8px;">Opens the official Coventry City Council planning portal in a new tab.</div>
             </div>
             <div style="font-size:2.5rem; flex-shrink:0;">🏗️</div>
-          </div>
-
-          <!-- Scraped data table — shown only when scraper succeeds -->
-          <div id="planning-table-wrap" style="display:none; overflow-x:auto;">
-            <p style="font-size:0.85rem; color:#666; margin:0 0 8px;">Recent applications automatically fetched from the Council portal:</p>
-            <table class="data-table">
-              <thead><tr>
-                <th style="width:18%;">Reference</th>
-                <th style="width:16%;">Date Lodged</th>
-                <th style="width:50%;">Address &amp; Proposal</th>
-                <th style="width:16%;">Status</th>
-              </tr></thead>
-              <tbody id="planning-box"></tbody>
-            </table>
           </div>
         </div>
 
@@ -765,20 +751,8 @@
   }
 
   function renderPlanning(data) {
-    // If siteDown or no data — the portal link card is always visible, nothing else to do
-    if (!data.length || (data.length === 1 && data[0].siteDown)) {
-      stamp('ts-planning', data.length ? data[0].fetchedAt : '');
-      return;
-    }
-    // Scraper succeeded — show the table as well as the portal link card
-    stamp('ts-planning', data[0].fetchedAt);
-    document.getElementById('planning-table-wrap').style.display = 'block';
-    document.getElementById('planning-box').innerHTML = data.map(function(p){
-      return '<tr><td><a href="'+esc(p.portalLink)+'" target="_blank" style="color:var(--labour-red);font-weight:bold;text-decoration:underline;">'+esc(p.reference)+'</a><br><span style="font-size:0.72rem;color:#aaa;">'+esc(p.source||'')+'</span></td>'+
-        '<td style="color:#555;">'+esc(p.dateLodged)+'</td>'+
-        '<td><strong>'+esc(p.address)+'</strong><br><span style="font-size:0.82rem;color:#666;">'+esc(p.description)+'</span></td>'+
-        '<td><span class="badge badge-blue">'+esc(p.status)+'</span></td></tr>';
-    }).join('');
+    // The portal link card is always visible — just stamp the fetch time if available
+    stamp('ts-planning', data.length ? data[0].fetchedAt : '');
   }
 
   function renderCrimes(data) {
