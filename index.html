@@ -46,7 +46,6 @@
     /* Shortcut buttons for moved sections */
     .moved-btn { display: block; width: 100%; text-align: left; background: var(--light-bg); border: 1px solid #E0E0E0; border-left: 5px solid var(--labour-red); border-radius: 5px; padding: 10px 12px; margin-bottom: 8px; font-size: 0.84rem; color: var(--charcoal); cursor: pointer; font-family: inherit; transition: all 0.15s; line-height: 1.5; }
     .moved-btn:hover { background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,0.12); transform: translateX(2px); }
-    .moved-btn .moved-dest { display: block; font-size: 0.74rem; color: var(--labour-red); font-weight: bold; margin-top: 2px; }
 
     .container { max-width: 1180px; margin: 20px auto; padding: 0 15px; }
     .page-view { display: none; }
@@ -232,27 +231,23 @@
               📌 Find Information Quickly
             </div>
             <p style="font-size:0.78rem;color:#666;margin:0 0 10px;line-height:1.5;">
-              These sections now have their own pages — <strong>tap a button</strong> to go straight there:
+              <strong>Tap a button</strong> to go straight to these sections:
             </p>
 
             <button onclick="goToPage('page2')" class="moved-btn" style="border-left-color:var(--charcoal);">
               🛡️ <strong>Police &amp; Crime Information</strong>
-              <span class="moved-dest">→ now on the Policing &amp; Safety page</span>
             </button>
 
             <button onclick="goToPage('page6')" class="moved-btn" style="border-left-color:var(--labour-red);">
               🏛️ <strong>Important Council Information</strong>
-              <span class="moved-dest">→ now on the Self Help page</span>
             </button>
 
             <button onclick="goToPage('page6')" class="moved-btn" style="border-left-color:#1565C0;">
               🚌 <strong>Important Transport Information</strong>
-              <span class="moved-dest">→ now on the Self Help page</span>
             </button>
 
             <button onclick="goToPage('page6')" class="moved-btn" style="border-left-color:#2E7D32;">
               ℹ️ <strong>Other Important Information</strong>
-              <span class="moved-dest">→ now on the Self Help page</span>
             </button>
           </div>
 
