@@ -43,6 +43,11 @@
     .tab-link:hover { color: #FFF; background: rgba(255,255,255,0.06); }
     .tab-link.active { color: #FFF; background: var(--labour-red); }
 
+    /* Shortcut buttons for moved sections */
+    .moved-btn { display: block; width: 100%; text-align: left; background: var(--light-bg); border: 1px solid #E0E0E0; border-left: 5px solid var(--labour-red); border-radius: 5px; padding: 10px 12px; margin-bottom: 8px; font-size: 0.84rem; color: var(--charcoal); cursor: pointer; font-family: inherit; transition: all 0.15s; line-height: 1.5; }
+    .moved-btn:hover { background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,0.12); transform: translateX(2px); }
+    .moved-btn .moved-dest { display: block; font-size: 0.74rem; color: var(--labour-red); font-weight: bold; margin-top: 2px; }
+
     .container { max-width: 1180px; margin: 20px auto; padding: 0 15px; }
     .page-view { display: none; }
     .page-view.active-view { display: block; }
@@ -154,11 +159,12 @@
 </div>
 
 <nav class="nav-tabs">
-  <button class="tab-link active" onclick="switchPage('page1',this)">📰 Ward &amp; Council</button>
-  <button class="tab-link" onclick="switchPage('page2',this)">🛡️ Policing &amp; Safety</button>
-  <button class="tab-link" onclick="switchPage('page3',this)">📅 Community Events</button>
-  <button class="tab-link" onclick="switchPage('page4',this)">📋 Report an Issue</button>
-  <button class="tab-link" onclick="switchPage('page5',this)">👥 Councillors' Work</button>
+  <button class="tab-link active" data-page="page1" onclick="switchPage('page1',this)">📰 Ward &amp; Council</button>
+  <button class="tab-link" data-page="page2" onclick="switchPage('page2',this)">🛡️ Policing &amp; Safety</button>
+  <button class="tab-link" data-page="page6" onclick="switchPage('page6',this)">🤝 Self Help</button>
+  <button class="tab-link" data-page="page3" onclick="switchPage('page3',this)">📅 Community Events</button>
+  <button class="tab-link" data-page="page4" onclick="switchPage('page4',this)">📋 Report an Issue</button>
+  <button class="tab-link" data-page="page5" onclick="switchPage('page5',this)">👥 Councillors' Work</button>
 </nav>
 
 <div class="container">
@@ -220,70 +226,34 @@
             </a>
           </div>
 
-          <!-- Council Information -->
-          <div style="margin-bottom:12px;">
-            <div style="font-size:0.78rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid var(--labour-red);margin-bottom:7px;">
-              🏛️ Important Council Information
-            </div>
-            <ul style="padding-left:0;margin:0;list-style:none;font-size:0.83rem;line-height:2.1;">
-              <li>📰 <a href="https://www.coventry.gov.uk/news" target="_blank" style="color:var(--labour-red);">Coventry Council News</a></li>
-              <li>📞 <a href="https://www.coventry.gov.uk/contact-council/emergency-hours-number" target="_blank" style="color:var(--labour-red);">Out of Hours Emergency</a></li>
-              <li>💰 <a href="https://www.coventry.gov.uk/costofliving" target="_blank" style="color:var(--labour-red);">Cost of Living Support</a></li>
-              <li>📋 <a href="https://tinyurl.com/Report-to-Cov-Council" target="_blank" style="color:var(--labour-red);">Report to Coventry Council</a></li>
-              <li>🗑️ <a href="https://tinyurl.com/tip-and-bulky-items" target="_blank" style="color:var(--labour-red);">Tip &amp; Bulky Items Collection</a></li>
-              <li>📚 <a href="https://tinyurl.com/edu-library-cov" target="_blank" style="color:var(--labour-red);">Education &amp; Libraries</a></li>
-              <li>🏗️ <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke" target="_blank" style="color:var(--labour-red);">Planning Applications</a></li>
-              <li>🗓️ <a href="https://www.coventry.gov.uk/events" target="_blank" style="color:var(--labour-red);">Council Events</a></li>
-            </ul>
-          </div>
-
-          <!-- Police & Crime -->
-          <div style="margin-bottom:12px;">
-            <div style="font-size:0.78rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid var(--charcoal);margin-bottom:7px;">
-              🛡️ Police &amp; Crime Information
-            </div>
-            <ul style="padding-left:0;margin:0;list-style:none;font-size:0.83rem;line-height:2.1;">
-              <li>🚨 <a href="https://tinyurl.com/report-a-crime-cov" target="_blank" style="color:var(--labour-red);">Report a Crime — Coventry</a></li>
-              <li>👮 <a href="https://tinyurl.com/Lower-Stoke-Police-details" target="_blank" style="color:var(--labour-red);">Lower Stoke Police Details</a></li>
-              <li>💻 <a href="https://www.actionfraud.police.uk/" target="_blank" style="color:var(--labour-red);">Action Fraud (Online Crime)</a></li>
-              <li>🔵 <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);">WM Police — Stoke &amp; Wyken</a></li>
-            </ul>
-            <div style="background:#FFF3E0;border-radius:4px;padding:8px 10px;margin-top:6px;font-size:0.8rem;line-height:1.9;">
-              <div style="font-weight:bold;color:#B71C1C;margin-bottom:2px;">📞 Important Numbers</div>
-              <div>🚨 <strong>999</strong> — All Emergencies</div>
-              <div>📞 <strong>101</strong> — Non-Emergency Police</div>
-              <div>🌍 <strong>+44 121 626 5000</strong> — Police from Abroad</div>
-              <div>🤫 <strong>0800 555 111</strong> — Crime Stoppers (Anonymous)</div>
-            </div>
-          </div>
-
-          <!-- Transport -->
-          <div style="margin-bottom:12px;">
-            <div style="font-size:0.78rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid #1565C0;margin-bottom:7px;">
-              🚌 Important Transport Information
-            </div>
-            <ul style="padding-left:0;margin:0;list-style:none;font-size:0.83rem;line-height:2.1;">
-              <li>🚌 <a href="https://nxbus.co.uk/coventry" target="_blank" style="color:var(--labour-red);">National Express Bus — Coventry</a></li>
-              <li>🗺️ <a href="https://tinyurl.com/bus-train-cov" target="_blank" style="color:var(--labour-red);">Bus &amp; Train Journey Planner</a></li>
-              <li>🔁 <a href="https://tinyurl.com/on-demand-bus" target="_blank" style="color:var(--labour-red);">On-Demand Bus Service</a></li>
-            </ul>
-          </div>
-
-          <!-- Other Important Info -->
+          <!-- Quick links — these sections have moved to their own pages -->
           <div>
-            <div style="font-size:0.78rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid #2E7D32;margin-bottom:7px;">
-              ℹ️ Other Important Information
+            <div style="font-size:0.78rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid var(--labour-red);margin-bottom:8px;">
+              📌 Find Information Quickly
             </div>
-            <ul style="padding-left:0;margin:0;list-style:none;font-size:0.83rem;line-height:2.1;">
-              <li>👴 <a href="https://tinyurl.com/Age-Con-Links" target="_blank" style="color:var(--labour-red);">Age Concern &amp; Elderly Support</a></li>
-              <li>💷 <a href="https://tinyurl.com/Money-debt" target="_blank" style="color:var(--labour-red);">Money &amp; Debt Help</a></li>
-              <li>🏦 <a href="https://tinyurl.com/credit-unions-cov" target="_blank" style="color:var(--labour-red);">Credit Unions — Coventry</a></li>
-              <li>🥗 <a href="https://tinyurl.com/Holiday-and-food-help" target="_blank" style="color:var(--labour-red);">Holiday &amp; Food Help</a></li>
-              <li>🧠 <a href="https://tinyurl.com/mentalhealth-cov" target="_blank" style="color:var(--labour-red);">Mental Health Support</a></li>
-              <li>🏥 <a href="https://111.nhs.uk" target="_blank" style="color:var(--labour-red);">NHS Help — call 111 or 111.nhs.uk</a></li>
-              <li>⚡ <a href="https://powercuts.nationalgrid.co.uk/" target="_blank" style="color:var(--labour-red);">Power Cut Information</a></li>
-              <li>📊 <a href="https://tinyurl.com/scrutiny-engagement-cov" target="_blank" style="color:var(--labour-red);">Scrutiny &amp; Community Engagement</a></li>
-            </ul>
+            <p style="font-size:0.78rem;color:#666;margin:0 0 10px;line-height:1.5;">
+              These sections now have their own pages — <strong>tap a button</strong> to go straight there:
+            </p>
+
+            <button onclick="goToPage('page2')" class="moved-btn" style="border-left-color:var(--charcoal);">
+              🛡️ <strong>Police &amp; Crime Information</strong>
+              <span class="moved-dest">→ now on the Policing &amp; Safety page</span>
+            </button>
+
+            <button onclick="goToPage('page6')" class="moved-btn" style="border-left-color:var(--labour-red);">
+              🏛️ <strong>Important Council Information</strong>
+              <span class="moved-dest">→ now on the Self Help page</span>
+            </button>
+
+            <button onclick="goToPage('page6')" class="moved-btn" style="border-left-color:#1565C0;">
+              🚌 <strong>Important Transport Information</strong>
+              <span class="moved-dest">→ now on the Self Help page</span>
+            </button>
+
+            <button onclick="goToPage('page6')" class="moved-btn" style="border-left-color:#2E7D32;">
+              ℹ️ <strong>Other Important Information</strong>
+              <span class="moved-dest">→ now on the Self Help page</span>
+            </button>
           </div>
 
         </div>
@@ -351,6 +321,36 @@
         Information on this page is taken from
         <a href="https://www.westmidlands.police.uk/" target="_blank" style="color:#7EC8E3;text-decoration:underline;">www.westmidlands.police.uk</a>
       </span>
+    </div>
+
+    <!-- Police & Crime Information — moved here from the front page -->
+    <div class="card card-red-top" style="margin-bottom:20px;">
+      <div class="section-header">
+        <h2>🛡️ Police &amp; Crime Information</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;align-items:start;">
+
+        <div>
+          <div style="font-size:0.82rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid var(--charcoal);margin-bottom:8px;">
+            🔗 Useful Links
+          </div>
+          <ul style="padding-left:0;margin:0;list-style:none;font-size:0.9rem;line-height:2.3;">
+            <li>🚨 <a href="https://tinyurl.com/report-a-crime-cov" target="_blank" style="color:var(--labour-red);font-weight:bold;">Report a Crime — Coventry</a></li>
+            <li>👮 <a href="https://tinyurl.com/Lower-Stoke-Police-details" target="_blank" style="color:var(--labour-red);font-weight:bold;">Lower Stoke Police Details</a></li>
+            <li>💻 <a href="https://www.actionfraud.police.uk/" target="_blank" style="color:var(--labour-red);font-weight:bold;">Action Fraud (Online Crime)</a></li>
+            <li>🔵 <a href="https://www.westmidlands.police.uk/area/your-area/west-midlands/coventry/stoke-and-wyken/" target="_blank" style="color:var(--labour-red);font-weight:bold;">WM Police — Stoke &amp; Wyken</a></li>
+          </ul>
+        </div>
+
+        <div style="background:#FFF3E0;border-radius:6px;padding:14px 16px;font-size:0.9rem;line-height:2.2;">
+          <div style="font-weight:bold;color:#B71C1C;margin-bottom:4px;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.5px;">📞 Important Numbers</div>
+          <div>🚨 <strong>999</strong> — All Emergencies</div>
+          <div>📞 <strong>101</strong> — Non-Emergency Police</div>
+          <div>🌍 <strong>+44 121 626 5000</strong> — Police from Abroad</div>
+          <div>🤫 <strong>0800 555 111</strong> — Crime Stoppers (Anonymous)</div>
+        </div>
+
+      </div>
     </div>
 
     <div class="card card-dark-top" style="margin-bottom:20px;">
@@ -608,6 +608,63 @@
 
   </div><!-- /page5 -->
 
+  <!-- PAGE 6 — SELF HELP -->
+  <div id="page6" class="page-view">
+    <div class="page-bar">
+      <span>🤝 Self Help — Useful Links &amp; Support Information for Lower Stoke Residents</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start;">
+
+      <!-- Council Information -->
+      <div class="card card-red-top">
+        <div style="font-size:0.9rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid var(--labour-red);margin-bottom:10px;">
+          🏛️ Important Council Information
+        </div>
+        <ul style="padding-left:0;margin:0;list-style:none;font-size:0.9rem;line-height:2.4;">
+          <li>📰 <a href="https://www.coventry.gov.uk/news" target="_blank" style="color:var(--labour-red);">Coventry Council News</a></li>
+          <li>📞 <a href="https://www.coventry.gov.uk/contact-council/emergency-hours-number" target="_blank" style="color:var(--labour-red);">Out of Hours Emergency</a></li>
+          <li>💰 <a href="https://www.coventry.gov.uk/costofliving" target="_blank" style="color:var(--labour-red);">Cost of Living Support</a></li>
+          <li>📋 <a href="https://tinyurl.com/Report-to-Cov-Council" target="_blank" style="color:var(--labour-red);">Report to Coventry Council</a></li>
+          <li>🗑️ <a href="https://tinyurl.com/tip-and-bulky-items" target="_blank" style="color:var(--labour-red);">Tip &amp; Bulky Items Collection</a></li>
+          <li>📚 <a href="https://tinyurl.com/edu-library-cov" target="_blank" style="color:var(--labour-red);">Education &amp; Libraries</a></li>
+          <li>🏗️ <a href="https://planandregulatory.coventry.gov.uk/planning/index.html?fa=getApplications&ward=Lower%20Stoke" target="_blank" style="color:var(--labour-red);">Planning Applications</a></li>
+          <li>🗓️ <a href="https://www.coventry.gov.uk/events" target="_blank" style="color:var(--labour-red);">Council Events</a></li>
+        </ul>
+      </div>
+
+      <!-- Transport -->
+      <div class="card" style="border-top:4px solid #1565C0;">
+        <div style="font-size:0.9rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid #1565C0;margin-bottom:10px;">
+          🚌 Important Transport Information
+        </div>
+        <ul style="padding-left:0;margin:0;list-style:none;font-size:0.9rem;line-height:2.4;">
+          <li>🚌 <a href="https://nxbus.co.uk/coventry" target="_blank" style="color:var(--labour-red);">National Express Bus — Coventry</a></li>
+          <li>🗺️ <a href="https://tinyurl.com/bus-train-cov" target="_blank" style="color:var(--labour-red);">Bus &amp; Train Journey Planner</a></li>
+          <li>🔁 <a href="https://tinyurl.com/on-demand-bus" target="_blank" style="color:var(--labour-red);">On-Demand Bus Service</a></li>
+        </ul>
+      </div>
+
+      <!-- Other Important Info -->
+      <div class="card" style="border-top:4px solid #2E7D32;">
+        <div style="font-size:0.9rem;font-weight:bold;color:var(--charcoal);text-transform:uppercase;letter-spacing:0.5px;padding:5px 0;border-bottom:2px solid #2E7D32;margin-bottom:10px;">
+          ℹ️ Other Important Information
+        </div>
+        <ul style="padding-left:0;margin:0;list-style:none;font-size:0.9rem;line-height:2.4;">
+          <li>👴 <a href="https://tinyurl.com/Age-Con-Links" target="_blank" style="color:var(--labour-red);">Age Concern &amp; Elderly Support</a></li>
+          <li>💷 <a href="https://tinyurl.com/Money-debt" target="_blank" style="color:var(--labour-red);">Money &amp; Debt Help</a></li>
+          <li>🏦 <a href="https://tinyurl.com/credit-unions-cov" target="_blank" style="color:var(--labour-red);">Credit Unions — Coventry</a></li>
+          <li>🥗 <a href="https://tinyurl.com/Holiday-and-food-help" target="_blank" style="color:var(--labour-red);">Holiday &amp; Food Help</a></li>
+          <li>🧠 <a href="https://tinyurl.com/mentalhealth-cov" target="_blank" style="color:var(--labour-red);">Mental Health Support</a></li>
+          <li>🏥 <a href="https://111.nhs.uk" target="_blank" style="color:var(--labour-red);">NHS Help — call 111 or 111.nhs.uk</a></li>
+          <li>⚡ <a href="https://powercuts.nationalgrid.co.uk/" target="_blank" style="color:var(--labour-red);">Power Cut Information</a></li>
+          <li>📊 <a href="https://tinyurl.com/scrutiny-engagement-cov" target="_blank" style="color:var(--labour-red);">Scrutiny &amp; Community Engagement</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div><!-- /page6 -->
+
 </div><!-- /container -->
 
 <footer>
@@ -657,6 +714,12 @@
   }
 
   // ── TAB SWITCHING ─────────────────────────────────────────────────────────
+  // Switch pages from a button anywhere on the site (highlights the matching top tab)
+  function goToPage(id) {
+    var btn = document.querySelector('.tab-link[data-page="' + id + '"]');
+    switchPage(id, btn);
+  }
+
   function switchPage(id, btn) {
     document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active-view'); });
     document.querySelectorAll('.tab-link').forEach(function(t){ t.classList.remove('active'); });
