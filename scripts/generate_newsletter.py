@@ -270,7 +270,7 @@ def build_casework_section():
             "meta": meta,
             "link": None,
         })
-    return {"heading": "Councillor Casework Updates", "entries": entries}
+    return {"heading": "Councillor's Updates", "entries": entries}
 
 
 def build_planning_section():
