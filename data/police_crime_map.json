@@ -1,8 +1,8 @@
 {
-  "month": "2026-05",
-  "monthDisplay": "May 2026",
-  "total": 416,
-  "fetchedAt": "10 July 2026 at 21:45",
+  "month": "2026-06",
+  "monthDisplay": "June 2026",
+  "total": 412,
+  "fetchedAt": "14 August 2026 at 09:38",
   "categories": {
     "anti-social-behaviour": "Anti-Social Behaviour",
     "bicycle-theft": "Bicycle Theft",
@@ -647,34 +647,82 @@
   ],
   "crimes": [
     {
+      "lat": 52.408033,
+      "lng": -1.454065,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Lloyd Crescent"
+    },
+    {
+      "lat": 52.413963,
+      "lng": -1.467076,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Oswin Grove"
+    },
+    {
       "lat": 52.426835,
       "lng": -1.480951,
       "cat": "anti-social-behaviour",
       "street": "On or near Cheswick Close"
     },
     {
-      "lat": 52.397493,
-      "lng": -1.481354,
+      "lat": 52.418178,
+      "lng": -1.483185,
       "cat": "anti-social-behaviour",
-      "street": "On or near Carter Road"
+      "street": "On or near Mercer Avenue"
     },
     {
-      "lat": 52.404455,
-      "lng": -1.488299,
+      "lat": 52.409748,
+      "lng": -1.477565,
       "cat": "anti-social-behaviour",
-      "street": "On or near Ribble Road"
+      "street": "On or near Dronfield Road"
     },
     {
-      "lat": 52.397832,
-      "lng": -1.470622,
+      "lat": 52.402271,
+      "lng": -1.468143,
       "cat": "anti-social-behaviour",
-      "street": "On or near Treforest Road"
+      "street": "On or near Marjorie Way"
     },
     {
-      "lat": 52.400946,
-      "lng": -1.477463,
+      "lat": 52.426835,
+      "lng": -1.480951,
       "cat": "anti-social-behaviour",
-      "street": "On or near Siddeley Avenue"
+      "street": "On or near Cheswick Close"
+    },
+    {
+      "lat": 52.405049,
+      "lng": -1.456306,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Carver Close"
+    },
+    {
+      "lat": 52.398348,
+      "lng": -1.479507,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Princes Close"
+    },
+    {
+      "lat": 52.4256,
+      "lng": -1.482304,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Downderry Way"
+    },
+    {
+      "lat": 52.42792,
+      "lng": -1.46807,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Lydford Close"
+    },
+    {
+      "lat": 52.397851,
+      "lng": -1.433811,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.406656,
+      "lng": -1.477807,
+      "cat": "anti-social-behaviour",
+      "street": "On or near Parking Area"
     },
     {
       "lat": 52.408033,
@@ -683,52 +731,52 @@
       "street": "On or near Lloyd Crescent"
     },
     {
-      "lat": 52.405031,
-      "lng": -1.446473,
+      "lat": 52.403339,
+      "lng": -1.434823,
       "cat": "anti-social-behaviour",
-      "street": "On or near Colebrook Close"
+      "street": "On or near Hepworth Road"
     },
     {
-      "lat": 52.424538,
-      "lng": -1.471743,
+      "lat": 52.40552,
+      "lng": -1.435986,
       "cat": "anti-social-behaviour",
-      "street": "On or near Blackberry Lane"
+      "street": "On or near Sevilla Close"
     },
     {
-      "lat": 52.424936,
-      "lng": -1.474238,
+      "lat": 52.408033,
+      "lng": -1.454065,
       "cat": "anti-social-behaviour",
-      "street": "On or near Sewall Highway"
+      "street": "On or near Lloyd Crescent"
     },
     {
-      "lat": 52.409904,
-      "lng": -1.47427,
+      "lat": 52.416354,
+      "lng": -1.467121,
       "cat": "anti-social-behaviour",
-      "street": "On or near Grenville Avenue"
+      "street": "On or near Wyke Road"
     },
     {
-      "lat": 52.395185,
-      "lng": -1.471711,
-      "cat": "anti-social-behaviour",
-      "street": "On or near Jasmine Grove"
-    },
-    {
-      "lat": 52.406656,
-      "lng": -1.477807,
+      "lat": 52.411872,
+      "lng": -1.482171,
       "cat": "anti-social-behaviour",
       "street": "On or near Parking Area"
     },
     {
-      "lat": 52.413219,
-      "lng": -1.481846,
-      "cat": "anti-social-behaviour",
-      "street": "On or near Petrol Station"
+      "lat": 52.398416,
+      "lng": -1.486928,
+      "cat": "bicycle-theft",
+      "street": "On or near Hussar Court"
     },
     {
-      "lat": 52.4044,
-      "lng": -1.47779,
+      "lat": 52.399624,
+      "lng": -1.4752,
       "cat": "bicycle-theft",
-      "street": "On or near Coombe Street"
+      "street": "On or near The Boxhill"
+    },
+    {
+      "lat": 52.413592,
+      "lng": -1.452879,
+      "cat": "bicycle-theft",
+      "street": "On or near Sandilands Close"
     },
     {
       "lat": 52.406779,
@@ -737,10 +785,10 @@
       "street": "On or near Supermarket"
     },
     {
-      "lat": 52.415076,
-      "lng": -1.457006,
+      "lat": 52.397851,
+      "lng": -1.433811,
       "cat": "bicycle-theft",
-      "street": "On or near Hyde Road"
+      "street": "On or near Shopping Area"
     },
     {
       "lat": 52.406656,
@@ -753,78 +801,6 @@
       "lng": -1.476453,
       "cat": "bicycle-theft",
       "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.4003,
-      "lng": -1.490037,
-      "cat": "bicycle-theft",
-      "street": "On or near Terry Road"
-    },
-    {
-      "lat": 52.406779,
-      "lng": -1.476453,
-      "cat": "bicycle-theft",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.406779,
-      "lng": -1.476453,
-      "cat": "bicycle-theft",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.408705,
-      "lng": -1.479473,
-      "cat": "burglary",
-      "street": "On or near Brays Lane"
-    },
-    {
-      "lat": 52.412502,
-      "lng": -1.482413,
-      "cat": "burglary",
-      "street": "On or near Terracota Drive"
-    },
-    {
-      "lat": 52.415516,
-      "lng": -1.447077,
-      "cat": "burglary",
-      "street": "On or near Ennerdale Lane"
-    },
-    {
-      "lat": 52.404576,
-      "lng": -1.472937,
-      "cat": "burglary",
-      "street": "On or near Grant Road"
-    },
-    {
-      "lat": 52.4175,
-      "lng": -1.440847,
-      "cat": "burglary",
-      "street": "On or near Wareham Green"
-    },
-    {
-      "lat": 52.418628,
-      "lng": -1.461065,
-      "cat": "burglary",
-      "street": "On or near Yule Road"
-    },
-    {
-      "lat": 52.397742,
-      "lng": -1.437569,
-      "cat": "burglary",
-      "street": "On or near Petrol Station"
-    },
-    {
-      "lat": 52.396753,
-      "lng": -1.476513,
-      "cat": "burglary",
-      "street": "On or near St Catherine's Close"
-    },
-    {
-      "lat": 52.400708,
-      "lng": -1.486769,
-      "cat": "burglary",
-      "street": "On or near Cadet Close"
     },
     {
       "lat": 52.407805,
@@ -833,268 +809,124 @@
       "street": "On or near Central Avenue"
     },
     {
-      "lat": 52.399407,
-      "lng": -1.436005,
+      "lat": 52.409818,
+      "lng": -1.485444,
       "cat": "burglary",
-      "street": "On or near Claybrookes Lane"
+      "street": "On or near Argyll Street"
     },
     {
-      "lat": 52.397742,
-      "lng": -1.437569,
+      "lat": 52.418045,
+      "lng": -1.447604,
       "cat": "burglary",
-      "street": "On or near Petrol Station"
+      "street": "On or near Bodmin Road"
     },
     {
-      "lat": 52.420477,
-      "lng": -1.484584,
+      "lat": 52.397093,
+      "lng": -1.435138,
       "cat": "burglary",
-      "street": "On or near Bewick Croft"
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.411838,
-      "lng": -1.460516,
+      "lat": 52.426733,
+      "lng": -1.48232,
       "cat": "burglary",
-      "street": "On or near Macdonald Road"
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.40693,
-      "lng": -1.446919,
+      "lat": 52.404455,
+      "lng": -1.469896,
       "cat": "burglary",
-      "street": "On or near Bridgeacre Gardens"
+      "street": "On or near Lauras Walk"
     },
     {
-      "lat": 52.408061,
-      "lng": -1.486581,
+      "lat": 52.426733,
+      "lng": -1.48232,
       "cat": "burglary",
-      "street": "On or near Kingsway"
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.400679,
-      "lng": -1.435063,
+      "lat": 52.412633,
+      "lng": -1.48347,
       "cat": "burglary",
-      "street": "On or near Bulwick Close"
+      "street": "On or near Quarrywood Grove"
     },
     {
-      "lat": 52.418301,
-      "lng": -1.444748,
+      "lat": 52.407006,
+      "lng": -1.485682,
       "cat": "burglary",
-      "street": "On or near Tollard Close"
+      "street": "On or near Clara Street"
     },
     {
-      "lat": 52.415516,
-      "lng": -1.447077,
+      "lat": 52.418111,
+      "lng": -1.442486,
       "cat": "burglary",
-      "street": "On or near Ennerdale Lane"
+      "street": "On or near Cranborne Chase"
     },
     {
-      "lat": 52.415556,
-      "lng": -1.44218,
+      "lat": 52.417247,
+      "lng": -1.459803,
       "cat": "burglary",
-      "street": "On or near Studland Green"
+      "street": "On or near A4600"
     },
     {
-      "lat": 52.399949,
-      "lng": -1.481708,
+      "lat": 52.403566,
+      "lng": -1.486589,
       "cat": "burglary",
-      "street": "On or near Yeomanry Walk"
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.403515,
-      "lng": -1.470803,
+      "lat": 52.398416,
+      "lng": -1.486928,
       "cat": "burglary",
-      "street": "On or near Buttercup Walk"
+      "street": "On or near Hussar Court"
     },
     {
-      "lat": 52.414044,
-      "lng": -1.445625,
+      "lat": 52.411586,
+      "lng": -1.471702,
       "cat": "burglary",
-      "street": "On or near Keswick Walk"
+      "street": "On or near Shopping Area"
     },
     {
-      "lat": 52.42016,
-      "lng": -1.48622,
+      "lat": 52.409904,
+      "lng": -1.47427,
       "cat": "burglary",
-      "street": "On or near Swancroft Road"
+      "street": "On or near Grenville Avenue"
     },
     {
-      "lat": 52.424936,
-      "lng": -1.474238,
+      "lat": 52.416603,
+      "lng": -1.480616,
       "cat": "criminal-damage-arson",
-      "street": "On or near Sewall Highway"
+      "street": "On or near Coventry Street"
     },
     {
-      "lat": 52.39869,
-      "lng": -1.469406,
+      "lat": 52.397093,
+      "lng": -1.435138,
       "cat": "criminal-damage-arson",
-      "street": "On or near Chatham Close"
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.402369,
-      "lng": -1.488352,
+      "lat": 52.39899,
+      "lng": -1.472327,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Whitworth Avenue"
+    },
+    {
+      "lat": 52.406656,
+      "lng": -1.477807,
       "cat": "criminal-damage-arson",
       "street": "On or near Parking Area"
     },
     {
-      "lat": 52.419322,
-      "lng": -1.471423,
+      "lat": 52.414889,
+      "lng": -1.48537,
       "cat": "criminal-damage-arson",
-      "street": "On or near Honiton Road"
+      "street": "On or near Heath Road"
     },
     {
-      "lat": 52.415032,
-      "lng": -1.470103,
+      "lat": 52.411838,
+      "lng": -1.460516,
       "cat": "criminal-damage-arson",
-      "street": "On or near Sports/recreation Area"
-    },
-    {
-      "lat": 52.413202,
-      "lng": -1.469835,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Wordsworth Road"
-    },
-    {
-      "lat": 52.408033,
-      "lng": -1.454065,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Lloyd Crescent"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.394578,
-      "lng": -1.474628,
-      "cat": "criminal-damage-arson",
-      "street": "On or near The Coppice"
-    },
-    {
-      "lat": 52.399176,
-      "lng": -1.467563,
-      "cat": "criminal-damage-arson",
-      "street": "On or near The Cornfield"
-    },
-    {
-      "lat": 52.403962,
-      "lng": -1.484512,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Hugh Road"
-    },
-    {
-      "lat": 52.416406,
-      "lng": -1.456828,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Hocking Road"
-    },
-    {
-      "lat": 52.404103,
-      "lng": -1.479733,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Parkview"
-    },
-    {
-      "lat": 52.395185,
-      "lng": -1.471711,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Jasmine Grove"
-    },
-    {
-      "lat": 52.417846,
-      "lng": -1.461075,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Wyken Avenue"
-    },
-    {
-      "lat": 52.410976,
-      "lng": -1.484872,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Villiers Street"
-    },
-    {
-      "lat": 52.410205,
-      "lng": -1.453273,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Triumph Close"
-    },
-    {
-      "lat": 52.415119,
-      "lng": -1.446876,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Westmorland Road"
-    },
-    {
-      "lat": 52.39881,
-      "lng": -1.466201,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Yew Close"
-    },
-    {
-      "lat": 52.398348,
-      "lng": -1.479507,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Princes Close"
-    },
-    {
-      "lat": 52.397493,
-      "lng": -1.481354,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Carter Road"
-    },
-    {
-      "lat": 52.422616,
-      "lng": -1.460281,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Sports/recreation Area"
-    },
-    {
-      "lat": 52.4175,
-      "lng": -1.440847,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Wareham Green"
-    },
-    {
-      "lat": 52.41418,
-      "lng": -1.481526,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Stoke Row"
-    },
-    {
-      "lat": 52.397832,
-      "lng": -1.470622,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Treforest Road"
-    },
-    {
-      "lat": 52.42016,
-      "lng": -1.48622,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Swancroft Road"
-    },
-    {
-      "lat": 52.42016,
-      "lng": -1.48622,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Swancroft Road"
-    },
-    {
-      "lat": 52.397493,
-      "lng": -1.481354,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Carter Road"
-    },
-    {
-      "lat": 52.414044,
-      "lng": -1.445625,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Keswick Walk"
-    },
-    {
-      "lat": 52.410976,
-      "lng": -1.484872,
-      "cat": "criminal-damage-arson",
-      "street": "On or near Villiers Street"
+      "street": "On or near Macdonald Road"
     },
     {
       "lat": 52.41431,
@@ -1103,184 +935,196 @@
       "street": "On or near Goring Road"
     },
     {
-      "lat": 52.411872,
-      "lng": -1.482171,
-      "cat": "drugs",
-      "street": "On or near Parking Area"
+      "lat": 52.412633,
+      "lng": -1.48347,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Quarrywood Grove"
     },
     {
-      "lat": 52.409798,
-      "lng": -1.48293,
-      "cat": "drugs",
-      "street": "On or near St Michael's Road"
+      "lat": 52.399689,
+      "lng": -1.487972,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Gibraltar Close"
     },
     {
-      "lat": 52.420478,
-      "lng": -1.468454,
-      "cat": "drugs",
+      "lat": 52.396156,
+      "lng": -1.477725,
+      "cat": "criminal-damage-arson",
+      "street": "On or near The Moorfield"
+    },
+    {
+      "lat": 52.413949,
+      "lng": -1.486425,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Stepney Road"
+    },
+    {
+      "lat": 52.4077,
+      "lng": -1.479985,
+      "cat": "criminal-damage-arson",
+      "street": "On or near East Avenue"
+    },
+    {
+      "lat": 52.417064,
+      "lng": -1.461143,
+      "cat": "criminal-damage-arson",
       "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.401343,
-      "lng": -1.465582,
-      "cat": "drugs",
-      "street": "On or near Second Avenue"
+      "lat": 52.41841,
+      "lng": -1.480594,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Salford Close"
     },
     {
-      "lat": 52.410649,
-      "lng": -1.482097,
-      "cat": "drugs",
-      "street": "On or near St Osburg's Road"
-    },
-    {
-      "lat": 52.420478,
-      "lng": -1.468454,
-      "cat": "drugs",
-      "street": "On or near Petrol Station"
+      "lat": 52.417424,
+      "lng": -1.465197,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Wyken Grange Road"
     },
     {
       "lat": 52.40922,
       "lng": -1.48623,
-      "cat": "drugs",
+      "cat": "criminal-damage-arson",
       "street": "On or near Hamilton Road"
     },
     {
-      "lat": 52.420478,
-      "lng": -1.468454,
-      "cat": "drugs",
-      "street": "On or near Petrol Station"
+      "lat": 52.402755,
+      "lng": -1.475825,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Sphinx Drive"
     },
     {
-      "lat": 52.406576,
-      "lng": -1.471796,
-      "cat": "drugs",
-      "street": "On or near Emscote Road"
+      "lat": 52.400946,
+      "lng": -1.477463,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Siddeley Avenue"
     },
     {
-      "lat": 52.426883,
-      "lng": -1.471524,
-      "cat": "drugs",
-      "street": "On or near Torpoint Close"
+      "lat": 52.413963,
+      "lng": -1.467076,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Oswin Grove"
     },
     {
-      "lat": 52.427561,
-      "lng": -1.470383,
-      "cat": "drugs",
-      "street": "On or near Parry Road"
+      "lat": 52.405007,
+      "lng": -1.468875,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Constance Close"
     },
     {
-      "lat": 52.400628,
-      "lng": -1.480671,
+      "lat": 52.409904,
+      "lng": -1.47427,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Grenville Avenue"
+    },
+    {
+      "lat": 52.409904,
+      "lng": -1.47427,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Grenville Avenue"
+    },
+    {
+      "lat": 52.421862,
+      "lng": -1.470525,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Lamerton Close"
+    },
+    {
+      "lat": 52.404588,
+      "lng": -1.4442,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Melfort Close"
+    },
+    {
+      "lat": 52.403431,
+      "lng": -1.484357,
+      "cat": "criminal-damage-arson",
+      "street": "On or near Hollis Road"
+    },
+    {
+      "lat": 52.410649,
+      "lng": -1.482097,
+      "cat": "criminal-damage-arson",
+      "street": "On or near St Osburg's Road"
+    },
+    {
+      "lat": 52.4256,
+      "lng": -1.482304,
       "cat": "drugs",
-      "street": "On or near Aldermoor Lane"
+      "street": "On or near Downderry Way"
+    },
+    {
+      "lat": 52.413949,
+      "lng": -1.486425,
+      "cat": "drugs",
+      "street": "On or near Stepney Road"
+    },
+    {
+      "lat": 52.421274,
+      "lng": -1.475649,
+      "cat": "drugs",
+      "street": "On or near Dennis Road"
+    },
+    {
+      "lat": 52.398464,
+      "lng": -1.485487,
+      "cat": "drugs",
+      "street": "On or near Humber Road"
+    },
+    {
+      "lat": 52.400946,
+      "lng": -1.477463,
+      "cat": "drugs",
+      "street": "On or near Siddeley Avenue"
+    },
+    {
+      "lat": 52.411498,
+      "lng": -1.485115,
+      "cat": "drugs",
+      "street": "On or near Chandos Street"
+    },
+    {
+      "lat": 52.418159,
+      "lng": -1.478833,
+      "cat": "drugs",
+      "street": "On or near North Street"
+    },
+    {
+      "lat": 52.413949,
+      "lng": -1.486425,
+      "cat": "drugs",
+      "street": "On or near Stepney Road"
+    },
+    {
+      "lat": 52.410831,
+      "lng": -1.466438,
+      "cat": "drugs",
+      "street": "On or near Longfellow Road"
+    },
+    {
+      "lat": 52.39869,
+      "lng": -1.469406,
+      "cat": "drugs",
+      "street": "On or near Chatham Close"
+    },
+    {
+      "lat": 52.420678,
+      "lng": -1.485317,
+      "cat": "drugs",
+      "street": "On or near Deegan Close"
     },
     {
       "lat": 52.403566,
       "lng": -1.486589,
-      "cat": "drugs",
+      "cat": "other-theft",
       "street": "On or near Supermarket"
     },
     {
-      "lat": 52.42878,
-      "lng": -1.479678,
-      "cat": "drugs",
-      "street": "On or near Nuffield Road"
-    },
-    {
-      "lat": 52.412103,
-      "lng": -1.453676,
-      "cat": "drugs",
-      "street": "On or near Hopedale Close"
-    },
-    {
-      "lat": 52.406656,
-      "lng": -1.477807,
-      "cat": "drugs",
-      "street": "On or near Parking Area"
-    },
-    {
-      "lat": 52.406656,
-      "lng": -1.477807,
-      "cat": "drugs",
-      "street": "On or near Parking Area"
-    },
-    {
-      "lat": 52.416603,
-      "lng": -1.480616,
+      "lat": 52.401428,
+      "lng": -1.435626,
       "cat": "other-theft",
-      "street": "On or near Coventry Street"
-    },
-    {
-      "lat": 52.4029,
-      "lng": -1.484201,
-      "cat": "other-theft",
-      "street": "On or near Bolingbroke Road"
-    },
-    {
-      "lat": 52.422821,
-      "lng": -1.463896,
-      "cat": "other-theft",
-      "street": "On or near Curtis Road"
-    },
-    {
-      "lat": 52.415119,
-      "lng": -1.446876,
-      "cat": "other-theft",
-      "street": "On or near Westmorland Road"
-    },
-    {
-      "lat": 52.399624,
-      "lng": -1.4752,
-      "cat": "other-theft",
-      "street": "On or near The Boxhill"
-    },
-    {
-      "lat": 52.397742,
-      "lng": -1.437569,
-      "cat": "other-theft",
-      "street": "On or near Petrol Station"
-    },
-    {
-      "lat": 52.407805,
-      "lng": -1.481366,
-      "cat": "other-theft",
-      "street": "On or near Central Avenue"
-    },
-    {
-      "lat": 52.406261,
-      "lng": -1.469815,
-      "cat": "other-theft",
-      "street": "On or near Uxbridge Avenue"
-    },
-    {
-      "lat": 52.397851,
-      "lng": -1.433811,
-      "cat": "other-theft",
-      "street": "On or near Shopping Area"
-    },
-    {
-      "lat": 52.412146,
-      "lng": -1.479021,
-      "cat": "other-theft",
-      "street": "On or near Roman Road"
-    },
-    {
-      "lat": 52.412633,
-      "lng": -1.48347,
-      "cat": "other-theft",
-      "street": "On or near Quarrywood Grove"
-    },
-    {
-      "lat": 52.415516,
-      "lng": -1.447077,
-      "cat": "other-theft",
-      "street": "On or near Ennerdale Lane"
-    },
-    {
-      "lat": 52.43197,
-      "lng": -1.483333,
-      "cat": "other-theft",
-      "street": "On or near Navigation Way"
+      "street": "On or near Hardwyn Close"
     },
     {
       "lat": 52.426733,
@@ -1289,58 +1133,202 @@
       "street": "On or near Supermarket"
     },
     {
+      "lat": 52.413967,
+      "lng": -1.476177,
+      "cat": "other-theft",
+      "street": "On or near Dane Road"
+    },
+    {
+      "lat": 52.4077,
+      "lng": -1.479985,
+      "cat": "other-theft",
+      "street": "On or near East Avenue"
+    },
+    {
+      "lat": 52.420127,
+      "lng": -1.452798,
+      "cat": "other-theft",
+      "street": "On or near Caludon Park Avenue"
+    },
+    {
+      "lat": 52.410976,
+      "lng": -1.484872,
+      "cat": "other-theft",
+      "street": "On or near Villiers Street"
+    },
+    {
+      "lat": 52.421707,
+      "lng": -1.477997,
+      "cat": "other-theft",
+      "street": "On or near Devon Grove"
+    },
+    {
+      "lat": 52.408879,
+      "lng": -1.464095,
+      "cat": "other-theft",
+      "street": "On or near Herrick Road"
+    },
+    {
+      "lat": 52.410831,
+      "lng": -1.466438,
+      "cat": "other-theft",
+      "street": "On or near Longfellow Road"
+    },
+    {
+      "lat": 52.407042,
+      "lng": -1.481566,
+      "cat": "other-theft",
+      "street": "On or near South Avenue"
+    },
+    {
+      "lat": 52.414306,
+      "lng": -1.440152,
+      "cat": "other-theft",
+      "street": "On or near Sturminster Close"
+    },
+    {
+      "lat": 52.399176,
+      "lng": -1.467563,
+      "cat": "other-theft",
+      "street": "On or near The Cornfield"
+    },
+    {
+      "lat": 52.399689,
+      "lng": -1.487972,
+      "cat": "other-theft",
+      "street": "On or near Gibraltar Close"
+    },
+    {
+      "lat": 52.4175,
+      "lng": -1.440847,
+      "cat": "other-theft",
+      "street": "On or near Wareham Green"
+    },
+    {
       "lat": 52.417064,
       "lng": -1.461143,
       "cat": "other-theft",
       "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.401446,
-      "lng": -1.484747,
+      "lat": 52.403431,
+      "lng": -1.484357,
       "cat": "other-theft",
-      "street": "On or near Surrey Drive"
+      "street": "On or near Hollis Road"
     },
     {
-      "lat": 52.415667,
-      "lng": -1.4409,
+      "lat": 52.417064,
+      "lng": -1.461143,
       "cat": "other-theft",
-      "street": "On or near Shillingstone Close"
+      "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.419322,
-      "lng": -1.471423,
+      "lat": 52.42016,
+      "lng": -1.48622,
       "cat": "other-theft",
-      "street": "On or near Honiton Road"
+      "street": "On or near Swancroft Road"
     },
     {
-      "lat": 52.409818,
-      "lng": -1.485444,
+      "lat": 52.397093,
+      "lng": -1.435138,
       "cat": "other-theft",
-      "street": "On or near Argyll Street"
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.411498,
-      "lng": -1.485115,
+      "lat": 52.399624,
+      "lng": -1.4752,
       "cat": "other-theft",
-      "street": "On or near Chandos Street"
+      "street": "On or near The Boxhill"
     },
     {
-      "lat": 52.422728,
-      "lng": -1.481308,
+      "lat": 52.407568,
+      "lng": -1.484676,
+      "cat": "other-theft",
+      "street": "On or near Gresham Street"
+    },
+    {
+      "lat": 52.397832,
+      "lng": -1.470622,
+      "cat": "other-theft",
+      "street": "On or near Treforest Road"
+    },
+    {
+      "lat": 52.412502,
+      "lng": -1.482413,
+      "cat": "other-theft",
+      "street": "On or near Terracota Drive"
+    },
+    {
+      "lat": 52.416673,
+      "lng": -1.440799,
+      "cat": "other-theft",
+      "street": "On or near Bryanston Close"
+    },
+    {
+      "lat": 52.397851,
+      "lng": -1.433811,
+      "cat": "other-theft",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.401325,
+      "lng": -1.44233,
+      "cat": "other-theft",
+      "street": "On or near Orchard Court"
+    },
+    {
+      "lat": 52.410205,
+      "lng": -1.453273,
       "cat": "possession-of-weapons",
-      "street": "On or near Ox Close"
+      "street": "On or near Triumph Close"
     },
     {
-      "lat": 52.413459,
-      "lng": -1.45513,
+      "lat": 52.404455,
+      "lng": -1.469896,
       "cat": "possession-of-weapons",
-      "street": "On or near Caludon Terrace"
+      "street": "On or near Lauras Walk"
     },
     {
-      "lat": 52.410976,
-      "lng": -1.484872,
+      "lat": 52.399949,
+      "lng": -1.481708,
       "cat": "possession-of-weapons",
-      "street": "On or near Villiers Street"
+      "street": "On or near Yeomanry Walk"
+    },
+    {
+      "lat": 52.420946,
+      "lng": -1.472609,
+      "cat": "possession-of-weapons",
+      "street": "On or near Hartland Avenue"
+    },
+    {
+      "lat": 52.418159,
+      "lng": -1.478833,
+      "cat": "possession-of-weapons",
+      "street": "On or near North Street"
+    },
+    {
+      "lat": 52.398464,
+      "lng": -1.485487,
+      "cat": "possession-of-weapons",
+      "street": "On or near Humber Road"
+    },
+    {
+      "lat": 52.410975,
+      "lng": -1.448354,
+      "cat": "possession-of-weapons",
+      "street": "On or near Sports/recreation Area"
+    },
+    {
+      "lat": 52.398464,
+      "lng": -1.485487,
+      "cat": "possession-of-weapons",
+      "street": "On or near Humber Road"
+    },
+    {
+      "lat": 52.398464,
+      "lng": -1.485487,
+      "cat": "possession-of-weapons",
+      "street": "On or near Humber Road"
     },
     {
       "lat": 52.409798,
@@ -1349,106 +1337,328 @@
       "street": "On or near St Michael's Road"
     },
     {
-      "lat": 52.420478,
-      "lng": -1.468454,
-      "cat": "possession-of-weapons",
-      "street": "On or near Petrol Station"
+      "lat": 52.409798,
+      "lng": -1.48293,
+      "cat": "public-order",
+      "street": "On or near St Michael's Road"
+    },
+    {
+      "lat": 52.413963,
+      "lng": -1.467076,
+      "cat": "public-order",
+      "street": "On or near Oswin Grove"
+    },
+    {
+      "lat": 52.41418,
+      "lng": -1.481526,
+      "cat": "public-order",
+      "street": "On or near Stoke Row"
+    },
+    {
+      "lat": 52.421707,
+      "lng": -1.477997,
+      "cat": "public-order",
+      "street": "On or near Devon Grove"
+    },
+    {
+      "lat": 52.419594,
+      "lng": -1.475875,
+      "cat": "public-order",
+      "street": "On or near Frederick Fell Walk"
+    },
+    {
+      "lat": 52.4175,
+      "lng": -1.440847,
+      "cat": "public-order",
+      "street": "On or near Wareham Green"
+    },
+    {
+      "lat": 52.422728,
+      "lng": -1.481308,
+      "cat": "public-order",
+      "street": "On or near Ox Close"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "public-order",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "public-order",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.417846,
+      "lng": -1.461075,
+      "cat": "public-order",
+      "street": "On or near Wyken Avenue"
+    },
+    {
+      "lat": 52.428076,
+      "lng": -1.480922,
+      "cat": "public-order",
+      "street": "On or near Birchgrave Close"
     },
     {
       "lat": 52.42016,
       "lng": -1.48622,
-      "cat": "possession-of-weapons",
+      "cat": "public-order",
       "street": "On or near Swancroft Road"
     },
     {
-      "lat": 52.399624,
-      "lng": -1.4752,
-      "cat": "possession-of-weapons",
-      "street": "On or near The Boxhill"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "possession-of-weapons",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.417422,
-      "lng": -1.480856,
-      "cat": "possession-of-weapons",
-      "street": "On or near Milton Street"
-    },
-    {
-      "lat": 52.397377,
-      "lng": -1.469437,
-      "cat": "possession-of-weapons",
-      "street": "On or near The Lindfield"
-    },
-    {
-      "lat": 52.42471,
-      "lng": -1.465962,
+      "lat": 52.415516,
+      "lng": -1.447077,
       "cat": "public-order",
-      "street": "On or near Kare Road"
+      "street": "On or near Ennerdale Lane"
     },
     {
-      "lat": 52.420478,
-      "lng": -1.468454,
+      "lat": 52.40922,
+      "lng": -1.48623,
+      "cat": "public-order",
+      "street": "On or near Hamilton Road"
+    },
+    {
+      "lat": 52.424538,
+      "lng": -1.471743,
+      "cat": "public-order",
+      "street": "On or near Blackberry Lane"
+    },
+    {
+      "lat": 52.425171,
+      "lng": -1.468618,
+      "cat": "public-order",
+      "street": "On or near Langnor Road"
+    },
+    {
+      "lat": 52.412633,
+      "lng": -1.48347,
+      "cat": "public-order",
+      "street": "On or near Quarrywood Grove"
+    },
+    {
+      "lat": 52.417301,
+      "lng": -1.454024,
+      "cat": "public-order",
+      "street": "On or near Arch Road"
+    },
+    {
+      "lat": 52.417064,
+      "lng": -1.461143,
       "cat": "public-order",
       "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.409748,
-      "lng": -1.477565,
+      "lat": 52.432351,
+      "lng": -1.482048,
       "cat": "public-order",
-      "street": "On or near Dronfield Road"
+      "street": "On or near Stuart Court"
     },
     {
-      "lat": 52.419685,
-      "lng": -1.482403,
+      "lat": 52.432351,
+      "lng": -1.482048,
       "cat": "public-order",
-      "street": "On or near Gun Lane"
+      "street": "On or near Stuart Court"
     },
     {
-      "lat": 52.404437,
-      "lng": -1.482272,
-      "cat": "public-order",
-      "street": "On or near Stoke Green"
+      "lat": 52.423213,
+      "lng": -1.449377,
+      "cat": "robbery",
+      "street": "On or near Crathie Close"
     },
     {
-      "lat": 52.415542,
-      "lng": -1.482613,
-      "cat": "public-order",
-      "street": "On or near Barras Green"
+      "lat": 52.401173,
+      "lng": -1.486191,
+      "cat": "robbery",
+      "street": "On or near Shropshire Drive"
     },
     {
-      "lat": 52.413967,
-      "lng": -1.476177,
-      "cat": "public-order",
-      "street": "On or near Dane Road"
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "robbery",
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.398464,
-      "lng": -1.485487,
-      "cat": "public-order",
-      "street": "On or near Humber Road"
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "robbery",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.411499,
+      "lng": -1.481131,
+      "cat": "robbery",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.397093,
+      "lng": -1.435138,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.397851,
+      "lng": -1.433811,
+      "cat": "shoplifting",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.406656,
+      "lng": -1.477807,
+      "cat": "shoplifting",
+      "street": "On or near Parking Area"
+    },
+    {
+      "lat": 52.423213,
+      "lng": -1.449377,
+      "cat": "shoplifting",
+      "street": "On or near Crathie Close"
+    },
+    {
+      "lat": 52.414306,
+      "lng": -1.440152,
+      "cat": "shoplifting",
+      "street": "On or near Sturminster Close"
+    },
+    {
+      "lat": 52.397851,
+      "lng": -1.433811,
+      "cat": "shoplifting",
+      "street": "On or near Shopping Area"
     },
     {
       "lat": 52.419349,
       "lng": -1.475496,
-      "cat": "robbery",
+      "cat": "shoplifting",
       "street": "On or near Supermarket"
     },
     {
-      "lat": 52.406779,
-      "lng": -1.476453,
-      "cat": "robbery",
+      "lat": 52.401559,
+      "lng": -1.479793,
+      "cat": "shoplifting",
+      "street": "On or near Stoke Green Crescent"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
       "street": "On or near Supermarket"
     },
     {
-      "lat": 52.406261,
-      "lng": -1.469815,
-      "cat": "robbery",
-      "street": "On or near Uxbridge Avenue"
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.428076,
+      "lng": -1.480922,
+      "cat": "shoplifting",
+      "street": "On or near Birchgrave Close"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.414306,
+      "lng": -1.440152,
+      "cat": "shoplifting",
+      "street": "On or near Sturminster Close"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.397093,
+      "lng": -1.435138,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.425354,
+      "lng": -1.477425,
+      "cat": "shoplifting",
+      "street": "On or near Alfred Herbert Close"
+    },
+    {
+      "lat": 52.399639,
+      "lng": -1.431931,
+      "cat": "shoplifting",
+      "street": "On or near The Stoop"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.410976,
+      "lng": -1.484872,
+      "cat": "shoplifting",
+      "street": "On or near Villiers Street"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.414306,
+      "lng": -1.440152,
+      "cat": "shoplifting",
+      "street": "On or near Sturminster Close"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
     },
     {
       "lat": 52.403566,
@@ -1475,376 +1685,70 @@
       "street": "On or near Supermarket"
     },
     {
-      "lat": 52.397742,
-      "lng": -1.437569,
+      "lat": 52.403566,
+      "lng": -1.486589,
       "cat": "shoplifting",
-      "street": "On or near Petrol Station"
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.397851,
+      "lng": -1.433811,
+      "cat": "shoplifting",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.411499,
+      "lng": -1.481131,
+      "cat": "shoplifting",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "shoplifting",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.407568,
+      "lng": -1.484676,
+      "cat": "theft-from-the-person",
+      "street": "On or near Gresham Street"
+    },
+    {
+      "lat": 52.414306,
+      "lng": -1.440152,
+      "cat": "theft-from-the-person",
+      "street": "On or near Sturminster Close"
     },
     {
       "lat": 52.406656,
-      "lng": -1.477807,
-      "cat": "shoplifting",
-      "street": "On or near Parking Area"
-    },
-    {
-      "lat": 52.414306,
-      "lng": -1.440152,
-      "cat": "shoplifting",
-      "street": "On or near Sturminster Close"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.411499,
-      "lng": -1.481131,
-      "cat": "shoplifting",
-      "street": "On or near Shopping Area"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.397093,
-      "lng": -1.435138,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.410976,
-      "lng": -1.484872,
-      "cat": "shoplifting",
-      "street": "On or near Villiers Street"
-    },
-    {
-      "lat": 52.414306,
-      "lng": -1.440152,
-      "cat": "shoplifting",
-      "street": "On or near Sturminster Close"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.397093,
-      "lng": -1.435138,
-      "cat": "shoplifting",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.410655,
-      "lng": -1.459383,
-      "cat": "shoplifting",
-      "street": "On or near Hipswell Highway"
-    },
-    {
-      "lat": 52.395185,
-      "lng": -1.471711,
+      "lng": -1.436574,
       "cat": "theft-from-the-person",
-      "street": "On or near Jasmine Grove"
+      "street": "On or near Valencia Road"
     },
     {
-      "lat": 52.401559,
-      "lng": -1.479793,
-      "cat": "theft-from-the-person",
-      "street": "On or near Stoke Green Crescent"
-    },
-    {
-      "lat": 52.405049,
-      "lng": -1.456306,
-      "cat": "theft-from-the-person",
-      "street": "On or near Carver Close"
-    },
-    {
-      "lat": 52.411499,
-      "lng": -1.481131,
-      "cat": "theft-from-the-person",
-      "street": "On or near Shopping Area"
-    },
-    {
-      "lat": 52.414055,
-      "lng": -1.477705,
-      "cat": "theft-from-the-person",
-      "street": "On or near Shakespeare Street"
-    },
-    {
-      "lat": 52.417064,
-      "lng": -1.461143,
+      "lat": 52.40618,
+      "lng": -1.453882,
       "cat": "vehicle-crime",
-      "street": "On or near Petrol Station"
-    },
-    {
-      "lat": 52.420465,
-      "lng": -1.449985,
-      "cat": "vehicle-crime",
-      "street": "On or near Snape Road"
-    },
-    {
-      "lat": 52.408054,
-      "lng": -1.476688,
-      "cat": "vehicle-crime",
-      "street": "On or near Holmfield Road"
-    },
-    {
-      "lat": 52.407042,
-      "lng": -1.481566,
-      "cat": "vehicle-crime",
-      "street": "On or near South Avenue"
-    },
-    {
-      "lat": 52.40922,
-      "lng": -1.48623,
-      "cat": "vehicle-crime",
-      "street": "On or near Hamilton Road"
-    },
-    {
-      "lat": 52.431655,
-      "lng": -1.481262,
-      "cat": "vehicle-crime",
-      "street": "On or near Pendenis Close"
-    },
-    {
-      "lat": 52.415516,
-      "lng": -1.447077,
-      "cat": "vehicle-crime",
-      "street": "On or near Ennerdale Lane"
-    },
-    {
-      "lat": 52.397377,
-      "lng": -1.469437,
-      "cat": "vehicle-crime",
-      "street": "On or near The Lindfield"
-    },
-    {
-      "lat": 52.39899,
-      "lng": -1.472327,
-      "cat": "vehicle-crime",
-      "street": "On or near Whitworth Avenue"
-    },
-    {
-      "lat": 52.415119,
-      "lng": -1.446876,
-      "cat": "vehicle-crime",
-      "street": "On or near Westmorland Road"
-    },
-    {
-      "lat": 52.408755,
-      "lng": -1.478797,
-      "cat": "vehicle-crime",
-      "street": "On or near Ethelfield Road"
-    },
-    {
-      "lat": 52.403183,
-      "lng": -1.468911,
-      "cat": "vehicle-crime",
-      "street": "On or near Lila Avenue"
+      "street": "On or near Standish Close"
     },
     {
       "lat": 52.410205,
       "lng": -1.453273,
       "cat": "vehicle-crime",
       "street": "On or near Triumph Close"
-    },
-    {
-      "lat": 52.413192,
-      "lng": -1.444121,
-      "cat": "vehicle-crime",
-      "street": "On or near Clifford Bridge Road"
-    },
-    {
-      "lat": 52.400946,
-      "lng": -1.477463,
-      "cat": "vehicle-crime",
-      "street": "On or near Siddeley Avenue"
-    },
-    {
-      "lat": 52.419594,
-      "lng": -1.475875,
-      "cat": "vehicle-crime",
-      "street": "On or near Frederick Fell Walk"
-    },
-    {
-      "lat": 52.398392,
-      "lng": -1.434254,
-      "cat": "vehicle-crime",
-      "street": "On or near Kynner Way"
-    },
-    {
-      "lat": 52.421274,
-      "lng": -1.475649,
-      "cat": "vehicle-crime",
-      "street": "On or near Dennis Road"
-    },
-    {
-      "lat": 52.408679,
-      "lng": -1.486045,
-      "cat": "vehicle-crime",
-      "street": "On or near Dean Street"
-    },
-    {
-      "lat": 52.4044,
-      "lng": -1.47779,
-      "cat": "vehicle-crime",
-      "street": "On or near Coombe Street"
-    },
-    {
-      "lat": 52.39899,
-      "lng": -1.472327,
-      "cat": "vehicle-crime",
-      "street": "On or near Whitworth Avenue"
-    },
-    {
-      "lat": 52.422616,
-      "lng": -1.460281,
-      "cat": "vehicle-crime",
-      "street": "On or near Sports/recreation Area"
-    },
-    {
-      "lat": 52.409239,
-      "lng": -1.452506,
-      "cat": "vehicle-crime",
-      "street": "On or near Ventnor Close"
-    },
-    {
-      "lat": 52.406576,
-      "lng": -1.471796,
-      "cat": "vehicle-crime",
-      "street": "On or near Emscote Road"
-    },
-    {
-      "lat": 52.418913,
-      "lng": -1.472472,
-      "cat": "vehicle-crime",
-      "street": "On or near Clovelly Road"
-    },
-    {
-      "lat": 52.419632,
-      "lng": -1.480389,
-      "cat": "vehicle-crime",
-      "street": "On or near Alliance Way"
-    },
-    {
-      "lat": 52.405184,
-      "lng": -1.472195,
-      "cat": "vehicle-crime",
-      "street": "On or near Harris Road"
-    },
-    {
-      "lat": 52.427602,
-      "lng": -1.475339,
-      "cat": "vehicle-crime",
-      "street": "On or near Sullivan Road"
-    },
-    {
-      "lat": 52.402441,
-      "lng": -1.478092,
-      "cat": "vehicle-crime",
-      "street": "On or near Lodge Road"
-    },
-    {
-      "lat": 52.406656,
-      "lng": -1.477807,
-      "cat": "vehicle-crime",
-      "street": "On or near Parking Area"
-    },
-    {
-      "lat": 52.407786,
-      "lng": -1.463094,
-      "cat": "vehicle-crime",
-      "street": "On or near Lord Lytton Avenue"
-    },
-    {
-      "lat": 52.403996,
-      "lng": -1.477868,
-      "cat": "vehicle-crime",
-      "street": "On or near Hasilwood Square"
-    },
-    {
-      "lat": 52.412847,
-      "lng": -1.485217,
-      "cat": "vehicle-crime",
-      "street": "On or near Hastings Road"
-    },
-    {
-      "lat": 52.397815,
-      "lng": -1.468814,
-      "cat": "vehicle-crime",
-      "street": "On or near Sports/recreation Area"
-    },
-    {
-      "lat": 52.409731,
-      "lng": -1.481828,
-      "cat": "vehicle-crime",
-      "street": "On or near St Agatha's Road"
-    },
-    {
-      "lat": 52.409748,
-      "lng": -1.477565,
-      "cat": "vehicle-crime",
-      "street": "On or near Dronfield Road"
-    },
-    {
-      "lat": 52.422616,
-      "lng": -1.460281,
-      "cat": "vehicle-crime",
-      "street": "On or near Sports/recreation Area"
-    },
-    {
-      "lat": 52.418762,
-      "lng": -1.462754,
-      "cat": "vehicle-crime",
-      "street": "On or near Kelvin Avenue"
-    },
-    {
-      "lat": 52.40922,
-      "lng": -1.48623,
-      "cat": "vehicle-crime",
-      "street": "On or near Hamilton Road"
     },
     {
       "lat": 52.408515,
@@ -1853,64 +1757,250 @@
       "street": "On or near Harry Rose Road"
     },
     {
-      "lat": 52.4077,
-      "lng": -1.479985,
+      "lat": 52.407571,
+      "lng": -1.461229,
       "cat": "vehicle-crime",
-      "street": "On or near East Avenue"
+      "street": "On or near Meredith Road"
     },
     {
-      "lat": 52.401832,
-      "lng": -1.464445,
+      "lat": 52.416603,
+      "lng": -1.480616,
       "cat": "vehicle-crime",
-      "street": "On or near The Pavilion"
+      "street": "On or near Coventry Street"
     },
     {
-      "lat": 52.399624,
-      "lng": -1.4752,
+      "lat": 52.4044,
+      "lng": -1.47779,
       "cat": "vehicle-crime",
-      "street": "On or near The Boxhill"
+      "street": "On or near Coombe Street"
     },
     {
-      "lat": 52.404576,
-      "lng": -1.472937,
+      "lat": 52.417451,
+      "lng": -1.469181,
       "cat": "vehicle-crime",
-      "street": "On or near Grant Road"
+      "street": "On or near Clovelly Gardens"
     },
     {
-      "lat": 52.395185,
-      "lng": -1.471711,
+      "lat": 52.397851,
+      "lng": -1.433811,
       "cat": "vehicle-crime",
-      "street": "On or near Jasmine Grove"
+      "street": "On or near Shopping Area"
     },
     {
-      "lat": 52.423626,
-      "lng": -1.479048,
+      "lat": 52.408755,
+      "lng": -1.478797,
       "cat": "vehicle-crime",
-      "street": "On or near Carpenter Road"
+      "street": "On or near Ethelfield Road"
     },
     {
-      "lat": 52.416387,
-      "lng": -1.456593,
+      "lat": 52.409818,
+      "lng": -1.485444,
       "cat": "vehicle-crime",
-      "street": "On or near Oldham Avenue"
+      "street": "On or near Argyll Street"
     },
     {
-      "lat": 52.416198,
-      "lng": -1.462433,
+      "lat": 52.402154,
+      "lng": -1.466204,
       "cat": "vehicle-crime",
-      "street": "On or near A4600"
+      "street": "On or near Sylvia Bird Close"
     },
     {
-      "lat": 52.424936,
-      "lng": -1.474238,
+      "lat": 52.418045,
+      "lng": -1.447604,
       "cat": "vehicle-crime",
-      "street": "On or near Sewall Highway"
+      "street": "On or near Bodmin Road"
     },
     {
-      "lat": 52.416354,
-      "lng": -1.467121,
+      "lat": 52.424605,
+      "lng": -1.46261,
       "cat": "vehicle-crime",
-      "street": "On or near Wyke Road"
+      "street": "On or near Wyken Croft"
+    },
+    {
+      "lat": 52.411607,
+      "lng": -1.487466,
+      "cat": "vehicle-crime",
+      "street": "On or near Brighton Street"
+    },
+    {
+      "lat": 52.414306,
+      "lng": -1.440152,
+      "cat": "vehicle-crime",
+      "street": "On or near Sturminster Close"
+    },
+    {
+      "lat": 52.41841,
+      "lng": -1.480594,
+      "cat": "vehicle-crime",
+      "street": "On or near Salford Close"
+    },
+    {
+      "lat": 52.397815,
+      "lng": -1.468814,
+      "cat": "vehicle-crime",
+      "street": "On or near Sports/recreation Area"
+    },
+    {
+      "lat": 52.415542,
+      "lng": -1.482613,
+      "cat": "vehicle-crime",
+      "street": "On or near Barras Green"
+    },
+    {
+      "lat": 52.41911,
+      "lng": -1.476278,
+      "cat": "vehicle-crime",
+      "street": "On or near Alfall Road"
+    },
+    {
+      "lat": 52.394578,
+      "lng": -1.474628,
+      "cat": "vehicle-crime",
+      "street": "On or near The Coppice"
+    },
+    {
+      "lat": 52.407568,
+      "lng": -1.484676,
+      "cat": "vehicle-crime",
+      "street": "On or near Gresham Street"
+    },
+    {
+      "lat": 52.409239,
+      "lng": -1.452506,
+      "cat": "vehicle-crime",
+      "street": "On or near Ventnor Close"
+    },
+    {
+      "lat": 52.419172,
+      "lng": -1.486217,
+      "cat": "vehicle-crime",
+      "street": "On or near Duke Barn Field"
+    },
+    {
+      "lat": 52.420127,
+      "lng": -1.452798,
+      "cat": "vehicle-crime",
+      "street": "On or near Caludon Park Avenue"
+    },
+    {
+      "lat": 52.422661,
+      "lng": -1.476265,
+      "cat": "vehicle-crime",
+      "street": "On or near Skipton Gardens"
+    },
+    {
+      "lat": 52.412502,
+      "lng": -1.482413,
+      "cat": "vehicle-crime",
+      "street": "On or near Terracota Drive"
+    },
+    {
+      "lat": 52.397851,
+      "lng": -1.433811,
+      "cat": "vehicle-crime",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.426989,
+      "lng": -1.468978,
+      "cat": "vehicle-crime",
+      "street": "On or near Haytor Rise"
+    },
+    {
+      "lat": 52.418422,
+      "lng": -1.467243,
+      "cat": "vehicle-crime",
+      "street": "On or near Forknell Avenue"
+    },
+    {
+      "lat": 52.410649,
+      "lng": -1.482097,
+      "cat": "vehicle-crime",
+      "street": "On or near St Osburg's Road"
+    },
+    {
+      "lat": 52.409904,
+      "lng": -1.47427,
+      "cat": "vehicle-crime",
+      "street": "On or near Grenville Avenue"
+    },
+    {
+      "lat": 52.402441,
+      "lng": -1.478092,
+      "cat": "vehicle-crime",
+      "street": "On or near Lodge Road"
+    },
+    {
+      "lat": 52.421274,
+      "lng": -1.475649,
+      "cat": "vehicle-crime",
+      "street": "On or near Dennis Road"
+    },
+    {
+      "lat": 52.397851,
+      "lng": -1.433811,
+      "cat": "vehicle-crime",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.424435,
+      "lng": -1.480935,
+      "cat": "vehicle-crime",
+      "street": "On or near Thackeray Road"
+    },
+    {
+      "lat": 52.413178,
+      "lng": -1.482729,
+      "cat": "vehicle-crime",
+      "street": "On or near Clay Lane"
+    },
+    {
+      "lat": 52.424435,
+      "lng": -1.480935,
+      "cat": "vehicle-crime",
+      "street": "On or near Thackeray Road"
+    },
+    {
+      "lat": 52.401417,
+      "lng": -1.471577,
+      "cat": "vehicle-crime",
+      "street": "On or near Sports/recreation Area"
+    },
+    {
+      "lat": 52.423101,
+      "lng": -1.478069,
+      "cat": "vehicle-crime",
+      "street": "On or near Alcott Close"
+    },
+    {
+      "lat": 52.411499,
+      "lng": -1.481131,
+      "cat": "vehicle-crime",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.416584,
+      "lng": -1.439035,
+      "cat": "vehicle-crime",
+      "street": "On or near Bridport Close"
+    },
+    {
+      "lat": 52.409239,
+      "lng": -1.452506,
+      "cat": "vehicle-crime",
+      "street": "On or near Ventnor Close"
+    },
+    {
+      "lat": 52.401723,
+      "lng": -1.484538,
+      "cat": "violent-crime",
+      "street": "On or near Lancers Walk"
+    },
+    {
+      "lat": 52.405673,
+      "lng": -1.45502,
+      "cat": "violent-crime",
+      "street": "On or near Brewster Close"
     },
     {
       "lat": 52.394578,
@@ -1919,166 +2009,16 @@
       "street": "On or near The Coppice"
     },
     {
-      "lat": 52.407006,
-      "lng": -1.485682,
+      "lat": 52.423213,
+      "lng": -1.449377,
       "cat": "violent-crime",
-      "street": "On or near Clara Street"
+      "street": "On or near Crathie Close"
     },
     {
-      "lat": 52.410205,
-      "lng": -1.453273,
+      "lat": 52.412244,
+      "lng": -1.455012,
       "cat": "violent-crime",
-      "street": "On or near Triumph Close"
-    },
-    {
-      "lat": 52.404335,
-      "lng": -1.487653,
-      "cat": "violent-crime",
-      "street": "On or near School Close"
-    },
-    {
-      "lat": 52.413967,
-      "lng": -1.476177,
-      "cat": "violent-crime",
-      "street": "On or near Dane Road"
-    },
-    {
-      "lat": 52.40922,
-      "lng": -1.48623,
-      "cat": "violent-crime",
-      "street": "On or near Hamilton Road"
-    },
-    {
-      "lat": 52.404437,
-      "lng": -1.482272,
-      "cat": "violent-crime",
-      "street": "On or near Stoke Green"
-    },
-    {
-      "lat": 52.39869,
-      "lng": -1.469406,
-      "cat": "violent-crime",
-      "street": "On or near Chatham Close"
-    },
-    {
-      "lat": 52.409239,
-      "lng": -1.452506,
-      "cat": "violent-crime",
-      "street": "On or near Ventnor Close"
-    },
-    {
-      "lat": 52.413963,
-      "lng": -1.467076,
-      "cat": "violent-crime",
-      "street": "On or near Oswin Grove"
-    },
-    {
-      "lat": 52.417422,
-      "lng": -1.480856,
-      "cat": "violent-crime",
-      "street": "On or near Milton Street"
-    },
-    {
-      "lat": 52.409798,
-      "lng": -1.48293,
-      "cat": "violent-crime",
-      "street": "On or near St Michael's Road"
-    },
-    {
-      "lat": 52.401832,
-      "lng": -1.464445,
-      "cat": "violent-crime",
-      "street": "On or near The Pavilion"
-    },
-    {
-      "lat": 52.402755,
-      "lng": -1.475825,
-      "cat": "violent-crime",
-      "street": "On or near Sphinx Drive"
-    },
-    {
-      "lat": 52.399176,
-      "lng": -1.467563,
-      "cat": "violent-crime",
-      "street": "On or near The Cornfield"
-    },
-    {
-      "lat": 52.422661,
-      "lng": -1.476265,
-      "cat": "violent-crime",
-      "street": "On or near Skipton Gardens"
-    },
-    {
-      "lat": 52.412165,
-      "lng": -1.481388,
-      "cat": "violent-crime",
-      "street": "On or near Dawes Close"
-    },
-    {
-      "lat": 52.406261,
-      "lng": -1.469815,
-      "cat": "violent-crime",
-      "street": "On or near Uxbridge Avenue"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "violent-crime",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.416603,
-      "lng": -1.480616,
-      "cat": "violent-crime",
-      "street": "On or near Coventry Street"
-    },
-    {
-      "lat": 52.406779,
-      "lng": -1.476453,
-      "cat": "violent-crime",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.414055,
-      "lng": -1.477705,
-      "cat": "violent-crime",
-      "street": "On or near Shakespeare Street"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "violent-crime",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.409748,
-      "lng": -1.477565,
-      "cat": "violent-crime",
-      "street": "On or near Dronfield Road"
-    },
-    {
-      "lat": 52.406779,
-      "lng": -1.476453,
-      "cat": "violent-crime",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.426344,
-      "lng": -1.479663,
-      "cat": "violent-crime",
-      "street": "On or near Mulberry Road"
-    },
-    {
-      "lat": 52.420465,
-      "lng": -1.449985,
-      "cat": "violent-crime",
-      "street": "On or near Snape Road"
-    },
-    {
-      "lat": 52.411499,
-      "lng": -1.481131,
-      "cat": "violent-crime",
-      "street": "On or near Shopping Area"
+      "street": "On or near Attoxhall Road"
     },
     {
       "lat": 52.415516,
@@ -2087,190 +2027,40 @@
       "street": "On or near Ennerdale Lane"
     },
     {
-      "lat": 52.419685,
-      "lng": -1.482403,
-      "cat": "violent-crime",
-      "street": "On or near Gun Lane"
-    },
-    {
-      "lat": 52.399689,
-      "lng": -1.487972,
-      "cat": "violent-crime",
-      "street": "On or near Gibraltar Close"
-    },
-    {
-      "lat": 52.420478,
-      "lng": -1.468454,
+      "lat": 52.40608,
+      "lng": -1.475521,
       "cat": "violent-crime",
       "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.415032,
-      "lng": -1.470103,
+      "lat": 52.406212,
+      "lng": -1.455043,
       "cat": "violent-crime",
-      "street": "On or near Sports/recreation Area"
+      "street": "On or near Crakston Close"
     },
     {
-      "lat": 52.417064,
-      "lng": -1.461143,
+      "lat": 52.408515,
+      "lng": -1.4535,
       "cat": "violent-crime",
-      "street": "On or near Petrol Station"
+      "street": "On or near Harry Rose Road"
     },
     {
-      "lat": 52.408033,
-      "lng": -1.454065,
+      "lat": 52.409924,
+      "lng": -1.443163,
       "cat": "violent-crime",
-      "street": "On or near Lloyd Crescent"
+      "street": "On or near Faygate Close"
     },
     {
-      "lat": 52.418883,
-      "lng": -1.481809,
+      "lat": 52.417301,
+      "lng": -1.454024,
       "cat": "violent-crime",
-      "street": "On or near Uplands"
+      "street": "On or near Arch Road"
     },
     {
-      "lat": 52.422574,
-      "lng": -1.478928,
+      "lat": 52.417301,
+      "lng": -1.454024,
       "cat": "violent-crime",
-      "street": "On or near Beckett Road"
-    },
-    {
-      "lat": 52.403566,
-      "lng": -1.486589,
-      "cat": "violent-crime",
-      "street": "On or near Supermarket"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "violent-crime",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.397377,
-      "lng": -1.469437,
-      "cat": "violent-crime",
-      "street": "On or near The Lindfield"
-    },
-    {
-      "lat": 52.423658,
-      "lng": -1.478077,
-      "cat": "violent-crime",
-      "street": "On or near Burroughs Close"
-    },
-    {
-      "lat": 52.414044,
-      "lng": -1.445625,
-      "cat": "violent-crime",
-      "street": "On or near Keswick Walk"
-    },
-    {
-      "lat": 52.407006,
-      "lng": -1.485682,
-      "cat": "violent-crime",
-      "street": "On or near Clara Street"
-    },
-    {
-      "lat": 52.407006,
-      "lng": -1.485682,
-      "cat": "violent-crime",
-      "street": "On or near Clara Street"
-    },
-    {
-      "lat": 52.413219,
-      "lng": -1.481846,
-      "cat": "violent-crime",
-      "street": "On or near Petrol Station"
-    },
-    {
-      "lat": 52.4003,
-      "lng": -1.490037,
-      "cat": "violent-crime",
-      "street": "On or near Terry Road"
-    },
-    {
-      "lat": 52.431655,
-      "lng": -1.481262,
-      "cat": "violent-crime",
-      "street": "On or near Pendenis Close"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "violent-crime",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.408927,
-      "lng": -1.474811,
-      "cat": "violent-crime",
-      "street": "On or near Church Lane"
-    },
-    {
-      "lat": 52.41929,
-      "lng": -1.476408,
-      "cat": "violent-crime",
-      "street": "On or near Petrol Station"
-    },
-    {
-      "lat": 52.418762,
-      "lng": -1.462754,
-      "cat": "violent-crime",
-      "street": "On or near Kelvin Avenue"
-    },
-    {
-      "lat": 52.418762,
-      "lng": -1.462754,
-      "cat": "violent-crime",
-      "street": "On or near Kelvin Avenue"
-    },
-    {
-      "lat": 52.411607,
-      "lng": -1.487466,
-      "cat": "violent-crime",
-      "street": "On or near Brighton Street"
-    },
-    {
-      "lat": 52.394578,
-      "lng": -1.474628,
-      "cat": "violent-crime",
-      "street": "On or near The Coppice"
-    },
-    {
-      "lat": 52.409818,
-      "lng": -1.485444,
-      "cat": "violent-crime",
-      "street": "On or near Argyll Street"
-    },
-    {
-      "lat": 52.412633,
-      "lng": -1.48347,
-      "cat": "violent-crime",
-      "street": "On or near Quarrywood Grove"
-    },
-    {
-      "lat": 52.415707,
-      "lng": -1.485434,
-      "cat": "violent-crime",
-      "street": "On or near Alverstone Road"
-    },
-    {
-      "lat": 52.413963,
-      "lng": -1.467076,
-      "cat": "violent-crime",
-      "street": "On or near Oswin Grove"
-    },
-    {
-      "lat": 52.42016,
-      "lng": -1.48622,
-      "cat": "violent-crime",
-      "street": "On or near Swancroft Road"
-    },
-    {
-      "lat": 52.401343,
-      "lng": -1.465582,
-      "cat": "violent-crime",
-      "street": "On or near Second Avenue"
+      "street": "On or near Arch Road"
     },
     {
       "lat": 52.39869,
@@ -2279,16 +2069,34 @@
       "street": "On or near Chatham Close"
     },
     {
-      "lat": 52.423658,
-      "lng": -1.478077,
+      "lat": 52.394578,
+      "lng": -1.474628,
       "cat": "violent-crime",
-      "street": "On or near Burroughs Close"
+      "street": "On or near The Coppice"
     },
     {
-      "lat": 52.406656,
-      "lng": -1.477807,
+      "lat": 52.424551,
+      "lng": -1.46664,
       "cat": "violent-crime",
-      "street": "On or near Parking Area"
+      "street": "On or near Derbyshire Way"
+    },
+    {
+      "lat": 52.401559,
+      "lng": -1.479793,
+      "cat": "violent-crime",
+      "street": "On or near Stoke Green Crescent"
+    },
+    {
+      "lat": 52.420127,
+      "lng": -1.452798,
+      "cat": "violent-crime",
+      "street": "On or near Caludon Park Avenue"
+    },
+    {
+      "lat": 52.410976,
+      "lng": -1.484872,
+      "cat": "violent-crime",
+      "street": "On or near Villiers Street"
     },
     {
       "lat": 52.403566,
@@ -2297,46 +2105,460 @@
       "street": "On or near Supermarket"
     },
     {
-      "lat": 52.414055,
-      "lng": -1.477705,
+      "lat": 52.431655,
+      "lng": -1.481262,
       "cat": "violent-crime",
-      "street": "On or near Shakespeare Street"
+      "street": "On or near Pendenis Close"
     },
     {
-      "lat": 52.414306,
-      "lng": -1.440152,
+      "lat": 52.426344,
+      "lng": -1.479663,
       "cat": "violent-crime",
-      "street": "On or near Sturminster Close"
+      "street": "On or near Mulberry Road"
     },
     {
-      "lat": 52.418529,
-      "lng": -1.485328,
+      "lat": 52.401413,
+      "lng": -1.479265,
       "cat": "violent-crime",
-      "street": "On or near Headborough Road"
+      "street": "On or near Armstrong Avenue"
     },
     {
-      "lat": 52.417422,
-      "lng": -1.480856,
+      "lat": 52.415262,
+      "lng": -1.48022,
       "cat": "violent-crime",
-      "street": "On or near Milton Street"
+      "street": "On or near Stratford Street"
     },
     {
-      "lat": 52.408039,
-      "lng": -1.475409,
+      "lat": 52.417629,
+      "lng": -1.474707,
       "cat": "violent-crime",
-      "street": "On or near Copperfield Road"
+      "street": "On or near Avon Street"
     },
     {
-      "lat": 52.413219,
-      "lng": -1.481846,
+      "lat": 52.406779,
+      "lng": -1.476453,
+      "cat": "violent-crime",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.411607,
+      "lng": -1.487466,
+      "cat": "violent-crime",
+      "street": "On or near Brighton Street"
+    },
+    {
+      "lat": 52.411607,
+      "lng": -1.487466,
+      "cat": "violent-crime",
+      "street": "On or near Brighton Street"
+    },
+    {
+      "lat": 52.397493,
+      "lng": -1.481354,
+      "cat": "violent-crime",
+      "street": "On or near Carter Road"
+    },
+    {
+      "lat": 52.432689,
+      "lng": -1.481206,
+      "cat": "violent-crime",
+      "street": "On or near B4109"
+    },
+    {
+      "lat": 52.412701,
+      "lng": -1.480603,
+      "cat": "violent-crime",
+      "street": "On or near Briton Road"
+    },
+    {
+      "lat": 52.415032,
+      "lng": -1.470103,
+      "cat": "violent-crime",
+      "street": "On or near Sports/recreation Area"
+    },
+    {
+      "lat": 52.410757,
+      "lng": -1.478009,
+      "cat": "violent-crime",
+      "street": "On or near Kings Grove"
+    },
+    {
+      "lat": 52.41431,
+      "lng": -1.484597,
+      "cat": "violent-crime",
+      "street": "On or near Goring Road"
+    },
+    {
+      "lat": 52.423932,
+      "lng": -1.466942,
+      "cat": "violent-crime",
+      "street": "On or near Rollings Drive"
+    },
+    {
+      "lat": 52.409798,
+      "lng": -1.48293,
+      "cat": "violent-crime",
+      "street": "On or near St Michael's Road"
+    },
+    {
+      "lat": 52.407006,
+      "lng": -1.485682,
+      "cat": "violent-crime",
+      "street": "On or near Clara Street"
+    },
+    {
+      "lat": 52.403431,
+      "lng": -1.484357,
+      "cat": "violent-crime",
+      "street": "On or near Hollis Road"
+    },
+    {
+      "lat": 52.398464,
+      "lng": -1.485487,
+      "cat": "violent-crime",
+      "street": "On or near Humber Road"
+    },
+    {
+      "lat": 52.40608,
+      "lng": -1.475521,
       "cat": "violent-crime",
       "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.415119,
-      "lng": -1.446876,
+      "lat": 52.420946,
+      "lng": -1.472609,
       "cat": "violent-crime",
-      "street": "On or near Westmorland Road"
+      "street": "On or near Hartland Avenue"
+    },
+    {
+      "lat": 52.39869,
+      "lng": -1.469406,
+      "cat": "violent-crime",
+      "street": "On or near Chatham Close"
+    },
+    {
+      "lat": 52.397815,
+      "lng": -1.468814,
+      "cat": "violent-crime",
+      "street": "On or near Sports/recreation Area"
+    },
+    {
+      "lat": 52.424538,
+      "lng": -1.471743,
+      "cat": "violent-crime",
+      "street": "On or near Blackberry Lane"
+    },
+    {
+      "lat": 52.397377,
+      "lng": -1.469437,
+      "cat": "violent-crime",
+      "street": "On or near The Lindfield"
+    },
+    {
+      "lat": 52.405673,
+      "lng": -1.45502,
+      "cat": "violent-crime",
+      "street": "On or near Brewster Close"
+    },
+    {
+      "lat": 52.41431,
+      "lng": -1.484597,
+      "cat": "violent-crime",
+      "street": "On or near Goring Road"
+    },
+    {
+      "lat": 52.424816,
+      "lng": -1.44996,
+      "cat": "violent-crime",
+      "street": "On or near Balmoral Close"
+    },
+    {
+      "lat": 52.4175,
+      "lng": -1.440847,
+      "cat": "violent-crime",
+      "street": "On or near Wareham Green"
+    },
+    {
+      "lat": 52.41431,
+      "lng": -1.484597,
+      "cat": "violent-crime",
+      "street": "On or near Goring Road"
+    },
+    {
+      "lat": 52.406393,
+      "lng": -1.437989,
+      "cat": "violent-crime",
+      "street": "On or near Florence Road"
+    },
+    {
+      "lat": 52.407042,
+      "lng": -1.481566,
+      "cat": "violent-crime",
+      "street": "On or near South Avenue"
+    },
+    {
+      "lat": 52.406656,
+      "lng": -1.477807,
+      "cat": "violent-crime",
+      "street": "On or near Parking Area"
+    },
+    {
+      "lat": 52.411499,
+      "lng": -1.481131,
+      "cat": "violent-crime",
+      "street": "On or near Shopping Area"
+    },
+    {
+      "lat": 52.4003,
+      "lng": -1.490037,
+      "cat": "violent-crime",
+      "street": "On or near Terry Road"
+    },
+    {
+      "lat": 52.411498,
+      "lng": -1.485115,
+      "cat": "violent-crime",
+      "street": "On or near Chandos Street"
+    },
+    {
+      "lat": 52.423658,
+      "lng": -1.478077,
+      "cat": "violent-crime",
+      "street": "On or near Burroughs Close"
+    },
+    {
+      "lat": 52.40922,
+      "lng": -1.48623,
+      "cat": "violent-crime",
+      "street": "On or near Hamilton Road"
+    },
+    {
+      "lat": 52.405863,
+      "lng": -1.451431,
+      "cat": "violent-crime",
+      "street": "On or near Margeson Close"
+    },
+    {
+      "lat": 52.410757,
+      "lng": -1.478009,
+      "cat": "violent-crime",
+      "street": "On or near Kings Grove"
+    },
+    {
+      "lat": 52.39561,
+      "lng": -1.478305,
+      "cat": "violent-crime",
+      "street": "On or near Michell Close"
+    },
+    {
+      "lat": 52.42016,
+      "lng": -1.48622,
+      "cat": "violent-crime",
+      "street": "On or near Swancroft Road"
+    },
+    {
+      "lat": 52.410976,
+      "lng": -1.484872,
+      "cat": "violent-crime",
+      "street": "On or near Villiers Street"
+    },
+    {
+      "lat": 52.402376,
+      "lng": -1.479636,
+      "cat": "violent-crime",
+      "street": "On or near Dawson Road"
+    },
+    {
+      "lat": 52.422705,
+      "lng": -1.480147,
+      "cat": "violent-crime",
+      "street": "On or near Barrie Way"
+    },
+    {
+      "lat": 52.419594,
+      "lng": -1.475875,
+      "cat": "violent-crime",
+      "street": "On or near Frederick Fell Walk"
+    },
+    {
+      "lat": 52.396156,
+      "lng": -1.477725,
+      "cat": "violent-crime",
+      "street": "On or near The Moorfield"
+    },
+    {
+      "lat": 52.413949,
+      "lng": -1.486425,
+      "cat": "violent-crime",
+      "street": "On or near Stepney Road"
+    },
+    {
+      "lat": 52.415032,
+      "lng": -1.470103,
+      "cat": "violent-crime",
+      "street": "On or near Sports/recreation Area"
+    },
+    {
+      "lat": 52.412502,
+      "lng": -1.482413,
+      "cat": "violent-crime",
+      "street": "On or near Terracota Drive"
+    },
+    {
+      "lat": 52.42016,
+      "lng": -1.48622,
+      "cat": "violent-crime",
+      "street": "On or near Swancroft Road"
+    },
+    {
+      "lat": 52.420946,
+      "lng": -1.472609,
+      "cat": "violent-crime",
+      "street": "On or near Hartland Avenue"
+    },
+    {
+      "lat": 52.418422,
+      "lng": -1.467243,
+      "cat": "violent-crime",
+      "street": "On or near Forknell Avenue"
+    },
+    {
+      "lat": 52.41431,
+      "lng": -1.484597,
+      "cat": "violent-crime",
+      "street": "On or near Goring Road"
+    },
+    {
+      "lat": 52.419685,
+      "lng": -1.482403,
+      "cat": "violent-crime",
+      "street": "On or near Gun Lane"
+    },
+    {
+      "lat": 52.402755,
+      "lng": -1.475825,
+      "cat": "violent-crime",
+      "street": "On or near Sphinx Drive"
+    },
+    {
+      "lat": 52.418913,
+      "lng": -1.472472,
+      "cat": "violent-crime",
+      "street": "On or near Clovelly Road"
+    },
+    {
+      "lat": 52.4029,
+      "lng": -1.484201,
+      "cat": "violent-crime",
+      "street": "On or near Bolingbroke Road"
+    },
+    {
+      "lat": 52.4003,
+      "lng": -1.490037,
+      "cat": "violent-crime",
+      "street": "On or near Terry Road"
+    },
+    {
+      "lat": 52.397172,
+      "lng": -1.477787,
+      "cat": "violent-crime",
+      "street": "On or near Luff Close"
+    },
+    {
+      "lat": 52.402755,
+      "lng": -1.475825,
+      "cat": "violent-crime",
+      "street": "On or near Sphinx Drive"
+    },
+    {
+      "lat": 52.41841,
+      "lng": -1.480594,
+      "cat": "violent-crime",
+      "street": "On or near Salford Close"
+    },
+    {
+      "lat": 52.401173,
+      "lng": -1.486191,
+      "cat": "violent-crime",
+      "street": "On or near Shropshire Drive"
+    },
+    {
+      "lat": 52.406816,
+      "lng": -1.465134,
+      "cat": "violent-crime",
+      "street": "On or near Sapphire Gate"
+    },
+    {
+      "lat": 52.402755,
+      "lng": -1.475825,
+      "cat": "violent-crime",
+      "street": "On or near Sphinx Drive"
+    },
+    {
+      "lat": 52.41431,
+      "lng": -1.484597,
+      "cat": "violent-crime",
+      "street": "On or near Goring Road"
+    },
+    {
+      "lat": 52.4003,
+      "lng": -1.490037,
+      "cat": "violent-crime",
+      "street": "On or near Terry Road"
+    },
+    {
+      "lat": 52.417301,
+      "lng": -1.454024,
+      "cat": "violent-crime",
+      "street": "On or near Arch Road"
+    },
+    {
+      "lat": 52.406816,
+      "lng": -1.465134,
+      "cat": "violent-crime",
+      "street": "On or near Sapphire Gate"
+    },
+    {
+      "lat": 52.40511,
+      "lng": -1.473827,
+      "cat": "violent-crime",
+      "street": "On or near Biggin Hall Crescent"
+    },
+    {
+      "lat": 52.406816,
+      "lng": -1.465134,
+      "cat": "violent-crime",
+      "street": "On or near Sapphire Gate"
+    },
+    {
+      "lat": 52.424435,
+      "lng": -1.480935,
+      "cat": "violent-crime",
+      "street": "On or near Thackeray Road"
+    },
+    {
+      "lat": 52.397141,
+      "lng": -1.485224,
+      "cat": "violent-crime",
+      "street": "On or near B4110"
+    },
+    {
+      "lat": 52.424538,
+      "lng": -1.471743,
+      "cat": "violent-crime",
+      "street": "On or near Blackberry Lane"
+    },
+    {
+      "lat": 52.40922,
+      "lng": -1.48623,
+      "cat": "violent-crime",
+      "street": "On or near Hamilton Road"
+    },
+    {
+      "lat": 52.407836,
+      "lng": -1.474074,
+      "cat": "violent-crime",
+      "street": "On or near Raleigh Road"
     },
     {
       "lat": 52.419246,
@@ -2351,76 +2573,112 @@
       "street": "On or near Hyde Road"
     },
     {
-      "lat": 52.407836,
-      "lng": -1.474074,
+      "lat": 52.423658,
+      "lng": -1.478077,
       "cat": "violent-crime",
-      "street": "On or near Raleigh Road"
+      "street": "On or near Burroughs Close"
     },
     {
-      "lat": 52.422728,
-      "lng": -1.481308,
+      "lat": 52.4003,
+      "lng": -1.490037,
       "cat": "violent-crime",
-      "street": "On or near Ox Close"
+      "street": "On or near Terry Road"
     },
     {
-      "lat": 52.419322,
-      "lng": -1.471423,
+      "lat": 52.419594,
+      "lng": -1.475875,
       "cat": "violent-crime",
-      "street": "On or near Honiton Road"
+      "street": "On or near Frederick Fell Walk"
     },
     {
-      "lat": 52.408061,
-      "lng": -1.486581,
+      "lat": 52.403105,
+      "lng": -1.473792,
       "cat": "violent-crime",
-      "street": "On or near Kingsway"
+      "street": "On or near Glencoe Road"
     },
     {
-      "lat": 52.396753,
-      "lng": -1.476513,
+      "lat": 52.397141,
+      "lng": -1.485224,
       "cat": "violent-crime",
-      "street": "On or near St Catherine's Close"
+      "street": "On or near B4110"
     },
     {
-      "lat": 52.414663,
-      "lng": -1.453204,
+      "lat": 52.410205,
+      "lng": -1.453273,
       "cat": "violent-crime",
-      "street": "On or near Axholme Road"
+      "street": "On or near Triumph Close"
     },
     {
-      "lat": 52.413967,
-      "lng": -1.476177,
+      "lat": 52.426344,
+      "lng": -1.479663,
       "cat": "violent-crime",
-      "street": "On or near Dane Road"
+      "street": "On or near Mulberry Road"
     },
     {
-      "lat": 52.407836,
-      "lng": -1.474074,
+      "lat": 52.415967,
+      "lng": -1.455216,
       "cat": "violent-crime",
-      "street": "On or near Raleigh Road"
+      "street": "On or near Edyth Road"
     },
     {
-      "lat": 52.411607,
-      "lng": -1.487466,
+      "lat": 52.415032,
+      "lng": -1.470103,
       "cat": "violent-crime",
-      "street": "On or near Brighton Street"
+      "street": "On or near Sports/recreation Area"
     },
     {
-      "lat": 52.41574,
-      "lng": -1.460615,
+      "lat": 52.403962,
+      "lng": -1.484512,
       "cat": "violent-crime",
-      "street": "On or near Cowley Road"
+      "street": "On or near Hugh Road"
     },
     {
-      "lat": 52.408033,
-      "lng": -1.454065,
+      "lat": 52.415516,
+      "lng": -1.447077,
       "cat": "violent-crime",
-      "street": "On or near Lloyd Crescent"
+      "street": "On or near Ennerdale Lane"
     },
     {
-      "lat": 52.414663,
-      "lng": -1.453204,
+      "lat": 52.409239,
+      "lng": -1.452506,
       "cat": "violent-crime",
-      "street": "On or near Axholme Road"
+      "street": "On or near Ventnor Close"
+    },
+    {
+      "lat": 52.402376,
+      "lng": -1.479636,
+      "cat": "violent-crime",
+      "street": "On or near Dawson Road"
+    },
+    {
+      "lat": 52.430859,
+      "lng": -1.484272,
+      "cat": "violent-crime",
+      "street": "On or near Griffin Court"
+    },
+    {
+      "lat": 52.409239,
+      "lng": -1.452506,
+      "cat": "violent-crime",
+      "street": "On or near Ventnor Close"
+    },
+    {
+      "lat": 52.418791,
+      "lng": -1.453491,
+      "cat": "violent-crime",
+      "street": "On or near Farren Road"
+    },
+    {
+      "lat": 52.420477,
+      "lng": -1.484584,
+      "cat": "violent-crime",
+      "street": "On or near Bewick Croft"
+    },
+    {
+      "lat": 52.423213,
+      "lng": -1.449377,
+      "cat": "violent-crime",
+      "street": "On or near Crathie Close"
     },
     {
       "lat": 52.40938,
@@ -2429,214 +2687,10 @@
       "street": "On or near St Ann's Road"
     },
     {
-      "lat": 52.417451,
-      "lng": -1.469181,
+      "lat": 52.398348,
+      "lng": -1.479507,
       "cat": "violent-crime",
-      "street": "On or near Clovelly Gardens"
-    },
-    {
-      "lat": 52.395185,
-      "lng": -1.471711,
-      "cat": "violent-crime",
-      "street": "On or near Jasmine Grove"
-    },
-    {
-      "lat": 52.395185,
-      "lng": -1.471711,
-      "cat": "violent-crime",
-      "street": "On or near Jasmine Grove"
-    },
-    {
-      "lat": 52.422728,
-      "lng": -1.481308,
-      "cat": "violent-crime",
-      "street": "On or near Ox Close"
-    },
-    {
-      "lat": 52.422728,
-      "lng": -1.481308,
-      "cat": "violent-crime",
-      "street": "On or near Ox Close"
-    },
-    {
-      "lat": 52.399949,
-      "lng": -1.481708,
-      "cat": "violent-crime",
-      "street": "On or near Yeomanry Walk"
-    },
-    {
-      "lat": 52.406656,
-      "lng": -1.477807,
-      "cat": "violent-crime",
-      "street": "On or near Parking Area"
-    },
-    {
-      "lat": 52.428076,
-      "lng": -1.480922,
-      "cat": "violent-crime",
-      "street": "On or near Birchgrave Close"
-    },
-    {
-      "lat": 52.417247,
-      "lng": -1.459803,
-      "cat": "violent-crime",
-      "street": "On or near A4600"
-    },
-    {
-      "lat": 52.413219,
-      "lng": -1.481846,
-      "cat": "violent-crime",
-      "street": "On or near Petrol Station"
-    },
-    {
-      "lat": 52.414044,
-      "lng": -1.445625,
-      "cat": "violent-crime",
-      "street": "On or near Keswick Walk"
-    },
-    {
-      "lat": 52.404455,
-      "lng": -1.488299,
-      "cat": "violent-crime",
-      "street": "On or near Ribble Road"
-    },
-    {
-      "lat": 52.416133,
-      "lng": -1.446466,
-      "cat": "violent-crime",
-      "street": "On or near Dalton Gardens"
-    },
-    {
-      "lat": 52.420946,
-      "lng": -1.472609,
-      "cat": "violent-crime",
-      "street": "On or near Hartland Avenue"
-    },
-    {
-      "lat": 52.414663,
-      "lng": -1.453204,
-      "cat": "violent-crime",
-      "street": "On or near Axholme Road"
-    },
-    {
-      "lat": 52.404455,
-      "lng": -1.488299,
-      "cat": "violent-crime",
-      "street": "On or near Ribble Road"
-    },
-    {
-      "lat": 52.401413,
-      "lng": -1.479265,
-      "cat": "violent-crime",
-      "street": "On or near Armstrong Avenue"
-    },
-    {
-      "lat": 52.399752,
-      "lng": -1.46763,
-      "cat": "violent-crime",
-      "street": "On or near Knotting Way"
-    },
-    {
-      "lat": 52.39881,
-      "lng": -1.466201,
-      "cat": "violent-crime",
-      "street": "On or near Yew Close"
-    },
-    {
-      "lat": 52.404455,
-      "lng": -1.488299,
-      "cat": "violent-crime",
-      "street": "On or near Ribble Road"
-    },
-    {
-      "lat": 52.42016,
-      "lng": -1.48622,
-      "cat": "violent-crime",
-      "street": "On or near Swancroft Road"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "violent-crime",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.404437,
-      "lng": -1.482272,
-      "cat": "violent-crime",
-      "street": "On or near Stoke Green"
-    },
-    {
-      "lat": 52.414887,
-      "lng": -1.462743,
-      "cat": "violent-crime",
-      "street": "On or near Newey Road"
-    },
-    {
-      "lat": 52.417422,
-      "lng": -1.480856,
-      "cat": "violent-crime",
-      "street": "On or near Milton Street"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "violent-crime",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.406261,
-      "lng": -1.469815,
-      "cat": "violent-crime",
-      "street": "On or near Uxbridge Avenue"
-    },
-    {
-      "lat": 52.419322,
-      "lng": -1.471423,
-      "cat": "violent-crime",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.41574,
-      "lng": -1.460615,
-      "cat": "violent-crime",
-      "street": "On or near Cowley Road"
-    },
-    {
-      "lat": 52.4175,
-      "lng": -1.440847,
-      "cat": "violent-crime",
-      "street": "On or near Wareham Green"
-    },
-    {
-      "lat": 52.417422,
-      "lng": -1.480856,
-      "cat": "violent-crime",
-      "street": "On or near Milton Street"
-    },
-    {
-      "lat": 52.404455,
-      "lng": -1.488299,
-      "cat": "violent-crime",
-      "street": "On or near Ribble Road"
-    },
-    {
-      "lat": 52.422705,
-      "lng": -1.480147,
-      "cat": "violent-crime",
-      "street": "On or near Barrie Way"
-    },
-    {
-      "lat": 52.419685,
-      "lng": -1.482403,
-      "cat": "violent-crime",
-      "street": "On or near Gun Lane"
-    },
-    {
-      "lat": 52.43197,
-      "lng": -1.483333,
-      "cat": "violent-crime",
-      "street": "On or near Navigation Way"
+      "street": "On or near Princes Close"
     },
     {
       "lat": 52.424538,
@@ -2645,46 +2699,34 @@
       "street": "On or near Blackberry Lane"
     },
     {
-      "lat": 52.401086,
-      "lng": -1.482753,
+      "lat": 52.407805,
+      "lng": -1.481366,
       "cat": "violent-crime",
-      "street": "On or near Signals Drive"
+      "street": "On or near Central Avenue"
     },
     {
-      "lat": 52.417629,
-      "lng": -1.474707,
+      "lat": 52.412847,
+      "lng": -1.485217,
       "cat": "violent-crime",
-      "street": "On or near Avon Street"
+      "street": "On or near Hastings Road"
     },
     {
-      "lat": 52.412029,
-      "lng": -1.4853,
+      "lat": 52.430859,
+      "lng": -1.484272,
       "cat": "violent-crime",
-      "street": "On or near Richmond Street"
+      "street": "On or near Griffin Court"
     },
     {
-      "lat": 52.41431,
-      "lng": -1.484597,
+      "lat": 52.407568,
+      "lng": -1.484676,
       "cat": "violent-crime",
-      "street": "On or near Goring Road"
+      "street": "On or near Gresham Street"
     },
     {
-      "lat": 52.4003,
-      "lng": -1.490037,
+      "lat": 52.432689,
+      "lng": -1.481206,
       "cat": "violent-crime",
-      "street": "On or near Terry Road"
-    },
-    {
-      "lat": 52.408033,
-      "lng": -1.454065,
-      "cat": "violent-crime",
-      "street": "On or near Lloyd Crescent"
-    },
-    {
-      "lat": 52.408033,
-      "lng": -1.454065,
-      "cat": "violent-crime",
-      "street": "On or near Lloyd Crescent"
+      "street": "On or near B4109"
     },
     {
       "lat": 52.413219,
@@ -2693,184 +2735,16 @@
       "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.419322,
-      "lng": -1.471423,
+      "lat": 52.403843,
+      "lng": -1.473769,
       "cat": "violent-crime",
-      "street": "On or near Honiton Road"
-    },
-    {
-      "lat": 52.43197,
-      "lng": -1.483333,
-      "cat": "violent-crime",
-      "street": "On or near Navigation Way"
-    },
-    {
-      "lat": 52.419685,
-      "lng": -1.482403,
-      "cat": "violent-crime",
-      "street": "On or near Gun Lane"
-    },
-    {
-      "lat": 52.415119,
-      "lng": -1.446876,
-      "cat": "violent-crime",
-      "street": "On or near Westmorland Road"
-    },
-    {
-      "lat": 52.408598,
-      "lng": -1.469655,
-      "cat": "violent-crime",
-      "street": "On or near Wyver Crescent"
-    },
-    {
-      "lat": 52.418159,
-      "lng": -1.478833,
-      "cat": "violent-crime",
-      "street": "On or near North Street"
-    },
-    {
-      "lat": 52.4029,
-      "lng": -1.484201,
-      "cat": "violent-crime",
-      "street": "On or near Bolingbroke Road"
-    },
-    {
-      "lat": 52.420946,
-      "lng": -1.472609,
-      "cat": "violent-crime",
-      "street": "On or near Hartland Avenue"
-    },
-    {
-      "lat": 52.411607,
-      "lng": -1.487466,
-      "cat": "violent-crime",
-      "street": "On or near Brighton Street"
-    },
-    {
-      "lat": 52.417846,
-      "lng": -1.461075,
-      "cat": "violent-crime",
-      "street": "On or near Wyken Avenue"
-    },
-    {
-      "lat": 52.4029,
-      "lng": -1.484201,
-      "cat": "violent-crime",
-      "street": "On or near Bolingbroke Road"
-    },
-    {
-      "lat": 52.418803,
-      "lng": -1.456049,
-      "cat": "violent-crime",
-      "street": "On or near Ansty Road"
-    },
-    {
-      "lat": 52.414044,
-      "lng": -1.445625,
-      "cat": "violent-crime",
-      "street": "On or near Keswick Walk"
-    },
-    {
-      "lat": 52.419685,
-      "lng": -1.482403,
-      "cat": "violent-crime",
-      "street": "On or near Gun Lane"
-    },
-    {
-      "lat": 52.399624,
-      "lng": -1.4752,
-      "cat": "violent-crime",
-      "street": "On or near The Boxhill"
-    },
-    {
-      "lat": 52.414889,
-      "lng": -1.48537,
-      "cat": "violent-crime",
-      "street": "On or near Heath Road"
-    },
-    {
-      "lat": 52.418422,
-      "lng": -1.467243,
-      "cat": "violent-crime",
-      "street": "On or near Forknell Avenue"
-    },
-    {
-      "lat": 52.418422,
-      "lng": -1.467243,
-      "cat": "violent-crime",
-      "street": "On or near Forknell Avenue"
-    },
-    {
-      "lat": 52.42878,
-      "lng": -1.479678,
-      "cat": "violent-crime",
-      "street": "On or near Nuffield Road"
-    },
-    {
-      "lat": 52.42878,
-      "lng": -1.479678,
-      "cat": "violent-crime",
-      "street": "On or near Nuffield Road"
-    },
-    {
-      "lat": 52.421274,
-      "lng": -1.475649,
-      "cat": "violent-crime",
-      "street": "On or near Dennis Road"
-    },
-    {
-      "lat": 52.401413,
-      "lng": -1.479265,
-      "cat": "violent-crime",
-      "street": "On or near Armstrong Avenue"
-    },
-    {
-      "lat": 52.398201,
-      "lng": -1.474718,
-      "cat": "violent-crime",
-      "street": "On or near Acorn Street"
-    },
-    {
-      "lat": 52.417451,
-      "lng": -1.469181,
-      "cat": "violent-crime",
-      "street": "On or near Clovelly Gardens"
-    },
-    {
-      "lat": 52.430808,
-      "lng": -1.482787,
-      "cat": "violent-crime",
-      "street": "On or near Redruth Close"
-    },
-    {
-      "lat": 52.421862,
-      "lng": -1.470525,
-      "cat": "violent-crime",
-      "street": "On or near Lamerton Close"
-    },
-    {
-      "lat": 52.411607,
-      "lng": -1.487466,
-      "cat": "violent-crime",
-      "street": "On or near Brighton Street"
+      "street": "On or near Lindley Road"
     },
     {
       "lat": 52.4003,
       "lng": -1.490037,
       "cat": "violent-crime",
       "street": "On or near Terry Road"
-    },
-    {
-      "lat": 52.407323,
-      "lng": -1.45228,
-      "cat": "violent-crime",
-      "street": "On or near Dunrose Close"
-    },
-    {
-      "lat": 52.404455,
-      "lng": -1.488299,
-      "cat": "violent-crime",
-      "street": "On or near Ribble Road"
     },
     {
       "lat": 52.425354,
@@ -2879,52 +2753,28 @@
       "street": "On or near Alfred Herbert Close"
     },
     {
-      "lat": 52.413219,
-      "lng": -1.481846,
+      "lat": 52.4003,
+      "lng": -1.490037,
       "cat": "violent-crime",
-      "street": "On or near Petrol Station"
+      "street": "On or near Terry Road"
     },
     {
-      "lat": 52.418883,
-      "lng": -1.481809,
+      "lat": 52.403566,
+      "lng": -1.486589,
       "cat": "violent-crime",
-      "street": "On or near Uplands"
+      "street": "On or near Supermarket"
     },
     {
-      "lat": 52.41841,
-      "lng": -1.480594,
+      "lat": 52.413592,
+      "lng": -1.452879,
       "cat": "violent-crime",
-      "street": "On or near Salford Close"
+      "street": "On or near Sandilands Close"
     },
     {
-      "lat": 52.406137,
-      "lng": -1.442843,
+      "lat": 52.419594,
+      "lng": -1.475875,
       "cat": "violent-crime",
-      "street": "On or near Portree Avenue"
-    },
-    {
-      "lat": 52.41574,
-      "lng": -1.460615,
-      "cat": "violent-crime",
-      "street": "On or near Cowley Road"
-    },
-    {
-      "lat": 52.420405,
-      "lng": -1.462293,
-      "cat": "violent-crime",
-      "street": "On or near Tiverton Road"
-    },
-    {
-      "lat": 52.419501,
-      "lng": -1.477185,
-      "cat": "violent-crime",
-      "street": "On or near Geoffrey Close"
-    },
-    {
-      "lat": 52.422728,
-      "lng": -1.481308,
-      "cat": "violent-crime",
-      "street": "On or near Ox Close"
+      "street": "On or near Frederick Fell Walk"
     },
     {
       "lat": 52.420478,
@@ -2933,46 +2783,94 @@
       "street": "On or near Petrol Station"
     },
     {
-      "lat": 52.407571,
-      "lng": -1.461229,
+      "lat": 52.396553,
+      "lng": -1.474091,
       "cat": "violent-crime",
-      "street": "On or near Meredith Road"
+      "street": "On or near The Green Field"
     },
     {
-      "lat": 52.422728,
-      "lng": -1.481308,
+      "lat": 52.408176,
+      "lng": -1.484051,
       "cat": "violent-crime",
-      "street": "On or near Ox Close"
+      "street": "On or near Marlborough Road"
     },
     {
-      "lat": 52.419468,
-      "lng": -1.463937,
+      "lat": 52.407568,
+      "lng": -1.484676,
       "cat": "violent-crime",
-      "street": "On or near Tiverton Grove"
+      "street": "On or near Gresham Street"
     },
     {
-      "lat": 52.395185,
-      "lng": -1.471711,
+      "lat": 52.42471,
+      "lng": -1.465962,
       "cat": "violent-crime",
-      "street": "On or near Jasmine Grove"
+      "street": "On or near Kare Road"
     },
     {
-      "lat": 52.419322,
-      "lng": -1.471423,
+      "lat": 52.415983,
+      "lng": -1.470669,
       "cat": "violent-crime",
-      "street": "On or near Honiton Road"
+      "street": "On or near Balliol Road"
     },
     {
-      "lat": 52.406576,
-      "lng": -1.471796,
+      "lat": 52.4003,
+      "lng": -1.490037,
       "cat": "violent-crime",
-      "street": "On or near Emscote Road"
+      "street": "On or near Terry Road"
     },
     {
-      "lat": 52.419322,
-      "lng": -1.471423,
+      "lat": 52.415369,
+      "lng": -1.452166,
       "cat": "violent-crime",
-      "street": "On or near Honiton Road"
+      "street": "On or near Belgrave Road"
+    },
+    {
+      "lat": 52.399624,
+      "lng": -1.4752,
+      "cat": "violent-crime",
+      "street": "On or near The Boxhill"
+    },
+    {
+      "lat": 52.411607,
+      "lng": -1.487466,
+      "cat": "violent-crime",
+      "street": "On or near Brighton Street"
+    },
+    {
+      "lat": 52.40922,
+      "lng": -1.48623,
+      "cat": "violent-crime",
+      "street": "On or near Hamilton Road"
+    },
+    {
+      "lat": 52.408176,
+      "lng": -1.484051,
+      "cat": "violent-crime",
+      "street": "On or near Marlborough Road"
+    },
+    {
+      "lat": 52.403566,
+      "lng": -1.486589,
+      "cat": "violent-crime",
+      "street": "On or near Supermarket"
+    },
+    {
+      "lat": 52.416603,
+      "lng": -1.480616,
+      "cat": "violent-crime",
+      "street": "On or near Coventry Street"
+    },
+    {
+      "lat": 52.409748,
+      "lng": -1.477565,
+      "cat": "violent-crime",
+      "street": "On or near Dronfield Road"
+    },
+    {
+      "lat": 52.394578,
+      "lng": -1.474628,
+      "cat": "violent-crime",
+      "street": "On or near The Coppice"
     },
     {
       "lat": 52.420405,
@@ -2981,76 +2879,172 @@
       "street": "On or near Tiverton Road"
     },
     {
-      "lat": 52.419322,
-      "lng": -1.471423,
+      "lat": 52.39869,
+      "lng": -1.469406,
       "cat": "violent-crime",
-      "street": "On or near Honiton Road"
+      "street": "On or near Chatham Close"
     },
     {
-      "lat": 52.417422,
-      "lng": -1.480856,
+      "lat": 52.425354,
+      "lng": -1.477425,
       "cat": "violent-crime",
-      "street": "On or near Milton Street"
+      "street": "On or near Alfred Herbert Close"
     },
     {
-      "lat": 52.420195,
-      "lng": -1.479662,
+      "lat": 52.39869,
+      "lng": -1.469406,
       "cat": "violent-crime",
-      "street": "On or near Little Field"
+      "street": "On or near Chatham Close"
     },
     {
-      "lat": 52.408033,
-      "lng": -1.454065,
+      "lat": 52.400946,
+      "lng": -1.477463,
       "cat": "violent-crime",
-      "street": "On or near Lloyd Crescent"
+      "street": "On or near Siddeley Avenue"
     },
     {
-      "lat": 52.416354,
-      "lng": -1.467121,
+      "lat": 52.420946,
+      "lng": -1.472609,
       "cat": "violent-crime",
-      "street": "On or near Wyke Road"
+      "street": "On or near Hartland Avenue"
     },
     {
-      "lat": 52.406261,
-      "lng": -1.469815,
+      "lat": 52.4003,
+      "lng": -1.490037,
       "cat": "violent-crime",
-      "street": "On or near Uxbridge Avenue"
+      "street": "On or near Terry Road"
     },
     {
-      "lat": 52.415119,
-      "lng": -1.446876,
+      "lat": 52.406656,
+      "lng": -1.477807,
       "cat": "violent-crime",
-      "street": "On or near Westmorland Road"
+      "street": "On or near Parking Area"
     },
     {
-      "lat": 52.415542,
-      "lng": -1.482613,
+      "lat": 52.408767,
+      "lng": -1.471255,
       "cat": "violent-crime",
-      "street": "On or near Barras Green"
+      "street": "On or near Occupation Road"
     },
     {
-      "lat": 52.399624,
-      "lng": -1.4752,
+      "lat": 52.398416,
+      "lng": -1.486928,
       "cat": "violent-crime",
-      "street": "On or near The Boxhill"
+      "street": "On or near Hussar Court"
     },
     {
-      "lat": 52.40618,
-      "lng": -1.453882,
+      "lat": 52.415983,
+      "lng": -1.470669,
       "cat": "violent-crime",
-      "street": "On or near Standish Close"
+      "street": "On or near Balliol Road"
     },
     {
-      "lat": 52.417422,
-      "lng": -1.480856,
+      "lat": 52.420946,
+      "lng": -1.472609,
       "cat": "violent-crime",
-      "street": "On or near Milton Street"
+      "street": "On or near Hartland Avenue"
     },
     {
-      "lat": 52.411498,
-      "lng": -1.485115,
+      "lat": 52.41841,
+      "lng": -1.480594,
       "cat": "violent-crime",
-      "street": "On or near Chandos Street"
+      "street": "On or near Salford Close"
+    },
+    {
+      "lat": 52.397172,
+      "lng": -1.477787,
+      "cat": "violent-crime",
+      "street": "On or near Luff Close"
+    },
+    {
+      "lat": 52.411607,
+      "lng": -1.487466,
+      "cat": "violent-crime",
+      "street": "On or near Brighton Street"
+    },
+    {
+      "lat": 52.419246,
+      "lng": -1.460484,
+      "cat": "violent-crime",
+      "street": "On or near Olive Avenue"
+    },
+    {
+      "lat": 52.400263,
+      "lng": -1.48576,
+      "cat": "violent-crime",
+      "street": "On or near Fusiliers Close"
+    },
+    {
+      "lat": 52.407006,
+      "lng": -1.485682,
+      "cat": "violent-crime",
+      "street": "On or near Clara Street"
+    },
+    {
+      "lat": 52.415516,
+      "lng": -1.447077,
+      "cat": "violent-crime",
+      "street": "On or near Ennerdale Lane"
+    },
+    {
+      "lat": 52.415369,
+      "lng": -1.452166,
+      "cat": "violent-crime",
+      "street": "On or near Belgrave Road"
+    },
+    {
+      "lat": 52.402154,
+      "lng": -1.466204,
+      "cat": "violent-crime",
+      "street": "On or near Sylvia Bird Close"
+    },
+    {
+      "lat": 52.400946,
+      "lng": -1.477463,
+      "cat": "violent-crime",
+      "street": "On or near Siddeley Avenue"
+    },
+    {
+      "lat": 52.427602,
+      "lng": -1.475339,
+      "cat": "violent-crime",
+      "street": "On or near Sullivan Road"
+    },
+    {
+      "lat": 52.409818,
+      "lng": -1.485444,
+      "cat": "violent-crime",
+      "street": "On or near Argyll Street"
+    },
+    {
+      "lat": 52.4003,
+      "lng": -1.490037,
+      "cat": "violent-crime",
+      "street": "On or near Terry Road"
+    },
+    {
+      "lat": 52.426883,
+      "lng": -1.471524,
+      "cat": "violent-crime",
+      "street": "On or near Torpoint Close"
+    },
+    {
+      "lat": 52.426883,
+      "lng": -1.471524,
+      "cat": "violent-crime",
+      "street": "On or near Torpoint Close"
+    },
+    {
+      "lat": 52.398137,
+      "lng": -1.478207,
+      "cat": "violent-crime",
+      "street": "On or near Sports/recreation Area"
+    },
+    {
+      "lat": 52.412029,
+      "lng": -1.4853,
+      "cat": "violent-crime",
+      "street": "On or near Richmond Street"
     },
     {
       "lat": 52.413002,
@@ -3059,88 +3053,70 @@
       "street": "On or near Mellowdew Road"
     },
     {
-      "lat": 52.41431,
-      "lng": -1.484597,
+      "lat": 52.408722,
+      "lng": -1.445794,
       "cat": "violent-crime",
-      "street": "On or near Goring Road"
+      "street": "On or near Fieldside Lane"
     },
     {
-      "lat": 52.397832,
-      "lng": -1.470622,
-      "cat": "other-crime",
-      "street": "On or near Treforest Road"
+      "lat": 52.421274,
+      "lng": -1.475649,
+      "cat": "violent-crime",
+      "street": "On or near Dennis Road"
     },
     {
-      "lat": 52.421862,
-      "lng": -1.470525,
+      "lat": 52.41338,
+      "lng": -1.48574,
       "cat": "other-crime",
-      "street": "On or near Lamerton Close"
+      "street": "On or near Caludon Road"
     },
     {
-      "lat": 52.424169,
-      "lng": -1.4656,
+      "lat": 52.411499,
+      "lng": -1.481131,
       "cat": "other-crime",
-      "street": "On or near Roberts Grove"
+      "street": "On or near Shopping Area"
     },
     {
-      "lat": 52.415119,
-      "lng": -1.446876,
+      "lat": 52.411607,
+      "lng": -1.487466,
       "cat": "other-crime",
-      "street": "On or near Westmorland Road"
+      "street": "On or near Brighton Street"
     },
     {
-      "lat": 52.42878,
-      "lng": -1.479678,
+      "lat": 52.409532,
+      "lng": -1.457501,
       "cat": "other-crime",
-      "street": "On or near Nuffield Road"
+      "street": "On or near The Drive"
     },
     {
-      "lat": 52.398348,
-      "lng": -1.479507,
+      "lat": 52.414889,
+      "lng": -1.48537,
       "cat": "other-crime",
-      "street": "On or near Princes Close"
+      "street": "On or near Heath Road"
     },
     {
-      "lat": 52.410976,
-      "lng": -1.484872,
+      "lat": 52.398201,
+      "lng": -1.474718,
       "cat": "other-crime",
-      "street": "On or near Villiers Street"
+      "street": "On or near Acorn Street"
     },
     {
-      "lat": 52.409316,
-      "lng": -1.477438,
+      "lat": 52.408033,
+      "lng": -1.454065,
       "cat": "other-crime",
-      "street": "On or near Enfield Road"
+      "street": "On or near Lloyd Crescent"
     },
     {
-      "lat": 52.414306,
-      "lng": -1.440152,
+      "lat": 52.420678,
+      "lng": -1.485317,
       "cat": "other-crime",
-      "street": "On or near Sturminster Close"
+      "street": "On or near Deegan Close"
     },
     {
-      "lat": 52.409904,
-      "lng": -1.47427,
+      "lat": 52.420322,
+      "lng": -1.46575,
       "cat": "other-crime",
-      "street": "On or near Grenville Avenue"
-    },
-    {
-      "lat": 52.394578,
-      "lng": -1.474628,
-      "cat": "other-crime",
-      "street": "On or near The Coppice"
-    },
-    {
-      "lat": 52.399624,
-      "lng": -1.4752,
-      "cat": "other-crime",
-      "street": "On or near The Boxhill"
-    },
-    {
-      "lat": 52.426344,
-      "lng": -1.479663,
-      "cat": "other-crime",
-      "street": "On or near Mulberry Road"
+      "street": "On or near Dartmouth Road"
     }
   ]
 }
